@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">亿联</string>
+    <string name="gpsfollow">追随</string>
+    <string name="gpslocate">定位</string>
+    <string name="gpsrotate">旋转</string>
+</resources>
