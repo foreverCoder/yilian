@@ -1,5 +1,8 @@
 package com.haili.living.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +11,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,6 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haili.living.R;
+import com.haili.living.adapter.ClassifyItemAdapter;
+import com.haili.living.adapter.GoodsItemAdapter;
+import com.haili.living.entity.ClassifyVo;
+import com.haili.living.entity.LivingGoodsVo;
 import com.haili.living.view.XListView;
 import com.haili.living.view.XListView.IXListViewListener;
 
@@ -26,6 +35,10 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 	private EditText top_search;
 	private ListView classify_list_view;
 	private XListView mListView;
+	private List<ClassifyVo>  cVoList=new ArrayList<ClassifyVo>();
+	private List<LivingGoodsVo> lVoList= new ArrayList<LivingGoodsVo>();
+	private ClassifyItemAdapter cAdapter;
+	private GoodsItemAdapter   gAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,6 +93,13 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 				// TODO Auto-generated method stub
 			}
 		});
+		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				cAdapter.setSelected((ClassifyVo)cAdapter.getItem(arg2));
+				cAdapter.notifyDataSetChanged();
+			}
+		});
 	}
 	private void onLoad() {
 		mListView.stopRefresh();
@@ -88,6 +108,30 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 	}
 	private void initData() {
 		top_search.setHint("请输入类别或关键字");
+		
+		
+		cVoList.add(new ClassifyVo("农庄"));
+		cVoList.add(new ClassifyVo("牧场"));
+		cVoList.add(new ClassifyVo("垂钓"));
+		cVoList.add(new ClassifyVo("直供"));
+		cVoList.add(new ClassifyVo("采摘"));
+		cVoList.add(new ClassifyVo("蔬菜"));
+		cVoList.add(new ClassifyVo("水果"));
+		cVoList.add(new ClassifyVo("农庄"));
+		cVoList.add(new ClassifyVo("牧场"));
+		cVoList.add(new ClassifyVo("垂钓"));
+		cVoList.add(new ClassifyVo("直供"));
+		cVoList.add(new ClassifyVo("采摘"));
+		cVoList.add(new ClassifyVo("蔬菜"));
+		cVoList.add(new ClassifyVo("水果"));
+		
+		cAdapter=new ClassifyItemAdapter(LivingMuseumActivity.this, cVoList);
+		
+		classify_list_view.setAdapter(cAdapter);
+		if (cVoList.size()>0) {
+			cAdapter.setSelected((ClassifyVo)cAdapter.getItem(0));
+			cAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override

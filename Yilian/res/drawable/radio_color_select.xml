@@ -3,4 +3,5 @@
     <item android:state_checked="true" android:color="#39892f"/>    
     <!-- not selected -->    
     <item android:state_checked="false" android:color="#6e6d6d"/>    
+    
 </selector>  
