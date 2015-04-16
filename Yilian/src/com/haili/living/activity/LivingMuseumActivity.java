@@ -132,6 +132,22 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 			cAdapter.setSelected((ClassifyVo)cAdapter.getItem(0));
 			cAdapter.notifyDataSetChanged();
 		}
+		
+		
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png", "美味七七碧根果", "19.7", "250g"));
+		
+		gAdapter=new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
+		
+		mListView.setAdapter(gAdapter);
 	}
 
 	@Override

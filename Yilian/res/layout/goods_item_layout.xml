@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
             android:orientation="vertical" >
 
             <TextView
@@ -34,7 +35,7 @@
                 android:gravity="right"
                 android:paddingRight="5dp"
                 android:textColor="#555"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/goods_weight"
@@ -49,15 +50,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:gravity="bottom" >
+            android:layout_marginTop="1dp" 
+            android:layout_marginBottom="5dp"
+            android:gravity="bottom|right">
 
             <TextView
                 android:id="@+id/goods_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:gravity="bottom"
+                android:paddingRight="5dp"
+                android:gravity="bottom|right"
                 android:textColor="#ff3200"
                 android:textSize="18sp" />
         </RelativeLayout>

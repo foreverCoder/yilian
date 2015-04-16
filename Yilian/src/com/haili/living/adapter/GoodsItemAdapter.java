@@ -26,10 +26,10 @@ public class GoodsItemAdapter extends BaseAdapter {
 	private List<LivingGoodsVo> list;
 	private DecimalFormat df;
 
-	public GoodsItemAdapter(Context mContext, List<LivingGoodsVo> advertlist) {
+	public GoodsItemAdapter(Context mContext, List<LivingGoodsVo> voList) {
 		this.mContext = mContext;
 		layoutInflater = LayoutInflater.from(mContext);
-		this.list = advertlist;
+		this.list = voList;
 		imageLoader = new LoadNetworkPic(mContext);
 		df = new DecimalFormat("#0.00");
 	}
@@ -70,9 +70,12 @@ public class GoodsItemAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-//		if (list.get(position).getGdImgPath1() != null && !list.get(position).getGdImgPath1().equals("")) {
-//			imageLoader.DisplayImage(UrlList.PREFIX_IMG_PREURL + list.get(position).getGdImgPath1(), holder.store_icon);
-//		}
+		if (list.get(position).getImgUrl()!= null && !list.get(position).getImgUrl().equals("")) {
+			imageLoader.DisplayImage(list.get(position).getImgUrl(), holder.goods_icon);
+		}
+		holder.goods_price.setText("￥"+list.get(position).getGoodsPrice());
+		holder.goods_name.setText(list.get(position).getGoodsName());
+		holder.goods_weight.setText(list.get(position).getGoodsWeight());
 		return convertView;
 	}
 
