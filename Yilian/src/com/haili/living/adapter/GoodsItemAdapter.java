@@ -57,7 +57,7 @@ public class GoodsItemAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
@@ -70,9 +70,7 @@ public class GoodsItemAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		if (list.get(position).getImgUrl()!= null && !list.get(position).getImgUrl().equals("")) {
-			imageLoader.DisplayImage(list.get(position).getImgUrl(), holder.goods_icon);
-		}
+	    imageLoader.DisplayImage(list.get(position).getImgUrl(), holder.goods_icon);
 		holder.goods_price.setText("￥"+list.get(position).getGoodsPrice());
 		holder.goods_name.setText(list.get(position).getGoodsName());
 		holder.goods_weight.setText(list.get(position).getGoodsWeight());
