@@ -71,7 +71,9 @@
                     android:background="@drawable/tab1_radio"
                     android:button="@null"
                     android:gravity="center"
+                    android:paddingRight="4dp"
                     android:text="价格"
+                    android:drawableRight="@drawable/ic_jg0"
                     android:textColor="@drawable/radio_color_select" />
 
                 <RadioButton
