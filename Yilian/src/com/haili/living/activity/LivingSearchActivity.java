@@ -4,50 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.haili.living.R;
-import com.haili.living.adapter.ClassifyItemAdapter;
 import com.haili.living.adapter.GoodsItemAdapter;
-import com.haili.living.entity.ClassifyVo;
 import com.haili.living.entity.LivingGoodsVo;
 import com.haili.living.utils.Utils;
 import com.haili.living.view.XListView;
 import com.haili.living.view.XListView.IXListViewListener;
 
-public class LivingMuseumActivity extends Activity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
+public class LivingSearchActivity extends Activity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
 	private TextView top_title, top_right;
-	private ImageView top_left;
-	private EditText top_search;
-	private ListView classify_list_view;
+	private TextView top_left;
 	private XListView mListView;
-	private List<ClassifyVo> cVoList = new ArrayList<ClassifyVo>();
 	private List<LivingGoodsVo> lVoList = new ArrayList<LivingGoodsVo>();
-	private ClassifyItemAdapter cAdapter;
 	private GoodsItemAdapter gAdapter;
 	private int priceTag = -1;// -1 未选中 0正序 1倒叙
-
+    private String  searchString;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_living_museum);
+		setContentView(R.layout.activity_living_search);
 		initViews();
 		setListeners();
 		initData();
@@ -55,39 +38,16 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 
 	private void initViews() {
 		top_title = (TextView) findViewById(R.id.top_title);
-		top_title.setVisibility(View.GONE);
-		top_left = (ImageView) findViewById(R.id.top_left);
+		top_left = (TextView) findViewById(R.id.top_left);
 		top_right = (TextView) findViewById(R.id.top_right);
 		top_right.setVisibility(View.GONE);
-		top_search = (EditText) findViewById(R.id.top_search);
-		top_search.setVisibility(View.VISIBLE);
 		initRadioBtns();
-		classify_list_view = (ListView) findViewById(R.id.classify_list_view);
 		mListView = (XListView) findViewById(R.id.mlistview);
 		mListView.setPullLoadEnable(true);
 	}
 
 	private void setListeners() {
-		// 搜索跳转
-		top_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-							LivingMuseumActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-					if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
-						Toast.makeText(LivingMuseumActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
-					} else {
-						// TODO 跳转
-						Intent intent = new Intent(LivingMuseumActivity.this, LivingSearchActivity.class);
-						intent.putExtra("searchValue", top_search.getText().toString().trim());
-						startActivity(intent);
-					}
-					return true;
-				}
-				return false;
-			}
-		});
+		top_left.setOnClickListener(this);
 		mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
@@ -99,13 +59,6 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 				// TODO Auto-generated method stub
 			}
 		});
-		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				cAdapter.setSelected((ClassifyVo) cAdapter.getItem(arg2));
-				cAdapter.notifyDataSetChanged();
-			}
-		});
 	}
 
 	private void onLoad() {
@@ -115,31 +68,8 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 	}
 
 	private void initData() {
-		top_search.setHint("请输入类别或关键字");
-
-		cVoList.add(new ClassifyVo("农庄"));
-		cVoList.add(new ClassifyVo("牧场"));
-		cVoList.add(new ClassifyVo("垂钓"));
-		cVoList.add(new ClassifyVo("直供"));
-		cVoList.add(new ClassifyVo("采摘"));
-		cVoList.add(new ClassifyVo("蔬菜"));
-		cVoList.add(new ClassifyVo("水果"));
-		cVoList.add(new ClassifyVo("农庄"));
-		cVoList.add(new ClassifyVo("牧场"));
-		cVoList.add(new ClassifyVo("垂钓"));
-		cVoList.add(new ClassifyVo("直供"));
-		cVoList.add(new ClassifyVo("采摘"));
-		cVoList.add(new ClassifyVo("蔬菜"));
-		cVoList.add(new ClassifyVo("水果"));
-
-		cAdapter = new ClassifyItemAdapter(LivingMuseumActivity.this, cVoList);
-
-		classify_list_view.setAdapter(cAdapter);
-		if (cVoList.size() > 0) {
-			cAdapter.setSelected((ClassifyVo) cAdapter.getItem(0));
-			cAdapter.notifyDataSetChanged();
-		}
-
+		searchString=getIntent().getStringExtra("searchValue");
+		top_title.setText("搜索  "+searchString);
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
 				"美味七七碧根果", "19.7", "250g"));
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
@@ -156,7 +86,7 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
 				"美味七七碧根果", "19.7", "250g"));
 
-		gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
+		gAdapter = new GoodsItemAdapter(LivingSearchActivity.this, lVoList);
 
 		mListView.setAdapter(gAdapter);
 	}
@@ -227,6 +157,9 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 	public void onClick(View arg0) {
 		// 跳转搜索页面
 		switch (arg0.getId()) {
+		case R.id.top_left:
+			finish();
+			break;
 		case R.id.radio_jg:
 			Drawable drawable = null;
 			RadioButton btn = (RadioButton) findViewById(arg0.getId());
