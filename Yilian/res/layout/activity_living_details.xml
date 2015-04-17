@@ -1,0 +1,222 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/living_details_top" />
+
+    <com.haili.living.view.ScrollViewExtend
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/l_detail_back" />
+
+            <TextView
+                android:id="@+id/details_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#39892f"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:text="大溪地店地:合肥市望江西路800号创新产业园A4栋1001 电话：688888888   营业时间：8:00-22:00"
+                android:textColor="#fff"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_jrtm" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_cy" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_zstm" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_mstm" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_tg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="2dp"
+                android:layout_marginTop="5dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:orientation="vertical" >
+
+                    <RadioGroup
+                        android:layout_width="fill_parent"
+                        android:layout_height="80dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="vertical" >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="110dp"
+                            android:orientation="horizontal" >
+
+                            <RadioButton
+                                android:id="@+id/radio_zh"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:checked="true"
+                                android:gravity="center"
+                                android:text="综合"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:id="@+id/radio_xl"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="销量"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:id="@+id/radio_jg"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:paddingRight="4dp"
+                                android:text="价格"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:id="@+id/radio_jl"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="距离"
+                                android:textColor="@drawable/radio_color_select" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="110dp"
+                            android:orientation="horizontal" >
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:checked="true"
+                                android:gravity="center"
+                                android:text="综合"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="销量"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:paddingRight="4dp"
+                                android:text="价格"
+                                android:textColor="@drawable/radio_color_select" />
+
+                            <RadioButton
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@drawable/tab1_radio"
+                                android:button="@null"
+                                android:gravity="center"
+                                android:text="距离"
+                                android:textColor="@drawable/radio_color_select" />
+                        </LinearLayout>
+                    </RadioGroup>
+
+                    <com.haili.living.view.XListView
+                        android:id="@+id/mlistview"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="5"
+                        android:divider="#fff"
+                        android:dividerHeight="10dp" >
+                    </com.haili.living.view.XListView>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.haili.living.view.ScrollViewExtend>
+
+</LinearLayout>
