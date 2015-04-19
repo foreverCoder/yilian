@@ -1,24 +1,12 @@
 package com.haili.living.view;
 
+import com.haili.living.activity.LivingMuseumDetailsActivity;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.ScrollView;
 
-/**
- * 能够兼容ViewPager的ScrollView
- * @Description: 解决了ViewPager在ScrollView中的滑动反弹问题
-
- * @File: ScrollViewExtend.java
-
- * @Package com.image.indicator.control
-
- * @Author Hanyonglu
-
- * @Date 2012-6-18 下午01:34:50
-
- * @Version V1.0
- */
 public class ScrollViewExtend extends ScrollView {
     // 滑动距离及坐标
     private float xDistance, yDistance, xLast, yLast;
@@ -82,12 +70,11 @@ public class ScrollViewExtend extends ScrollView {
                 yDistance += Math.abs(curY - yLast);
                 xLast = curX;
                 yLast = curY;
-
-                if(xDistance > yDistance){
+                System.out.println("xDistance: "+xDistance+"   LivingMuseumDetailsActivity.totalHeight");
+                if(xDistance >= LivingMuseumDetailsActivity.totalHeight){
                     return false;
                 }  
         }
-
         return super.onInterceptTouchEvent(ev);
     }
 }

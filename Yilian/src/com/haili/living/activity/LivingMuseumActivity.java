@@ -88,6 +88,15 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 				return false;
 			}
 		});
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO 跳转
+				Intent intent = new Intent(LivingMuseumActivity.this, LivingMuseumDetailsActivity.class);
+				startActivity(intent);
+			}
+		});
 		mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
