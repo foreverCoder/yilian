@@ -17,7 +17,7 @@
             android:value="2592458cfe089c81b89e35d4631bc50c" />
 
         <activity
-            android:name="com.haili.living.MapActivity"
+            android:name="com.haili.living.InterfaceTestActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
 
@@ -35,7 +35,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>    
+         <activity
+            android:name="com.haili.living.MapActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+          <activity
+            android:name="com.haili.living.InterfaceShowActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.haili.living.activity.LivingSearchActivity"
             android:label="@string/app_name" >
@@ -52,7 +60,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
- 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
 </manifest>

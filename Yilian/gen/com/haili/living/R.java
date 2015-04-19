@@ -476,41 +476,115 @@ public final class R {
         public static final int yellow=0x7f04000c;
     }
     public static final class drawable {
-        public static final int black=0x7f020004;
-        public static final int blue=0x7f020005;
-        public static final int brown=0x7f020006;
-        public static final int green=0x7f020007;
-        public static final int ic_launcher=0x7f020000;
+        public static final int arrow=0x7f020000;
+        public static final int back=0x7f020001;
+        public static final int black=0x7f02001c;
+        public static final int blue=0x7f02001d;
+        public static final int brown=0x7f02001e;
+        public static final int classify_n=0x7f020002;
+        public static final int classify_p=0x7f020003;
+        public static final int classify_select=0x7f020004;
+        public static final int green=0x7f02001f;
+        public static final int ic_back=0x7f020005;
+        public static final int ic_jg0=0x7f020006;
+        public static final int ic_jg1=0x7f020007;
+        public static final int ic_jg2=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int ic_ohters=0x7f02000a;
+        public static final int icon_lm=0x7f02000b;
+        public static final int img_cy=0x7f02000c;
+        public static final int img_jrtm=0x7f02000d;
+        public static final int img_logo2=0x7f02000e;
+        public static final int img_mstm=0x7f02000f;
+        public static final int img_tg=0x7f020010;
+        public static final int img_zstm=0x7f020011;
+        public static final int l_detail_back=0x7f020012;
         /**  阳光橙色 
          */
-        public static final int maintab_page_bg_color=0x7f02000a;
+        public static final int maintab_page_bg_color=0x7f020022;
         /**  tab页面背景色 
          */
-        public static final int maintab_radio_pressed_color=0x7f02000c;
+        public static final int maintab_radio_pressed_color=0x7f020024;
         /**  tab页面背景色 
          */
-        public static final int maintab_toolbar_bg_color=0x7f02000b;
-        public static final int marker=0x7f020001;
-        public static final int sungrow_orange=0x7f020009;
-        public static final int test=0x7f020002;
-        public static final int transparent=0x7f020008;
-        public static final int white=0x7f020003;
+        public static final int maintab_toolbar_bg_color=0x7f020023;
+        public static final int marker=0x7f020013;
+        public static final int radio_bg1=0x7f020014;
+        public static final int radio_bg2=0x7f020015;
+        public static final int radio_color_select=0x7f020016;
+        public static final int search_bg=0x7f020017;
+        public static final int sungrow_orange=0x7f020021;
+        public static final int tab1_radio=0x7f020018;
+        public static final int test=0x7f020019;
+        public static final int title_text_selector=0x7f02001a;
+        public static final int transparent=0x7f020020;
+        public static final int white=0x7f02001b;
     }
     public static final class id {
-        public static final int gps_follow_button=0x7f070003;
-        public static final int gps_locate_button=0x7f070002;
-        public static final int gps_radio_group=0x7f070001;
-        public static final int gps_rotate_button=0x7f070004;
-        public static final int map=0x7f070000;
+        public static final int btnGoodClassify=0x7f070002;
+        public static final int btnGoodlistByClassify=0x7f070003;
+        public static final int btnLbsShops=0x7f070001;
+        public static final int btnSearchGoodList=0x7f070004;
+        public static final int classify_list_view=0x7f07000c;
+        public static final int details_info=0x7f070006;
+        public static final int goods_icon=0x7f070018;
+        public static final int goods_name=0x7f070019;
+        public static final int goods_price=0x7f07001b;
+        public static final int goods_weight=0x7f07001a;
+        public static final int gps_follow_button=0x7f070010;
+        public static final int gps_locate_button=0x7f07000f;
+        public static final int gps_radio_group=0x7f07000e;
+        public static final int gps_rotate_button=0x7f070011;
+        public static final int map=0x7f07000d;
+        public static final int mlistview=0x7f07000b;
+        public static final int radio_jg=0x7f070009;
+        public static final int radio_jl=0x7f07000a;
+        public static final int radio_xl=0x7f070008;
+        public static final int radio_zh=0x7f070007;
+        public static final int topBar_layout=0x7f070012;
+        public static final int top_bar=0x7f070005;
+        public static final int top_left=0x7f070013;
+        public static final int top_right=0x7f070015;
+        public static final int top_search=0x7f070016;
+        public static final int top_title=0x7f070014;
+        public static final int tvShowResult=0x7f070000;
+        public static final int tx_classify_name=0x7f070017;
+        public static final int xlistview_footer_content=0x7f07001c;
+        public static final int xlistview_footer_hint_textview=0x7f07001e;
+        public static final int xlistview_footer_progressbar=0x7f07001d;
+        public static final int xlistview_header_arrow=0x7f070023;
+        public static final int xlistview_header_content=0x7f07001f;
+        public static final int xlistview_header_hint_textview=0x7f070021;
+        public static final int xlistview_header_progressbar=0x7f070024;
+        public static final int xlistview_header_text=0x7f070020;
+        public static final int xlistview_header_time=0x7f070022;
     }
     public static final class layout {
-        public static final int activity_map=0x7f030000;
+        public static final int activity_interface_show=0x7f030000;
+        public static final int activity_interface_test=0x7f030001;
+        public static final int activity_living_details=0x7f030002;
+        public static final int activity_living_museum=0x7f030003;
+        public static final int activity_living_search=0x7f030004;
+        public static final int activity_map=0x7f030005;
+        public static final int activity_top=0x7f030006;
+        public static final int classify_list_item=0x7f030007;
+        public static final int goods_item_layout=0x7f030008;
+        public static final int living_details_top=0x7f030009;
+        public static final int living_museum_top=0x7f03000a;
+        public static final int xlistview_footer=0x7f03000b;
+        public static final int xlistview_header=0x7f03000c;
     }
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int gpsfollow=0x7f050001;
         public static final int gpslocate=0x7f050002;
         public static final int gpsrotate=0x7f050003;
+        public static final int xlistview_footer_hint_normal=0x7f050008;
+        public static final int xlistview_footer_hint_ready=0x7f050009;
+        public static final int xlistview_header_hint_loading=0x7f050006;
+        public static final int xlistview_header_hint_normal=0x7f050004;
+        public static final int xlistview_header_hint_ready=0x7f050005;
+        public static final int xlistview_header_last_time=0x7f050007;
     }
     public static final class style {
         /** 
@@ -535,9 +609,11 @@ public final class R {
  API 14 theme customizations can go here. 
          */
         public static final int AppBaseTheme=0x7f060000;
+        public static final int AppNoAnimalTheme=0x7f060002;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f060001;
+        public static final int top_but=0x7f060003;
     }
 }
