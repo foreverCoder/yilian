@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_back" />
+        android:src="@drawable/top_left_back" />
 
     <EditText
         android:id="@+id/top_search"
@@ -28,7 +28,7 @@
         android:background="@drawable/search_bg"
         android:gravity="center_vertical"
         android:imeOptions="actionSearch"
-        android:paddingLeft="30dp"
+        android:hint="请输入类别或关键字"
         android:singleLine="true"
         android:textColor="#000"
         android:textSize="15.0dip" />
@@ -41,6 +41,6 @@
         android:layout_centerVertical="true"
         android:gravity="center_vertical"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_ohters" />
+        android:src="@drawable/top_right_others" />
 
 </RelativeLayout>
