@@ -1,6 +1,18 @@
 package com.haili.living.utils;
 
 public class InterfaceUtils {
+	
+	public static class SortStyle{//2综合、1销量、3价格
+		public static String SALES = "1";
+		public static String MULTIPLE = "2";
+		public static String PRICE = "3";
+	}
+	
+	public static class SortDirect{//1为正序，默认倒序
+		public static String POSITIVE = "1";
+		public static String REVERSE = "?";
+	}
+	
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
 

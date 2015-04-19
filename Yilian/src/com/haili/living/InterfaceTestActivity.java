@@ -42,6 +42,8 @@ public class InterfaceTestActivity extends BaseActivity{
 	public void testSearchGoodList(View view){
 		RequestParams params = new RequestParams();
 		params.addQueryStringParameter("$goods_id", "20");
+//		params.addQueryStringParameter("$key", InterfaceUtils.SortStyle.MULTIPLE);//排序类型综合
+//		params.addQueryStringParameter("$order",InterfaceUtils.SortDirect.REVERSE );//排序方向倒序
         HttpUtils http = new HttpUtils();
         http.send(HttpRequest.HttpMethod.POST,
         		InterfaceUtils.getSearchGoodList(),
@@ -77,6 +79,8 @@ public class InterfaceTestActivity extends BaseActivity{
 	public void testGoodListByClassify(View view){
 		RequestParams params = new RequestParams();
 		params.addQueryStringParameter("$gc_id", "1211");
+//		params.addQueryStringParameter("$key", InterfaceUtils.SortStyle.MULTIPLE);//排序类型综合
+//		params.addQueryStringParameter("$order",InterfaceUtils.SortDirect.REVERSE );//排序方向倒序
         HttpUtils http = new HttpUtils();
         http.send(HttpRequest.HttpMethod.POST,
         		InterfaceUtils.getGoodListByClassify(),
