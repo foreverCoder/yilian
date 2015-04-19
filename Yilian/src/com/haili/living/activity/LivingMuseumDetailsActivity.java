@@ -36,6 +36,7 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	private GoodsItemAdapter gAdapter;
 	private boolean changeedGroup = true;
 	public static int totalHeight;
+	public static int topHeight;
 	@ViewInject(R.id.sv)
 	private ScrollViewExtend sv;
 //	@ViewInject(R.id.dong_layout)
@@ -300,9 +301,8 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 		gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
 
 		mListView.setAdapter(gAdapter);
-		int a = 0;
-		a = top_bar.getHeight();
-		Utils.setListViewHeight(mListView, a);
+		topHeight = top_bar.getHeight();
+		Utils.setListViewHeight(mListView, topHeight);
 	}
 
 	@Override
