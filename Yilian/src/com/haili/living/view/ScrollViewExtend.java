@@ -70,7 +70,7 @@ public class ScrollViewExtend extends ScrollView {
                 yDistance += Math.abs(curY - yLast);
                 xLast = curX;
                 yLast = curY;
-                System.out.println("xDistance: "+xDistance+"   LivingMuseumDetailsActivity.totalHeight");
+                System.out.println("xDistance: "+xDistance+"   LivingMuseumDetailsActivity.totalHeight"+LivingMuseumDetailsActivity.totalHeight);
                 if(xDistance >= LivingMuseumDetailsActivity.totalHeight){
                     return false;
                 }  

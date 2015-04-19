@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,20 +28,19 @@ import com.haili.living.view.XListView.IXListViewListener;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
-import com.lidroid.xutils.view.annotation.event.OnRadioGroupCheckedChange;
 
 public class LivingMuseumDetailsActivity extends Activity implements OnScrollListener1 {
-    // 滑动距离及坐标
-    private float xDistance, yDistance, xLast, yLast;
+	// 滑动距离及坐标
+	private float xDistance, yDistance, xLast, yLast;
 	private List<LivingGoodsVo> lVoList = new ArrayList<LivingGoodsVo>();
 	private GoodsItemAdapter gAdapter;
 	private boolean changeedGroup = true;
 	public static int totalHeight;
 	@ViewInject(R.id.sv)
 	private ScrollViewExtend sv;
-	@ViewInject(R.id.dong_layout)
+//	@ViewInject(R.id.dong_layout)
 	private LinearLayout dong_layout;
-	@ViewInject(R.id.jing_layout)
+//	@ViewInject(R.id.jing_layout)
 	private LinearLayout jing_layout;
 	@ViewInject(R.id.top_bar)
 	private View top_bar;
@@ -110,76 +110,146 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 		}
 	}
 
-	@ViewInject(R.id.radio_group1)
+	// @ViewInject(R.id.radio_group1)
 	RadioGroup radio_group1;
-	@ViewInject(R.id.radio_group2)
+	// @ViewInject(R.id.radio_group2)
 	RadioGroup radio_group2;
 
-	@OnRadioGroupCheckedChange(R.id.radio_group1)
-	public void screeningGoods1(RadioGroup group, int checkedId) {
-		if (changeedGroup) {
-			changeedGroup = false;
-			radio_group2.clearCheck();
-			changeedGroup = true;
-			switch (checkedId) {
-			// 粮油副食
-			case R.id.radio_lyfs:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "粮油副食", Toast.LENGTH_SHORT).show();
-				break;
-			// 休闲食品
-			case R.id.radio_xxsp:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "休闲食品", Toast.LENGTH_SHORT).show();
-				break;
-			// 酒水茶饮
-			case R.id.radio_jscy:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "酒水茶饮", Toast.LENGTH_SHORT).show();
-				break;
-			// 方便速食
-			case R.id.radio_fbss:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "方便速食", Toast.LENGTH_SHORT).show();
-				break;
-			default:
-				break;
-			}
-		}
-	}
-
-	@OnRadioGroupCheckedChange(R.id.radio_group2)
-	public void screeningGoods2(RadioGroup group, int checkedId) {
-		if (changeedGroup) {
-			changeedGroup = false;
-			radio_group1.clearCheck();
-			changeedGroup = true;
-			switch (checkedId) {
-			// 保健品
-			case R.id.radio_bjsp:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "保健品", Toast.LENGTH_SHORT).show();
-				break;
-			// 牛奶乳制品
-			case R.id.radio_nnrzp:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "牛奶乳制品", Toast.LENGTH_SHORT).show();
-				break;
-			// 生鲜
-			case R.id.radio_sx:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "生鲜", Toast.LENGTH_SHORT).show();
-				break;
-			// 餐饮
-			case R.id.radio_cy:
-				Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
-				break;
-			default:
-				break;
-			}
-		}
-	}
+//	@OnRadioGroupCheckedChange(R.id.radio_group1)
+//	public void screeningGoods1(RadioGroup group, int checkedId) {
+//		if (changeedGroup) {
+//			changeedGroup = false;
+//			radio_group2.clearCheck();
+//			changeedGroup = true;
+//			switch (checkedId) {
+//			// 粮油副食
+//			case R.id.radio_lyfs:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "粮油副食", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 休闲食品
+//			case R.id.radio_xxsp:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "休闲食品", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 酒水茶饮
+//			case R.id.radio_jscy:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "酒水茶饮", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 方便速食
+//			case R.id.radio_fbss:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "方便速食", Toast.LENGTH_SHORT).show();
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//	}
+//
+//	@OnRadioGroupCheckedChange(R.id.radio_group2)
+//	public void screeningGoods2(RadioGroup group, int checkedId) {
+//		if (changeedGroup) {
+//			changeedGroup = false;
+//			radio_group1.clearCheck();
+//			changeedGroup = true;
+//			switch (checkedId) {
+//			// 保健品
+//			case R.id.radio_bjsp:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "保健品", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 牛奶乳制品
+//			case R.id.radio_nnrzp:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "牛奶乳制品", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 生鲜
+//			case R.id.radio_sx:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "生鲜", Toast.LENGTH_SHORT).show();
+//				break;
+//			// 餐饮
+//			case R.id.radio_cy:
+//				Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
+//				break;
+//			default:
+//				break;
+//			}
+//		}
+//	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_living_details);
+		preInitViews();
 		ViewUtils.inject(this); // 注入view和事件、
 		setListeners();
 		initData();
+	}
+
+	private void preInitViews() {
+		dong_layout=(LinearLayout)findViewById(R.id.dong_layout);
+		jing_layout=(LinearLayout)findViewById(R.id.jing_layout);
+		radio_group1 = (RadioGroup) dong_layout.findViewById(R.id.radio_group1);
+		radio_group2 = (RadioGroup) dong_layout.findViewById(R.id.radio_group2);
+		radio_group1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if (changeedGroup) {
+				changeedGroup = false;
+				radio_group2.clearCheck();
+				changeedGroup = true;
+				switch (checkedId) {
+				// 粮油副食
+				case R.id.radio_lyfs:
+					Toast.makeText(LivingMuseumDetailsActivity.this, "粮油副食", Toast.LENGTH_SHORT).show();
+					break;
+				// 休闲食品
+				case R.id.radio_xxsp:
+					Toast.makeText(LivingMuseumDetailsActivity.this, "休闲食品", Toast.LENGTH_SHORT).show();
+					break;
+				// 酒水茶饮
+				case R.id.radio_jscy:
+					Toast.makeText(LivingMuseumDetailsActivity.this, "酒水茶饮", Toast.LENGTH_SHORT).show();
+					break;
+				// 方便速食
+				case R.id.radio_fbss:
+					Toast.makeText(LivingMuseumDetailsActivity.this, "方便速食", Toast.LENGTH_SHORT).show();
+					break;
+				default:
+					break;
+				}
+				}
+			}
+		});
+		radio_group2.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if (changeedGroup) {
+					if (changeedGroup) {
+						changeedGroup = false;
+						radio_group1.clearCheck();
+						changeedGroup = true;
+						switch (checkedId) {
+						// 保健品
+						case R.id.radio_bjsp:
+							Toast.makeText(LivingMuseumDetailsActivity.this, "保健品", Toast.LENGTH_SHORT).show();
+							break;
+						// 牛奶乳制品
+						case R.id.radio_nnrzp:
+							Toast.makeText(LivingMuseumDetailsActivity.this, "牛奶乳制品", Toast.LENGTH_SHORT).show();
+							break;
+						// 生鲜
+						case R.id.radio_sx:
+							Toast.makeText(LivingMuseumDetailsActivity.this, "生鲜", Toast.LENGTH_SHORT).show();
+							break;
+						// 餐饮
+						case R.id.radio_cy:
+							Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
+							break;
+						default:
+							break;
+						}
+					}
+				}
+			}
+		});
 	}
 
 	private void setListeners() {
@@ -207,8 +277,8 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	}
 
 	private void initData() {
-		 mListView.setPullLoadEnable(true);
-		 mListView.requestFocus();
+		mListView.setPullLoadEnable(true);
+		mListView.requestFocus();
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
 		details_info.setText("大溪地店地:合肥市望江西路800号创新产业园A4栋1001 电话：688888888   营业时间：8:00-22:00");
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
@@ -238,8 +308,8 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	@Override
 	public void onScroll(int scrollY) {
 		totalHeight = findViewById(R.id.mLayout).getHeight();
-		System.out.println("scrollY :" + scrollY);
-		System.out.println("totalHeight :" + totalHeight);
+//		System.out.println("scrollY :" + scrollY);
+//		System.out.println("totalHeight :" + totalHeight);
 		int mBuyLayout2ParentTop = Math.max(scrollY, jing_layout.getTop());
 		dong_layout.layout(0, mBuyLayout2ParentTop, dong_layout.getWidth(), dong_layout.getHeight() + mBuyLayout2ParentTop);
 	}
