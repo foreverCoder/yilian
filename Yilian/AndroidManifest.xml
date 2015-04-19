@@ -38,10 +38,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.haili.living.MapActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="com.haili.living.InterfaceShowActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait" />
