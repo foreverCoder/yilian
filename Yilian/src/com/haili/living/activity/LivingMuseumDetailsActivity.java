@@ -279,7 +279,7 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 
 	private void initData() {
 		mListView.setPullLoadEnable(true);
-		mListView.requestFocus();
+		mListView.setPullRefreshEnable(false);
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
 		details_info.setText("大溪地店地:合肥市望江西路800号创新产业园A4栋1001 电话：688888888   营业时间：8:00-22:00");
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",

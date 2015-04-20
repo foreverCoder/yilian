@@ -80,7 +80,7 @@ public class ScrollViewExtend extends ScrollView {
 			yLast = curY;
 			System.out.println("t: " + t + "   LivingMuseumDetailsActivity.totalHeight" + LivingMuseumDetailsActivity.totalHeight
 					+ LivingMuseumDetailsActivity.topHeight);
-			if (this.t >= LivingMuseumDetailsActivity.totalHeight + LivingMuseumDetailsActivity.topHeight) {
+			if (this.t > LivingMuseumDetailsActivity.totalHeight + LivingMuseumDetailsActivity.topHeight) {
 				int y = (int) ev.getY();
 				if (y > mLastY) {
 					mLastY = y;
