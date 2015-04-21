@@ -1,6 +1,7 @@
 package com.haili.living.utils;
 
 public class InterfaceUtils {
+	public static String RESULT_SUCCESS = "1";
 	
 	public static class SortStyle{//2综合、1销量、3价格
 		public static String SALES = "1";

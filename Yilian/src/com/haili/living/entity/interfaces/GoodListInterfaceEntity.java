@@ -77,4 +77,15 @@ public class GoodListInterfaceEntity {
         }
 
     }
+    
+    public boolean hasDatas(){
+    	try {
+			if (datas.goods_list != null && datas.goods_list.size() > 0)
+				return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} 
+    	return false;
+    }
 }
