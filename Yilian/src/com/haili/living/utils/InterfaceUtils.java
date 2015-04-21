@@ -10,18 +10,18 @@ public class InterfaceUtils {
 	
 	public static class SortDirect{//1为正序，默认倒序
 		public static String POSITIVE = "1";
-		public static String REVERSE = "?";
+		public static String REVERSE = "2";
 	}
 	
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
 
 	/*
-	 * 1、获取用户当前位置 500米内的生活馆信息
+	 * 1、获取用户当前位置 3公里内的生活馆信息
 	 * http://qxu1193880138.my3w.com/haili/mobile/index.php
 	 * ?act=life&op=mapgetlife POST传值 经度 参数：lng 纬度参数：lat 返回： [store_id] 店铺ID
 	 * [store_name] 店铺名 [type_id] 店铺类型 1商城 2，生活馆；3农庄 [maplnglat] 店铺的经纬度
-	 * 117.259462,31.860109
+	 * 117.18365190,31.81160903
 	 */
 	public static String getLbsShops() {
 		return getBaseURI() + "act=life&op=mapgetlife";

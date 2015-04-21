@@ -1,26 +1,33 @@
 package com.haili.living.entity.interfaces;
+
 import java.util.List;
 
 import com.haili.living.entity.GoodEntity;
 
 /**
- * Created by Administrator on 2015/4/21.
+ * Created by liteng on 2015/4/21.
  */
 public class GoodListInterfaceEntity {
 
     /**
-     * datas : {"goods_list":[{"goods_price":"0.01","group_flag":false,"goods_marketprice":"10.00","goods_id":"97","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/21/21_04828525927007214_360.jpg","evaluation_count":"0","goods_name":"产地直供","evaluation_good_star":"5","goods_image":"21_04828525927007214.jpg","goods_salenum":"1","xianshi_flag":false},{"goods_price":"0.01","group_flag":false,"goods_marketprice":"10.00","goods_id":"96","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/21/21_04828524655658741_360.jpg","evaluation_count":"0","goods_name":"农家乐","evaluation_good_star":"5","goods_image":"21_04828524655658741.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"0.01","group_flag":false,"goods_marketprice":"1.00","goods_id":"95","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/12/12_04805292866680588_360.jpg","evaluation_count":"0","goods_name":"151631","evaluation_good_star":"5","goods_image":"12_04805292866680588.jpg","goods_salenum":"2","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"93","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/20/20_04819010897802965_360.jpg","evaluation_count":"0","goods_name":"开心农庄住宿","evaluation_good_star":"5","goods_image":"20_04819010897802965.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"92","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/20/20_04819010494438533_360.jpg","evaluation_count":"0","goods_name":"开心农专牧场庄主","evaluation_good_star":"5","goods_image":"20_04819010494438533.jpg","goods_salenum":"0","xianshi_flag":false}]}
-     * page_total : 12
+     * datas : {"goods_list":[{"goods_price":"0.01","group_flag":false,"goods_marketprice":"1.00","goods_id":"95","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/12/12_04805292866680588_360.jpg","evaluation_count":"0","goods_name":"151631","evaluation_good_star":"5","goods_image":"12_04805292866680588.jpg","goods_salenum":"2","xianshi_flag":false},{"goods_price":"55.00","group_flag":false,"goods_marketprice":"555.00","goods_id":"80","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818904857823599_360.jpg","evaluation_count":"0","goods_name":"生活馆酒水茶饮晚餐","evaluation_good_star":"5","goods_image":"19_04818904857823599.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"222.00","group_flag":false,"goods_marketprice":"3333.00","goods_id":"79","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818904022502562_360.jpg","evaluation_count":"0","goods_name":"生活馆酒水茶饮中餐","evaluation_good_star":"5","goods_image":"19_04818904022502562.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"33.00","group_flag":false,"goods_marketprice":"333.00","goods_id":"78","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818903175386114_360.jpg","evaluation_count":"0","goods_name":"餐饮外卖早餐外卖","evaluation_good_star":"5","goods_image":"19_04818903175386114.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"77","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818900484086831_360.jpg","evaluation_count":"0","goods_name":"生活馆休闲食品","evaluation_good_star":"5","goods_image":"19_04818900484086831.jpg","goods_salenum":"0","xianshi_flag":false}]}
+     * result : 1
+     * page_total : 6
      * code : 200
      * hasmore : true
      */
     private DatasEntity datas;
+    private String result;
     private int page_total;
     private int code;
     private boolean hasmore;
 
     public void setDatas(DatasEntity datas) {
         this.datas = datas;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public void setPage_total(int page_total) {
@@ -39,6 +46,10 @@ public class GoodListInterfaceEntity {
         return datas;
     }
 
+    public String getResult() {
+        return result;
+    }
+
     public int getPage_total() {
         return page_total;
     }
@@ -53,7 +64,7 @@ public class GoodListInterfaceEntity {
 
     public class DatasEntity {
         /**
-         * goods_list : [{"goods_price":"0.01","group_flag":false,"goods_marketprice":"10.00","goods_id":"97","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/21/21_04828525927007214_360.jpg","evaluation_count":"0","goods_name":"产地直供","evaluation_good_star":"5","goods_image":"21_04828525927007214.jpg","goods_salenum":"1","xianshi_flag":false},{"goods_price":"0.01","group_flag":false,"goods_marketprice":"10.00","goods_id":"96","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/21/21_04828524655658741_360.jpg","evaluation_count":"0","goods_name":"农家乐","evaluation_good_star":"5","goods_image":"21_04828524655658741.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"0.01","group_flag":false,"goods_marketprice":"1.00","goods_id":"95","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/12/12_04805292866680588_360.jpg","evaluation_count":"0","goods_name":"151631","evaluation_good_star":"5","goods_image":"12_04805292866680588.jpg","goods_salenum":"2","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"93","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/20/20_04819010897802965_360.jpg","evaluation_count":"0","goods_name":"开心农庄住宿","evaluation_good_star":"5","goods_image":"20_04819010897802965.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"92","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/20/20_04819010494438533_360.jpg","evaluation_count":"0","goods_name":"开心农专牧场庄主","evaluation_good_star":"5","goods_image":"20_04819010494438533.jpg","goods_salenum":"0","xianshi_flag":false}]
+         * goods_list : [{"goods_price":"0.01","group_flag":false,"goods_marketprice":"1.00","goods_id":"95","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/12/12_04805292866680588_360.jpg","evaluation_count":"0","goods_name":"151631","evaluation_good_star":"5","goods_image":"12_04805292866680588.jpg","goods_salenum":"2","xianshi_flag":false},{"goods_price":"55.00","group_flag":false,"goods_marketprice":"555.00","goods_id":"80","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818904857823599_360.jpg","evaluation_count":"0","goods_name":"生活馆酒水茶饮晚餐","evaluation_good_star":"5","goods_image":"19_04818904857823599.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"222.00","group_flag":false,"goods_marketprice":"3333.00","goods_id":"79","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818904022502562_360.jpg","evaluation_count":"0","goods_name":"生活馆酒水茶饮中餐","evaluation_good_star":"5","goods_image":"19_04818904022502562.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"33.00","group_flag":false,"goods_marketprice":"333.00","goods_id":"78","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818903175386114_360.jpg","evaluation_count":"0","goods_name":"餐饮外卖早餐外卖","evaluation_good_star":"5","goods_image":"19_04818903175386114.jpg","goods_salenum":"0","xianshi_flag":false},{"goods_price":"22.00","group_flag":false,"goods_marketprice":"222.00","goods_id":"77","goods_image_url":"http://www.zq2014.com/haili/data/upload/shop/store/goods/19/19_04818900484086831_360.jpg","evaluation_count":"0","goods_name":"生活馆休闲食品","evaluation_good_star":"5","goods_image":"19_04818900484086831.jpg","goods_salenum":"0","xianshi_flag":false}]
          */
         private List<GoodEntity> goods_list;
 
@@ -64,5 +75,6 @@ public class GoodListInterfaceEntity {
         public List<GoodEntity> getGoods_list() {
             return goods_list;
         }
+
     }
 }
