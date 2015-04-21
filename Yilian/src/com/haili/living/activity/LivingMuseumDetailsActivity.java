@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	private boolean changeedGroup = true;
 	public static int totalHeight;
 	public static int topHeight;
+	public  int screenHeight;
 	@ViewInject(R.id.sv)
 	private ScrollViewExtend sv;
 //	@ViewInject(R.id.dong_layout)
@@ -49,7 +51,18 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	private XListView mListView;
 	@ViewInject(R.id.top_left)
 	ImageView top_left;
-
+	@ViewInject(R.id.back_top)
+	ImageView back_top;
+	
+	@OnClick(R.id.back_top)
+	public void goToTop(View v) {
+		Toast.makeText(LivingMuseumDetailsActivity.this, "返回顶部", Toast.LENGTH_SHORT).show();
+		sv.post(new Runnable() {
+	         public void run() {     
+	        	 sv.fullScroll(ScrollView.FOCUS_UP);
+	            }
+	     });
+	}
 	@OnClick(R.id.top_left)
 	public void finish(View v) {
 		finish();
@@ -278,6 +291,7 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 	}
 
 	private void initData() {
+		screenHeight=findViewById(R.id.parent_layout).getHeight();
 		mListView.setPullLoadEnable(true);
 		mListView.setPullRefreshEnable(false);
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
@@ -297,7 +311,12 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
 				"美味七七碧根果", "19.7", "250g"));
-
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
+		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
 		gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
 
 		mListView.setAdapter(gAdapter);
@@ -307,6 +326,11 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 
 	@Override
 	public void onScroll(int scrollY) {
+		if (scrollY>screenHeight) {
+			back_top.setVisibility(View.VISIBLE);
+		}else {
+			back_top.setVisibility(View.INVISIBLE);
+		}
 		totalHeight = findViewById(R.id.mLayout).getHeight();
 //		System.out.println("scrollY :" + scrollY);
 //		System.out.println("totalHeight :" + totalHeight);

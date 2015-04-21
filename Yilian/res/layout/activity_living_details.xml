@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
@@ -14,7 +14,8 @@
     <com.haili.living.view.ScrollViewExtend
         android:id="@+id/sv"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_bar" >
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -121,4 +122,17 @@
         </FrameLayout>
     </com.haili.living.view.ScrollViewExtend>
 
-</LinearLayout>
+    <ImageView
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/back_top"
+        android:layout_width="35dp"
+        android:layout_height="70dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/back_top"
+        android:visibility="gone" />
+
+</RelativeLayout>
