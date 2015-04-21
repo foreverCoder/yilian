@@ -3,15 +3,28 @@ package com.haili.living.utils;
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";
 	
-	public static class SortStyle{//2综合、1销量、3价格
-		public static String SALES = "1";
-		public static String MULTIPLE = "2";
-		public static String PRICE = "3";
+	/*
+	 * 排序类型
+	 */
+	public static class SortStyle{
+		public static String SALES = "1";//销量
+		public static String MULTIPLE = "2";//综合
+		public static String PRICE = "3";//价格
 	}
-	
-	public static class SortDirect{//1为正序，默认倒序
-		public static String POSITIVE = "1";
-		public static String REVERSE = "2";
+	/*
+	 * 排序方向
+	 */
+	public static class SortDirect{
+		public static String POSITIVE = "1";//正序
+		public static String REVERSE = "2";//倒序
+	}
+	/*
+	 * 商城类型
+	 */
+	public static class ShopType{
+		public static String MALL = "1";//商城
+		public static String LIVE = "2";//生活馆
+		public static String FARM = "3";//农庄
 	}
 	
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";

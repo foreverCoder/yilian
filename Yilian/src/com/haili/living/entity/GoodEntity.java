@@ -1,6 +1,7 @@
 package com.haili.living.entity;
 
 /**
+ * 商品实体
  * Created by Administrator on 2015/4/21.
  */
 public class GoodEntity {
@@ -18,14 +19,14 @@ public class GoodEntity {
      * goods_salenum : 1
      * xianshi_flag : false
      */
-    private String goods_price;
+    private String goods_price;//商品价格
     private boolean group_flag;
-    private String goods_marketprice;
-    private String goods_id;
-    private String goods_image_url;
+    private String goods_marketprice;//商品超市价格
+    private String goods_id;//商品ID
+    private String goods_image_url;//商品图片地址
     private String evaluation_count;
     private String goods_name;
-    private String evaluation_good_star;
+    private String evaluation_good_star;//评价星级
     private String goods_image;
     private String goods_salenum;
     private boolean xianshi_flag;

@@ -5,14 +5,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.annotate.JsonUnwrapped;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 
 import com.amap.api.mapcore.util.n;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
+import com.haili.living.utils.JacksonUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -130,18 +135,24 @@ public class InterfaceTestActivity extends BaseActivity {
 
 	@OnClick(R.id.btnLbsShops)
 	public void testLbsShops(View view) {// 获取用户当前位置 3公里内的生活馆信息
+
+		getLbsShops("117.18365190", "31.81160903");
+	}
+
+	/**
+	 * // 获取用户当前位置 3公里内的生活馆信息
+	 * 
+	 * @param lng
+	 * @param lat
+	 */
+	private void getLbsShops(String lng, String lat) {
 		RequestParams params = new RequestParams();
-		params.addBodyParameter("lng", "117.18365190");
-		params.addBodyParameter("lat", "31.81160903");
-		// params.addQueryStringParameter("lng", "117.18365190");
-		// params.addQueryStringParameter("lat", "31.81160903");
-		// params.addQueryStringParameter("tel", "13170198790");
+		params.addBodyParameter("lng", lng);
+		params.addBodyParameter("lat", lat);
 		HttpUtils http = new HttpUtils();
 		// http.configResponseTextCharset("GBK");
-		http.send(HttpRequest.HttpMethod.POST,
-				// "http://tcc.taobao.com/cc/json/mobile_tel_segment.htm",
-				InterfaceUtils.getLbsShops(), params,
-				new RequestCallBack<String>() {
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getLbsShops(),
+				params, new RequestCallBack<String>() {
 
 					@Override
 					public void onStart() {
@@ -159,8 +170,42 @@ public class InterfaceTestActivity extends BaseActivity {
 						String result = InterfaceUtils
 								.getResponseResult(responseInfo.result);
 						LogUtils.d(result);
-						toastLong("reply: " + result);
-						showResultActivity(result);
+
+						ObjectMapper m = new ObjectMapper();
+						List<StoreEntity> storeList = new ArrayList<StoreEntity>();//生活馆列表
+						try {
+							JsonNode rootNode = m.readValue(result,
+									JsonNode.class);
+							String jsonResult = rootNode.path("result")
+									.getTextValue();
+							if (InterfaceUtils.RESULT_SUCCESS
+									.equals(jsonResult)) {
+
+								JavaType javaType = JacksonUtils
+										.getCollectionType(ArrayList.class,
+												StoreEntity.class);
+								String jsonList = rootNode.path("datas").toString();
+//								StoreEntity[] s = m.readValue(jsonList,
+//										StoreEntity[].class);
+								
+								storeList = m.readValue(jsonList,
+										javaType);
+
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// toastLong("reply: " + result);
+						// showResultActivity(result);
 					}
 
 					@Override
@@ -168,7 +213,6 @@ public class InterfaceTestActivity extends BaseActivity {
 						toastLong("请求失败");
 					}
 				});
-
 	}
 
 	/**
@@ -213,7 +257,7 @@ public class InterfaceTestActivity extends BaseActivity {
 								.getResponseResult(responseInfo.result);
 
 						LogUtils.d(result);
-						toastLong("reply: " + result);
+						// toastLong("reply: " + result);
 						// showResultActivity(result);
 
 						ObjectMapper mapper = new ObjectMapper();
