@@ -2,7 +2,7 @@ package com.haili.living.entity;
 
 /**
  * 商品实体
- * Created by Administrator on 2015/4/21.
+ * Created by liteng on 2015/4/21.
  */
 public class GoodEntity {
 

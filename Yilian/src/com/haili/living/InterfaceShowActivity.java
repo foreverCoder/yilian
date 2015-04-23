@@ -19,8 +19,8 @@ public class InterfaceShowActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ViewUtils.inject(this);
-Intent intent = getIntent();
-String result = intent.getStringExtra("result");
+        Intent intent = getIntent();
+        String result = intent.getStringExtra("result");
         tvShowResult.setText(result);
 	};
 	

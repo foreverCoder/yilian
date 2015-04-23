@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.annotate.JsonUnwrapped;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 
-import com.amap.api.mapcore.util.n;
+import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.StoreEntity;
+import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
+import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.JacksonUtils;
 import com.lidroid.xutils.HttpUtils;
@@ -29,7 +30,6 @@ import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ContentView;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 import android.annotation.SuppressLint;
-import android.content.Entity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -49,17 +49,136 @@ public class InterfaceTestActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		ViewUtils.inject(this);
 	};
+	
+	//============================================地图接口=======================================
+	
+	@OnClick(R.id.btnLbsShops)
+	public void testLbsShops(View view) {// 获取用户当前位置 3公里内的生活馆信息
 
+		getLbsShops("117.18365190", "31.81160903");
+	}
+
+	
+	
+	
+	
+	//======================================商品展示页面接口============================================
 	@OnClick(R.id.btnSearchGoodList)
-	public void testSearchGoodList(View view) {
+	public void testSearchGoodList(View view) {//搜索指定商品
+		getSearchGoodList("ddd", InterfaceUtils.SortStyle.DEFAULT, InterfaceUtils.SortDirect.POSITIVE, "1", "20");
+	}
+	
+	@OnClick(R.id.btnGoodClassify)
+	public void testGoodClassify(View view) {//获取商品分类
+		getGoodClassify(InterfaceUtils.GoodType.ALL);
+	}
+	
+	@OnClick(R.id.btnGoodlistByClassify)
+	public void testGoodListByClassify(View view) {//根据分类获得商品列表
+		getGoodListByClassify("1211", InterfaceUtils.SortStyle.MULTIPLE,
+				InterfaceUtils.SortDirect.POSITIVE, "20", "1");
+	}
+	
+	
+	
+	
+	//======================================生活馆首页接口============================================
+	@OnClick(R.id.btnShopDistribution)
+	public void testShopDistribution(View view){//获取生活馆配送范围
+		getShopDistribution("19");
+	}
+	
+	
+	public void getShopDistribution(String storeId){
 		RequestParams params = new RequestParams();
-		params.addQueryStringParameter("$goods_id", "20");
-		// params.addQueryStringParameter("$key",
-		// InterfaceUtils.SortStyle.MULTIPLE);//排序类型综合
-		// params.addQueryStringParameter("$order",InterfaceUtils.SortDirect.REVERSE
-		// );//排序方向倒序
+		params.addBodyParameter("store_id",storeId);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.getShopDistribution(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d("--==="+result);
+						
+						
+//						ObjectMapper mapper = new ObjectMapper();
+//						List<GoodClassEntity> goodClassList = new ArrayList<GoodClassEntity>();
+//						try {
+//							GoodClassListInterfaceEntity entity = mapper.readValue(
+//									result, GoodClassListInterfaceEntity.class);// 接口实体类
+//
+//							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+//									.getResult())) {// 如果result返回1
+//								LogUtils.d("entity " + entity.getCode() + " "
+//										+ entity.getResult() + " ");
+//
+//								if (entity.hasDatas()) {
+//									goodClassList = entity.getDatas()
+//											.getGood_class();
+//
+//									/*
+//									 * 业务逻辑处理
+//									 */
+//									Iterator<GoodClassEntity> iterator = goodClassList
+//											.iterator();
+//									while (iterator.hasNext()) {
+//										GoodClassEntity goodClass = iterator.next();
+//
+//										LogUtils.d("good "
+//												+ goodClass.getGc_name());
+//									}
+//								}
+//							} else {
+//								LogUtils.d("--------数据异常");
+//							}
+//						} catch (JsonParseException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (JsonMappingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (Exception e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+		
+	}
+
+	private void getSearchGoodList(String keyWord ,String key,String order,String curpage,String pagesize){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("keyword",keyWord);
+		params.addBodyParameter("key",key);
+		params.addBodyParameter("order",order);
+//		params.addBodyParameter("curpage",curpage);
+//		params.addBodyParameter("pagesize",pagesize);
+		
+		
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.GET,
 				InterfaceUtils.getSearchGoodList(), params,
 				new RequestCallBack<String>() {
 
@@ -78,9 +197,51 @@ public class InterfaceTestActivity extends BaseActivity {
 					public void onSuccess(ResponseInfo<String> responseInfo) {
 						String result = InterfaceUtils
 								.getResponseResult(responseInfo.result);
-						LogUtils.d(result);
-						toastLong("reply: " + result);
-						showResultActivity(result);
+						LogUtils.d("--==="+result);
+						
+						
+						ObjectMapper mapper = new ObjectMapper();
+						List<GoodForSearchEntity> goodSearchList = new ArrayList<GoodForSearchEntity>();//搜索的商品列表
+						try {
+							GoodSearchInterfaceEntity entity = mapper.readValue(
+									result, GoodSearchInterfaceEntity.class);// 接口实体类
+
+							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+									.getResult())) {// 如果result返回1
+								LogUtils.d("entity " + entity.getCode() + " "
+										+ entity.getResult() + " ");
+
+								if (entity.hasDatas()) {
+									goodSearchList = entity.getDatas();
+
+									/*
+									 * 业务逻辑处理
+									 */
+									Iterator<GoodForSearchEntity> iterator = goodSearchList
+											.iterator();
+									while (iterator.hasNext()) {
+										GoodForSearchEntity good = iterator.next();
+
+										LogUtils.d("searchGood "
+												+ good.getGoods_name());
+									}
+								}
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override
@@ -88,19 +249,16 @@ public class InterfaceTestActivity extends BaseActivity {
 						toastLong("请求失败");
 					}
 				});
+		
 	}
 
-	@OnClick(R.id.btnGoodlistByClassify)
-	public void testGoodListByClassify(View view) {
-		getGoodListByClassify("1211", InterfaceUtils.SortStyle.MULTIPLE,
-				InterfaceUtils.SortDirect.POSITIVE, "20", "1");
-	}
-
-	@OnClick(R.id.btnGoodClassify)
-	public void testGoodClassify(View view) {
+	/**
+	 * 获取商品的所有分类，包括农庄和商城
+	 * @param style为1表示全部分类值，3表示开心农庄分类值
+	 */
+	private void getGoodClassify(String style){
 		RequestParams params = new RequestParams();
-		params.addBodyParameter("style", "1");
-		// params.addQueryStringParameter("style", "1");
+		params.addBodyParameter("style", style);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST,
 				InterfaceUtils.getGoodClassify(), params,
@@ -122,8 +280,52 @@ public class InterfaceTestActivity extends BaseActivity {
 						String result = InterfaceUtils
 								.getResponseResult(responseInfo.result);
 						LogUtils.d(result);
-						toastLong("reply: " + result);
-						showResultActivity(result);
+						
+						
+
+						ObjectMapper mapper = new ObjectMapper();
+						List<GoodClassEntity> goodClassList = new ArrayList<GoodClassEntity>();
+						try {
+							GoodClassListInterfaceEntity entity = mapper.readValue(
+									result, GoodClassListInterfaceEntity.class);// 接口实体类
+
+							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+									.getResult())) {// 如果result返回1
+								LogUtils.d("entity " + entity.getCode() + " "
+										+ entity.getResult() + " ");
+
+								if (entity.hasDatas()) {
+									goodClassList = entity.getDatas()
+											.getGood_class();
+
+									/*
+									 * 业务逻辑处理
+									 */
+									Iterator<GoodClassEntity> iterator = goodClassList
+											.iterator();
+									while (iterator.hasNext()) {
+										GoodClassEntity goodClass = iterator.next();
+
+										LogUtils.d("good "
+												+ goodClass.getGc_name());
+									}
+								}
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override
@@ -133,17 +335,11 @@ public class InterfaceTestActivity extends BaseActivity {
 				});
 	}
 
-	@OnClick(R.id.btnLbsShops)
-	public void testLbsShops(View view) {// 获取用户当前位置 3公里内的生活馆信息
-
-		getLbsShops("117.18365190", "31.81160903");
-	}
-
 	/**
 	 * // 获取用户当前位置 3公里内的生活馆信息
 	 * 
-	 * @param lng
-	 * @param lat
+	 * @param lng 经度
+	 * @param lat 纬度
 	 */
 	private void getLbsShops(String lng, String lat) {
 		RequestParams params = new RequestParams();
@@ -214,7 +410,7 @@ public class InterfaceTestActivity extends BaseActivity {
 					}
 				});
 	}
-
+	
 	/**
 	 * @param gcId
 	 *            分类ID
