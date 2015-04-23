@@ -9,6 +9,18 @@
         android:layout_height="wrap_content"
         android:text="本地500米范围内的生活馆"/>
     <Button
+        android:id="@+id/btnNearShop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="最近的生活馆"/>
+    
+    
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/blue"/>
+    <Button
         android:id="@+id/btnGoodClassify"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -23,9 +35,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="搜索指定商品排序后(缺省综合、销量、价格、距离)的信息，带分页"/>
+    
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/blue"/>
+    <Button
+        android:id="@+id/btnLiveShopInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="当前生活馆信息"/>
     <Button
         android:id="@+id/btnShopDistribution"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="店铺配送地址"/>
+    <Button
+        android:id="@+id/btnShopHeadPic"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="生活馆头部四个图片"/>
 </LinearLayout>
