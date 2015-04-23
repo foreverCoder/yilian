@@ -23,4 +23,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="搜索指定商品排序后(缺省综合、销量、价格、距离)的信息，带分页"/>
+    <Button
+        android:id="@+id/btnShopDistribution"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="店铺配送地址"/>
 </LinearLayout>
