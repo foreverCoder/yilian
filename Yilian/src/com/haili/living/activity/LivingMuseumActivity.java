@@ -1,9 +1,14 @@
 package com.haili.living.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import android.app.Activity;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -23,22 +28,33 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.ClassifyItemAdapter;
 import com.haili.living.adapter.GoodsItemAdapter;
 import com.haili.living.entity.ClassifyVo;
+import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.LivingGoodsVo;
+import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
+import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.Utils;
 import com.haili.living.view.XListView;
 import com.haili.living.view.XListView.IXListViewListener;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.util.LogUtils;
 
-public class LivingMuseumActivity extends Activity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
+public class LivingMuseumActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
 	private TextView top_title, top_right;
 	private ImageView top_left;
 	private EditText top_search;
 	private ListView classify_list_view;
 	private XListView mListView;
-	private List<ClassifyVo> cVoList = new ArrayList<ClassifyVo>();
+	private List<GoodClassEntity> cVoList = new ArrayList<GoodClassEntity>();
 	private List<LivingGoodsVo> lVoList = new ArrayList<LivingGoodsVo>();
 	private ClassifyItemAdapter cAdapter;
 	private GoodsItemAdapter gAdapter;
@@ -73,8 +89,9 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-							LivingMuseumActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+							.hideSoftInputFromWindow(LivingMuseumActivity.this.getCurrentFocus().getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
 					if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
 						Toast.makeText(LivingMuseumActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
 					} else {
@@ -111,7 +128,7 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				cAdapter.setSelected((ClassifyVo) cAdapter.getItem(arg2));
+				cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(arg2));
 				cAdapter.notifyDataSetChanged();
 			}
 		});
@@ -124,30 +141,12 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 	}
 
 	private void initData() {
+		getClassifyDatas();
 		top_search.setHint("请输入类别或关键字");
-
-		cVoList.add(new ClassifyVo("农庄"));
-		cVoList.add(new ClassifyVo("牧场"));
-		cVoList.add(new ClassifyVo("垂钓"));
-		cVoList.add(new ClassifyVo("直供"));
-		cVoList.add(new ClassifyVo("采摘"));
-		cVoList.add(new ClassifyVo("蔬菜"));
-		cVoList.add(new ClassifyVo("水果"));
-		cVoList.add(new ClassifyVo("农庄"));
-		cVoList.add(new ClassifyVo("牧场"));
-		cVoList.add(new ClassifyVo("垂钓"));
-		cVoList.add(new ClassifyVo("直供"));
-		cVoList.add(new ClassifyVo("采摘"));
-		cVoList.add(new ClassifyVo("蔬菜"));
-		cVoList.add(new ClassifyVo("水果"));
 
 		cAdapter = new ClassifyItemAdapter(LivingMuseumActivity.this, cVoList);
 
 		classify_list_view.setAdapter(cAdapter);
-		if (cVoList.size() > 0) {
-			cAdapter.setSelected((ClassifyVo) cAdapter.getItem(0));
-			cAdapter.notifyDataSetChanged();
-		}
 
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
 				"美味七七碧根果", "19.7", "250g"));
@@ -258,4 +257,73 @@ public class LivingMuseumActivity extends Activity implements CompoundButton.OnC
 			break;
 		}
 	}
+
+	/**
+	 * 获取分类列表
+	 * **/
+	private void getClassifyDatas() {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("style", InterfaceUtils.GoodType.ALL);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.getGoodClassify(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d(result);
+
+						ObjectMapper mapper = new ObjectMapper();
+						try {
+							GoodClassListInterfaceEntity entity = mapper.readValue(
+									result, GoodClassListInterfaceEntity.class);// 接口实体类
+
+							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+									.getResult())) {// 如果result返回1
+								if (entity.hasDatas()) {
+									cVoList = entity.getDatas().getGood_class();
+									if (cVoList.size() > 0) {
+										System.out.println(cVoList.size()+"             dddddddddddddddddddddddd");
+										cAdapter.notifyDataSetChanged();
+										cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(0));
+									}
+								}
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+	}
+
 }

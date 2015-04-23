@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.haili.living.R;
-import com.haili.living.entity.ClassifyVo;
+import com.haili.living.entity.GoodClassEntity;
 
 /**
  * @author melody
@@ -21,17 +21,17 @@ import com.haili.living.entity.ClassifyVo;
 public class ClassifyItemAdapter extends BaseAdapter {
 	private Context mContext;
 	private LayoutInflater layoutInflater;
-	private List<ClassifyVo> list;
+	private List<GoodClassEntity> list;
 	private DecimalFormat df;
-	private ClassifyVo selected;
+	private GoodClassEntity selected;
 
-	public ClassifyItemAdapter(Context mContext, List<ClassifyVo> advertlist) {
+	public ClassifyItemAdapter(Context mContext, List<GoodClassEntity> advertlist) {
 		this.mContext = mContext;
 		layoutInflater = LayoutInflater.from(mContext);
 		this.list = advertlist;
 		df = new DecimalFormat("#0.00");
 	}
-	public void setSelected(ClassifyVo vo){
+	public void setSelected(GoodClassEntity vo){
 		selected = vo;
 	}
 	@Override
@@ -75,7 +75,7 @@ public class ClassifyItemAdapter extends BaseAdapter {
 			convertView.setBackgroundResource(R.drawable.classify_n);
 			holder.tx_classify_name.setTextColor(Color.parseColor("#6e6d6d"));
 		}
-		holder.tx_classify_name.setText(list.get(position).getClassifyName());
+		holder.tx_classify_name.setText(list.get(position).getGc_name());
 		return convertView;
 	}
 
