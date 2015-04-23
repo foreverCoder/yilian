@@ -2,6 +2,17 @@ package com.haili.living.utils;
 
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";
+	
+	/*
+	 * 生活馆图片类型
+	 */
+	public static class ShopPicType {
+		public static String MORNING_SPECIAL = "1";// 早市特卖
+		public static String EVENING_SPECIAL = "2";// 晚市特卖
+		public static String BREAKFAST_OUT = "3";// 餐饮外卖-早餐
+		public static String LANCHER_OUT = "4";// 餐饮外卖-午餐
+		public static String SUPER_OUT = "5";// 餐饮外卖-晚餐
+	}
 
 	/*
 	 * 排序类型
@@ -42,6 +53,33 @@ public class InterfaceUtils {
 	private static String MOBILE_PATH = "";
 
 	/*
+	 * 6. 获取当前生活馆的信息，如原型图 接口：act=life&op= index POST传值：
+	 * 需要传一个商家的$store_id值，$store_id是需要查看商家信息所对应的id值。
+	 */
+	public static String getLiveShopInfo() {
+		return getBaseURI() + "act=life&op=index";
+	}
+
+	/**
+	 * 7. 获取今日新品、餐饮、早市特卖、晚市特卖的图片 接口：act=life&op= life_images POST传值：
+	 * 需要传一个导航状态值的$life_type和商家店铺的$store_id值
+	 * ，$life_type等于1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，
+	 * 4为餐饮外卖-午餐，5为餐饮外卖-晚餐的图片，$store_id是需要查看商家所对应的id值。
+	 */
+	public static String getLiveShopHeadPic() {
+		return getBaseURI() + "act=life&op= life_images";
+	}
+	
+	/**
+	 * 8.获取今日新品的商品列表
+接口：act=life&op= life_new
+POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值。
+	 */
+	public static String getGoodListByPicType(){
+		return getBaseURI() + "act=life&op= life_new";
+	}
+
+	/*
 	 * 1、获取用户当前位置 3公里内的生活馆信息
 	 * http://qxu1193880138.my3w.com/haili/mobile/index.php
 	 * ?act=life&op=mapgetlife POST传值 经度 参数：lng 纬度参数：lat 返回： [store_id] 店铺ID
@@ -50,6 +88,16 @@ public class InterfaceUtils {
 	 */
 	public static String getLbsShops() {
 		return getBaseURI() + "act=life&op=mapgetlife";
+	}
+
+	/*
+	 * 2、获取当前位置最近的生活馆信息
+	 * http://www.zq2014.com/haili/mobile/index.php?act=life&op=mapnearbylife
+	 * POST传值 经度 参数：lng 纬度参数：lat 返回： [store_id] 生活馆店铺ID [store_name] 生活馆店铺名
+	 * [type_id] 店铺类型 1商城 2，生活馆；3农庄 [maplnglat] 生活馆店铺的经纬度 117.259462,31.860109
+	 */
+	public static String getNearShop() {
+		return getBaseURI() + "act=life&op=mapnearbylife";
 	}
 
 	/*

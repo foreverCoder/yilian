@@ -19,6 +19,7 @@ import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.JacksonUtils;
+import com.haili.living.utils.InterfaceUtils.ShopPicType;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -58,6 +59,10 @@ public class InterfaceTestActivity extends BaseActivity {
 		getLbsShops("117.18365190", "31.81160903");
 	}
 
+	@OnClick(R.id.btnNearShop)
+	public void testNearShop(View view){//最近的生活馆
+		getNearShop("117.18365190", "31.81160903");
+	}
 	
 	
 	
@@ -83,12 +88,160 @@ public class InterfaceTestActivity extends BaseActivity {
 	
 	
 	//======================================生活馆首页接口============================================
+	@OnClick(R.id.btnLiveShopInfo)
+	public void testLiveShopInfo(View view){//获取当前生活馆信息 
+		getLiveShopInfo("9");
+	}
 	@OnClick(R.id.btnShopDistribution)
 	public void testShopDistribution(View view){//获取生活馆配送范围
 		getShopDistribution("19");
 	}
+	@OnClick(R.id.btnShopHeadPic)
+	public void testShopHeadPic(View view){//获取生活馆头部四张图片
+		getShopHeadPic("9", ShopPicType.BREAKFAST_OUT);
+	}
 	
 	
+	
+	public void getShopHeadPic(String storeId,String life_type){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("store_id",storeId);
+		params.addBodyParameter("life_type",life_type);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.getLiveShopHeadPic(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+//						String result = InterfaceUtils
+//								.getResponseResult(responseInfo.result);
+//						LogUtils.d("getShopDistribution = "+result);
+//						
+//						ObjectMapper m = new ObjectMapper();
+//						String shopDis; 
+//						try {
+//							JsonNode rootNode = m.readValue(result,
+//									JsonNode.class);
+//							String jsonResult = rootNode.path("result").toString();
+//							if (InterfaceUtils.RESULT_SUCCESS
+//									.equals(jsonResult)) {
+//
+//								shopDis = rootNode.path("datas").path("info").toString();
+//								
+//								LogUtils.d("shopDistribution = "+shopDis);
+//
+//							} else {
+//								LogUtils.d("--------数据异常");
+//							}
+//						} catch (JsonParseException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (JsonMappingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+		
+	}
+	
+	public void getLiveShopInfo(String store_id){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("store_id",store_id);
+		
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.getLiveShopInfo(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d("**"+result);
+						
+						
+//						ObjectMapper mapper = new ObjectMapper();
+//						List<GoodForSearchEntity> goodSearchList = new ArrayList<GoodForSearchEntity>();//搜索的商品列表
+//						try {
+//							GoodSearchInterfaceEntity entity = mapper.readValue(
+//									result, GoodSearchInterfaceEntity.class);// 接口实体类
+//
+//							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+//									.getResult())) {// 如果result返回1
+//								LogUtils.d("entity " + entity.getCode() + " "
+//										+ entity.getResult() + " ");
+//
+//								if (entity.hasDatas()) {
+//									goodSearchList = entity.getDatas();
+//
+//									/*
+//									 * 业务逻辑处理
+//									 */
+//									Iterator<GoodForSearchEntity> iterator = goodSearchList
+//											.iterator();
+//									while (iterator.hasNext()) {
+//										GoodForSearchEntity good = iterator.next();
+//
+//										LogUtils.d("searchGood "
+//												+ good.getGoods_name());
+//									}
+//								}
+//							} else {
+//								LogUtils.d("--------数据异常");
+//							}
+//						} catch (JsonParseException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (JsonMappingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						} catch (Exception e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+	}
 	public void getShopDistribution(String storeId){
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("store_id",storeId);
@@ -112,52 +265,34 @@ public class InterfaceTestActivity extends BaseActivity {
 					public void onSuccess(ResponseInfo<String> responseInfo) {
 						String result = InterfaceUtils
 								.getResponseResult(responseInfo.result);
-						LogUtils.d("--==="+result);
+						LogUtils.d("getShopDistribution = "+result);
 						
-						
-//						ObjectMapper mapper = new ObjectMapper();
-//						List<GoodClassEntity> goodClassList = new ArrayList<GoodClassEntity>();
-//						try {
-//							GoodClassListInterfaceEntity entity = mapper.readValue(
-//									result, GoodClassListInterfaceEntity.class);// 接口实体类
-//
-//							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
-//									.getResult())) {// 如果result返回1
-//								LogUtils.d("entity " + entity.getCode() + " "
-//										+ entity.getResult() + " ");
-//
-//								if (entity.hasDatas()) {
-//									goodClassList = entity.getDatas()
-//											.getGood_class();
-//
-//									/*
-//									 * 业务逻辑处理
-//									 */
-//									Iterator<GoodClassEntity> iterator = goodClassList
-//											.iterator();
-//									while (iterator.hasNext()) {
-//										GoodClassEntity goodClass = iterator.next();
-//
-//										LogUtils.d("good "
-//												+ goodClass.getGc_name());
-//									}
-//								}
-//							} else {
-//								LogUtils.d("--------数据异常");
-//							}
-//						} catch (JsonParseException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (JsonMappingException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (Exception e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
+						ObjectMapper m = new ObjectMapper();
+						String shopDis; 
+						try {
+							JsonNode rootNode = m.readValue(result,
+									JsonNode.class);
+							String jsonResult = rootNode.path("result").toString();
+							if (InterfaceUtils.RESULT_SUCCESS
+									.equals(jsonResult)) {
+
+								shopDis = rootNode.path("datas").path("info").toString();
+								
+								LogUtils.d("shopDistribution = "+shopDis);
+
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override
@@ -386,6 +521,80 @@ public class InterfaceTestActivity extends BaseActivity {
 								
 								storeList = m.readValue(jsonList,
 										javaType);
+
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						// toastLong("reply: " + result);
+						// showResultActivity(result);
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+	}
+	
+	/**
+	 * // 获取最近的生活馆
+	 * 
+	 * @param lng 经度
+	 * @param lat 纬度
+	 */
+	private void getNearShop(String lng, String lat) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("lng", lng);
+		params.addBodyParameter("lat", lat);
+		HttpUtils http = new HttpUtils();
+		// http.configResponseTextCharset("GBK");
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getNearShop(),
+				params, new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d(result);
+
+						ObjectMapper m = new ObjectMapper();
+						List<StoreEntity> storeList = new ArrayList<StoreEntity>();//生活馆列表
+						StoreEntity storeEntity = new StoreEntity();
+						try {
+							JsonNode rootNode = m.readValue(result,
+									JsonNode.class);
+							String jsonResult = rootNode.path("result")
+									.getTextValue();
+							if (InterfaceUtils.RESULT_SUCCESS
+									.equals(jsonResult)) {
+
+								String jsonList = rootNode.path("datas").toString();
+//								StoreEntity[] s = m.readValue(jsonList,
+//										StoreEntity[].class);
+								
+								storeEntity = m.readValue(jsonList,
+										StoreEntity.class);
 
 							} else {
 								LogUtils.d("--------数据异常");
