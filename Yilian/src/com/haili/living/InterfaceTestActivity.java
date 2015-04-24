@@ -2,8 +2,11 @@ package com.haili.living;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -17,6 +20,7 @@ import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
+import com.haili.living.entity.interfaces.ShopInfoInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.JacksonUtils;
 import com.haili.living.utils.InterfaceUtils.ShopPicType;
@@ -90,23 +94,21 @@ public class InterfaceTestActivity extends BaseActivity {
 	//======================================生活馆首页接口============================================
 	@OnClick(R.id.btnLiveShopInfo)
 	public void testLiveShopInfo(View view){//获取当前生活馆信息 
-		getLiveShopInfo("9");
+		getLiveShopInfo("9");//传入生活馆ID
 	}
 	@OnClick(R.id.btnShopDistribution)
 	public void testShopDistribution(View view){//获取生活馆配送范围
-		getShopDistribution("19");
+		getShopDistribution("19");//传入生活馆ID
 	}
-	@OnClick(R.id.btnShopHeadPic)
-	public void testShopHeadPic(View view){//获取生活馆头部四张图片
-		getShopHeadPic("9", ShopPicType.BREAKFAST_OUT);
-	}
+//	@OnClick(R.id.btnShopHeadPic)
+//	public void testShopHeadPic(View view){//获取生活馆头部四张图片
+//		getShopHeadPic();//传入生活馆ID
+//	}
 	
 	
 	
-	public void getShopHeadPic(String storeId,String life_type){
+	public void getShopHeadPic(){
 		RequestParams params = new RequestParams();
-		params.addBodyParameter("store_id",storeId);
-		params.addBodyParameter("life_type",life_type);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST,
 				InterfaceUtils.getLiveShopHeadPic(), params,
@@ -125,36 +127,42 @@ public class InterfaceTestActivity extends BaseActivity {
 
 					@Override
 					public void onSuccess(ResponseInfo<String> responseInfo) {
-//						String result = InterfaceUtils
-//								.getResponseResult(responseInfo.result);
-//						LogUtils.d("getShopDistribution = "+result);
-//						
-//						ObjectMapper m = new ObjectMapper();
-//						String shopDis; 
-//						try {
-//							JsonNode rootNode = m.readValue(result,
-//									JsonNode.class);
-//							String jsonResult = rootNode.path("result").toString();
-//							if (InterfaceUtils.RESULT_SUCCESS
-//									.equals(jsonResult)) {
-//
-//								shopDis = rootNode.path("datas").path("info").toString();
-//								
-//								LogUtils.d("shopDistribution = "+shopDis);
-//
-//							} else {
-//								LogUtils.d("--------数据异常");
-//							}
-//						} catch (JsonParseException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (JsonMappingException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d("getShopHeadPic = "+result);
+						
+						ObjectMapper m = new ObjectMapper();
+						
+						Map<String, String> picMap = new HashMap<String, String>();
+						try {
+							JsonNode rootNode = m.readValue(result,
+									JsonNode.class);
+							String jsonResult = rootNode.path("result").getTextValue();
+							LogUtils.d("getShopHeadPic jsonResult = "+jsonResult);
+							if (InterfaceUtils.RESULT_SUCCESS
+									.equals(jsonResult)) {
+
+								picMap.put(InterfaceUtils.ShopPicType.KEY_TODAY_NEW, rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_TODAY_NEW).toString());
+								picMap.put(InterfaceUtils.ShopPicType.KEY_DINNER_OUT, rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_DINNER_OUT).toString());
+								picMap.put(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL, rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL).toString());
+								picMap.put(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL, rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL).toString());
+								picMap.put(InterfaceUtils.ShopPicType.KEY_GROUP_BUY, rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_GROUP_BUY).toString());
+								
+								LogUtils.d("getShopHeadPic = "+picMap.toString());
+
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override
@@ -192,48 +200,38 @@ public class InterfaceTestActivity extends BaseActivity {
 						LogUtils.d("**"+result);
 						
 						
-//						ObjectMapper mapper = new ObjectMapper();
-//						List<GoodForSearchEntity> goodSearchList = new ArrayList<GoodForSearchEntity>();//搜索的商品列表
-//						try {
-//							GoodSearchInterfaceEntity entity = mapper.readValue(
-//									result, GoodSearchInterfaceEntity.class);// 接口实体类
-//
-//							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
-//									.getResult())) {// 如果result返回1
-//								LogUtils.d("entity " + entity.getCode() + " "
-//										+ entity.getResult() + " ");
-//
-//								if (entity.hasDatas()) {
-//									goodSearchList = entity.getDatas();
-//
-//									/*
-//									 * 业务逻辑处理
-//									 */
-//									Iterator<GoodForSearchEntity> iterator = goodSearchList
-//											.iterator();
-//									while (iterator.hasNext()) {
-//										GoodForSearchEntity good = iterator.next();
-//
-//										LogUtils.d("searchGood "
-//												+ good.getGoods_name());
-//									}
-//								}
-//							} else {
-//								LogUtils.d("--------数据异常");
-//							}
-//						} catch (JsonParseException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (JsonMappingException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						} catch (Exception e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
+						ObjectMapper mapper = new ObjectMapper();
+						StoreEntity storeEntity = new StoreEntity();//获取生活馆信息
+						try {
+							ShopInfoInterfaceEntity entity = mapper.readValue(
+									result, ShopInfoInterfaceEntity.class);// 接口实体类
+
+							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+									.getResult())) {// 如果result返回1
+								LogUtils.d("entity " + entity.getCode() + " "
+										+ entity.getResult() + " ");
+
+								if (entity.hasDatas()) {
+									storeEntity = entity.getDatas().get(0);
+
+									LogUtils.d("shopInfo "+storeEntity.getStore_name());
+								}
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 					@Override
