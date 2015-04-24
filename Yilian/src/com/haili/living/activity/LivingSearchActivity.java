@@ -86,9 +86,9 @@ public class LivingSearchActivity extends Activity implements CompoundButton.OnC
 		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
 				"美味七七碧根果", "19.7", "250g"));
 
-		gAdapter = new GoodsItemAdapter(LivingSearchActivity.this, lVoList);
-
-		mListView.setAdapter(gAdapter);
+//		gAdapter = new GoodsItemAdapter(LivingSearchActivity.this, lVoList);
+//
+//		mListView.setAdapter(gAdapter);
 	}
 
 	@Override

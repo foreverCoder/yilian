@@ -2,7 +2,6 @@ package com.haili.living.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
@@ -32,10 +31,11 @@ import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.ClassifyItemAdapter;
 import com.haili.living.adapter.GoodsItemAdapter;
-import com.haili.living.entity.ClassifyVo;
 import com.haili.living.entity.GoodClassEntity;
-import com.haili.living.entity.LivingGoodsVo;
+import com.haili.living.entity.GoodEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
+import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
+import com.haili.living.utils.ConstantValue;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.Utils;
 import com.haili.living.view.XListView;
@@ -55,10 +55,13 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	private ListView classify_list_view;
 	private XListView mListView;
 	private List<GoodClassEntity> cVoList = new ArrayList<GoodClassEntity>();
-	private List<LivingGoodsVo> lVoList = new ArrayList<LivingGoodsVo>();
+	private List<GoodEntity> lVoList = new ArrayList<GoodEntity>();
 	private ClassifyItemAdapter cAdapter;
 	private GoodsItemAdapter gAdapter;
 	private int priceTag = -1;// -1 未选中 0正序 1倒叙
+	private int pageNum = 1;// 当前页数
+	private String sortStyle = InterfaceUtils.SortStyle.MULTIPLE;// 排序方式
+	private String sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		initViews();
 		setListeners();
 		initData();
+		getClassifyDatas();// 获取分类
 	}
 
 	private void initViews() {
@@ -81,6 +85,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		classify_list_view = (ListView) findViewById(R.id.classify_list_view);
 		mListView = (XListView) findViewById(R.id.mlistview);
 		mListView.setPullLoadEnable(true);
+		top_search.setHint("请输入类别或关键字");
 	}
 
 	private void setListeners() {
@@ -117,12 +122,16 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
-				// TODO Auto-generated method stub
+				pageNum = 1;
+				getGoodListByClassify(cVoList.get(0).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
+						true);
 			}
 
 			@Override
 			public void onLoadMore() {
-				// TODO Auto-generated method stub
+				pageNum += 1;
+				getGoodListByClassify(cVoList.get(0).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
+						false);
 			}
 		});
 		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
@@ -130,6 +139,9 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(arg2));
 				cAdapter.notifyDataSetChanged();
+				pageNum = 1;
+				getGoodListByClassify(cVoList.get(arg2).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
 			}
 		});
 	}
@@ -141,32 +153,14 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	}
 
 	private void initData() {
-		getClassifyDatas();
-		top_search.setHint("请输入类别或关键字");
-
-		cAdapter = new ClassifyItemAdapter(LivingMuseumActivity.this, cVoList);
-
-		classify_list_view.setAdapter(cAdapter);
-
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-
-		gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
-
-		mListView.setAdapter(gAdapter);
+		if (cVoList.size() > 0) {
+			cAdapter = new ClassifyItemAdapter(LivingMuseumActivity.this, cVoList);
+			classify_list_view.setAdapter(cAdapter);
+			cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(0));
+			// 根据分类查询商品 默认
+			getGoodListByClassify(cVoList.get(0).getGc_id(), InterfaceUtils.SortStyle.MULTIPLE, InterfaceUtils.SortDirect.POSITIVE,
+					ConstantValue.PAGE_COUNT + "", pageNum + "", true);
+		}
 	}
 
 	@Override
@@ -201,18 +195,24 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			// 综合
 			case R.id.radio_zh:
 				initJgButton();
+				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
+				sortStyle = InterfaceUtils.SortStyle.MULTIPLE;
 				break;
 			// 销量
 			case R.id.radio_xl:
 				initJgButton();
+				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
+				sortStyle = InterfaceUtils.SortStyle.SALES;
 				break;
 			// 价格
 			case R.id.radio_jg:
-
+				sortStyle = InterfaceUtils.SortStyle.PRICE;
 				break;
 			// 距离
 			case R.id.radio_jl:
 				initJgButton();
+				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
+				sortStyle = InterfaceUtils.SortStyle.PRICE;// TODO 距离排序
 				break;
 
 			default:
@@ -265,65 +265,136 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("style", InterfaceUtils.GoodType.ALL);
 		HttpUtils http = new HttpUtils();
-		http.send(HttpRequest.HttpMethod.POST,
-				InterfaceUtils.getGoodClassify(), params,
-				new RequestCallBack<String>() {
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodClassify(), params, new RequestCallBack<String>() {
 
-					@Override
-					public void onStart() {
-						toastLong("请求服务器");
-					}
+			@Override
+			public void onStart() {
+			}
 
-					@Override
-					public void onLoading(long total, long current,
-							boolean isUploading) {
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
 
-					}
+			}
 
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo) {
-						String result = InterfaceUtils
-								.getResponseResult(responseInfo.result);
-						LogUtils.d(result);
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d(result);
 
-						ObjectMapper mapper = new ObjectMapper();
-						try {
-							GoodClassListInterfaceEntity entity = mapper.readValue(
-									result, GoodClassListInterfaceEntity.class);// 接口实体类
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					GoodClassListInterfaceEntity entity = mapper.readValue(result, GoodClassListInterfaceEntity.class);// 接口实体类
 
-							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
-									.getResult())) {// 如果result返回1
-								if (entity.hasDatas()) {
-									cVoList = entity.getDatas().getGood_class();
-									if (cVoList.size() > 0) {
-										System.out.println(cVoList.size()+"             dddddddddddddddddddddddd");
-										cAdapter.notifyDataSetChanged();
-										cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(0));
-									}
-								}
-							} else {
-								LogUtils.d("--------数据异常");
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						if (entity.hasDatas()) {
+							cVoList = entity.getDatas().getGood_class();
+							if (cVoList.size() > 0) {
+								initData();// 初始化列表
 							}
-						} catch (JsonParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (JsonMappingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
+					} else {
+						LogUtils.d("--------数据异常");
 					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 
-					@Override
-					public void onFailure(HttpException error, String msg) {
-						toastLong("请求失败");
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+
+	/**
+	 * @param gcId
+	 *            分类ID
+	 * @param key
+	 *            排序类型
+	 * @param order
+	 *            排序方向
+	 * @param page
+	 *            每页数目
+	 * @param curpage
+	 *            当前页
+	 * @param flag
+	 *            ture 为刷新 false为加载更多
+	 */
+	private void getGoodListByClassify(String gcId, String key, String order, String page, final String curpage, final Boolean flag) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("gc_id", gcId);
+		params.addBodyParameter("key", gcId);
+		params.addBodyParameter("order", order);
+		params.addBodyParameter("page", page);
+		params.addBodyParameter("curpage", curpage);
+		System.out.println("   当前页面    ：" + curpage + "    每页数据：" + page);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByClassify(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				onLoad();
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d(result);
+				ObjectMapper mapper = new ObjectMapper();
+				List<GoodEntity> goodList = new ArrayList<GoodEntity>();
+				try {
+					GoodListInterfaceEntity entity = mapper.readValue(result, GoodListInterfaceEntity.class);// 接口实体类
+
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " " + entity.getPage_total());
+						goodList = entity.getDatas().getGoods_list();
+						if (flag) {// 刷新
+							lVoList.clear();
+							lVoList = goodList;
+							if (goodList.size() < 1) {
+								toastShort("暂无数据");
+							}
+							gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
+							mListView.setAdapter(gAdapter);
+						} else { // 加载更多
+							if (goodList.size() > 0) {
+								lVoList.addAll(entity.getDatas().getGoods_list());
+								gAdapter.notifyDataSetChanged();
+							} else {
+								toastShort("没有更多数据了");
+							}
+						}
+					} else {
+						toastShort("接口返回失败");
 					}
-				});
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
 	}
 
 }

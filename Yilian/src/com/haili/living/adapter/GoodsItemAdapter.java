@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.haili.living.R;
-import com.haili.living.entity.LivingGoodsVo;
+import com.haili.living.entity.GoodEntity;
 import com.haili.living.utils.LoadNetworkPic;
 
 /**
@@ -23,10 +23,10 @@ public class GoodsItemAdapter extends BaseAdapter {
 	protected LoadNetworkPic imageLoader;
 	private Context mContext;
 	private LayoutInflater layoutInflater;
-	private List<LivingGoodsVo> list;
+	private List<GoodEntity> list;
 	private DecimalFormat df;
 
-	public GoodsItemAdapter(Context mContext, List<LivingGoodsVo> voList) {
+	public GoodsItemAdapter(Context mContext, List<GoodEntity> voList) {
 		this.mContext = mContext;
 		layoutInflater = LayoutInflater.from(mContext);
 		this.list = voList;
@@ -70,10 +70,10 @@ public class GoodsItemAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-	    imageLoader.DisplayImage(list.get(position).getImgUrl(), holder.goods_icon);
-		holder.goods_price.setText("￥"+list.get(position).getGoodsPrice());
-		holder.goods_name.setText(list.get(position).getGoodsName());
-		holder.goods_weight.setText(list.get(position).getGoodsWeight());
+	    imageLoader.DisplayImage(list.get(position).getGoods_image_url(), holder.goods_icon);
+		holder.goods_price.setText("￥"+list.get(position).getGoods_price());
+		holder.goods_name.setText(list.get(position).getGoods_name());
+//		holder.goods_weight.setText(list.get(position).getGoods_salenum());
 		return convertView;
 	}
 

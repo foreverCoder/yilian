@@ -317,9 +317,9 @@ public class LivingMuseumDetailsActivity extends Activity implements OnScrollLis
 		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
 		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
 		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
+//		gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
 
-		mListView.setAdapter(gAdapter);
+//		mListView.setAdapter(gAdapter);
 		topHeight = top_bar.getHeight();
 		Utils.setListViewHeight(mListView, topHeight);
 	}
