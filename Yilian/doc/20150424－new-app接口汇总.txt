@@ -1,0 +1,849 @@
+固定地址：http://www.zq2014.com/haili/mobile/index.php
+
+1.获取用户当前位置 500米内的生活馆信息
+http://www.zq2014.com/haili/mobile/index.php?act=life&op=mapgetlife
+POST传值 经度 参数：lng 纬度参数：lat
+返回：      [store_id]      生活馆店铺ID
+            [store_name]   生活馆店铺名
+            [type_id]     店铺类型   1商城 2，生活馆；3农庄
+            [maplnglat]  生活馆店铺的经纬度  117.259462,31.860109
+
+2、获取当前位置最近的生活馆信息
+http://www.zq2014.com/haili/mobile/index.php?act=life&op=mapnearbylife
+POST传值 经度 参数：lng 纬度参数：lat
+返回：      [store_id]      生活馆店铺ID
+            [store_name]   生活馆店铺名
+            [type_id]     店铺类型   1商城 2，生活馆；3农庄
+            [maplnglat]  生活馆店铺的经纬度  117.259462,31.860109
+
+
+
+
+
+3.获取商品的所有分类，包括农庄和商城
+接口：http://www.zq2014.com/haili/mobile/index.php?act=classify&op=index
+POST传状态值：状态值style为1表示全部分类值，3表示开心农庄分类值
+
+4.获取某个分类下排序后(缺省综合、销量、价格、距离)的商品列表，带分页
+接口：http://www.zq2014.com/haili/mobile/index.php?act=classify&op=class
+POST传值： $key是排序类型（比如2综合、1销量、3价格)， $order是排序方向（1为正序，默认倒叙），$gc_id是查询分类的id(比如生活馆的分类gc_id是1211)
+
+5.搜索商品排序后(缺省综合、销量、价格、距离)的信息，带分页
+act=goods&op=goods_search
+传参数：GET
+keyword 用户搜索框添加的内容；key 为排序方式 0为默认，1为销量，2为人气，3为价格；order 为排序 1为升序，2为降序
+分页： curpage 第几页   pagesize 一页几条信息 不传值默认为5条
+&keyword=ddd&key=0&order=0&curpage=3&pagesize=2
+
+返回数据：
+Array
+(
+    [0] => Array
+        (
+            [nc_distinct] => 17,0
+            [goods_id] => 125
+            [goods_commonid] => 17
+            [goods_name] => 农庄中商品类测试添加商品5 小猪
+            [goods_jingle] => ddd
+            [gc_id] => 1222
+            [store_id] => 9
+            [store_name] => 美味生活馆
+            [goods_price] => 112.00
+            [goods_marketprice] => 155.00
+            [goods_storage] => 19
+            [goods_image] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg
+            [goods_freight] => 0.00
+            [goods_salenum] => 1
+            [color_id] => 0
+            [evaluation_good_star] => 5
+            [evaluation_count] => 0
+            [member_id] => 16
+            [store_domain] => 
+        )
+
+)
+
+
+
+6. 获取当前生活馆的信息，如原型图
+接口：act=life&op= index
+POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家信息所对应的id值。
+
+返回值：
+
+store_id：店铺id
+store_name:店铺名
+store_address：店铺地址
+store_label：店铺logo
+store_tel：店铺电话
+street：配送街道
+store_workingtime：店铺工作时间
+
+
+Array
+(
+    [9] => Array
+        (
+            [store_id] => 9
+            [store_name] => 美味生活馆
+            [store_address] => 
+            [store_label] => 
+            [store_tel] => 
+            [street] => 黎阳家苑
+            [store_workingtime] => 
+        )
+
+)
+
+
+7. 获取今日新品、餐饮、早市特卖、晚市特卖的图片
+接口：act=life&op= life_images
+返回：
+获取今日新品、餐饮、早市特卖、晚市特卖的图片
+APP_canyin(餐饮图片)，APP_temai（特卖）,APP_tuangou(团购),APP_wanshi(晚市),APP_zaoshi(早市)
+
+
+
+
+8、获取今日新品等分类下的商品列表
+接口：act=life&op= life_new
+POST传值： 需要传值为store_id（店铺id），life_type为分类状态(life_type表示(早市特卖（life_type=1），晚市特卖	(life_type=2），为餐饮外卖-早餐 (life_type=3），4为餐饮外卖-午餐	(life_type=4），为餐饮外卖-晚餐(life_type=5）,为日新品（life_type=""）)
+
+返回值：
+
+goods_id 商品id(SKU)
+
+goods_commonid 商品公共表id
+
+goods_name 商品名称
+
+goods_jingle 商品广告词
+
+gc_id 商品分类
+
+gc_name 商品分类
+
+store_id 店铺id
+
+store_name 店铺名称
+
+farm_type 农庄商品的类型，1生成验证码，2为农作物，3为养殖
+
+life_type 生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐，
+
+starttime_life 生活馆中类别商品，开卖时间
+
+endtime_life 生活馆中类别商品，结束时间
+
+spec_name 规格名称
+
+spec_value 规格值
+
+brand_id 品牌id
+
+brand_name 品牌名称
+
+type_id 类型id
+
+goods_image 商品主图
+
+goods_attr 商品属性
+
+goods_body 商品内容
+
+goods_state 商品状态 0下架，1正常，10违规（禁售）
+
+goods_stateremark 违规原因
+
+goods_verify 商品审核 1通过，0未通过，10审核中
+
+goods_verifyremark 审核失败原因
+
+goods_lock 商品锁定 0未锁，1已锁
+
+goods_addtime 商品添加时间
+
+goods_selltime 上架时间
+
+goods_specname 规格名称序列化（下标为规格id）
+
+goods_price 商品价格
+
+goods_marketprice 市场价
+
+goods_costprice 成本价
+
+goods_discount 折扣
+
+goods_serial 商家编号
+
+transport_id 运费模板
+
+transport_title 运费模板名称
+
+goods_commend 商品推荐 1是，0否，默认为0
+
+goods_freight 运费 0为免运费
+
+goods_vat 是否开具增值税发票 1是，0否
+
+areaid_1 一级地区id
+
+areaid_2 二级地区id
+
+areaid_3 三级地区id
+
+goods_stcids 店铺分类id 首尾用,隔开
+
+plateid_top 顶部关联板式
+
+plateid_bottom 底部关联板式
+
+goods_shicai 
+
+goods_zzbz 
+
+goods_xts 
+
+goods_shicaidetail
+
+
+
+
+
+Array
+(
+    [0] => Array
+        (
+            [goods_id] => 17
+            [goods_commonid] => 17
+            [goods_name] => 生活馆中商品类测试添加商品5
+            [goods_jingle] => ddd
+            [store_id] => 9
+            [store_name] => 美味生活馆
+            [gc_id] => 1221
+            [brand_id] => 294
+            [goods_price] => 112.00
+            [goods_marketprice] => 155.00
+            [goods_serial] => 
+            [goods_click] => 0
+            [goods_salenum] => 0
+            [goods_collect] => 0
+            [goods_spec] => a:3:{i:442;s:6:"水田";i:436;s:6:"水稻";i:444;s:9:"全托管";}
+            [goods_storage] => 12
+            [goods_image] => 9_04762708400105268.jpg
+            [goods_state] => 1
+            [goods_verify] => 1
+            [goods_addtime] => 1425292979
+            [goods_edittime] => 1427178138
+            [areaid_1] => 1
+            [areaid_2] => 36
+            [areaid_3] => 0
+            [color_id] => 442
+            [transport_id] => 0
+            [goods_freight] => 0.00
+            [goods_vat] => 0
+            [goods_commend] => 0
+            [goods_stcids] => ,0,
+            [evaluation_good_star] => 5
+            [evaluation_count] => 0
+            [gc_name] => 开心农庄 &gt;土地庄主
+            [farm_type] => 0
+            [life_type] => 0
+            [starttime_life] => 00:05
+            [endtime_life] => 00:05
+            [spec_name] => a:3:{i:1;s:12:"土地选择";i:15;s:12:"农作选择";i:20;s:12:"种植方式";}
+            [spec_value] => a:3:{i:1;a:4:{i:442;s:6:"水田";i:443;s:9:"蔬菜地";i:446;s:6:"旱地";i:447;s:6:"林地";}i:15;a:3:{i:436;s:6:"水稻";i:437;s:6:"蔬菜";i:448;s:6:"小麦";}i:20;a:2:{i:444;s:9:"全托管";i:445;s:9:"半托管";}}
+            [brand_name] => 益益乳业
+            [type_id] => 40
+            [goods_attr] => a:3:{i:226;a:2:{s:4:"name";s:12:"土地选择";i:3220;s:36:"水田，蔬菜地，旱地，林地";}i:227;a:2:{s:4:"name";s:15:"农作物选择";i:3221;s:24:"水稻，蔬菜，小麦";}i:228;a:2:{s:4:"name";s:12:"种植方式";i:3223;s:9:"半托管";}}
+            [goods_body] => <img alt="image" src="http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_1280.jpg" />
+            [goods_stateremark] => 
+            [goods_verifyremark] => 
+            [goods_lock] => 0
+            [goods_selltime] => 0
+            [goods_specname] => 
+            [goods_costprice] => 0.00
+            [goods_discount] => 72
+            [transport_title] => 
+            [plateid_top] => 0
+            [plateid_bottom] => 0
+            [goods_shicai] => 
+            [goods_zzbz] => 
+            [goods_xts] => 
+            [goods_shicaidetail] => 
+        )
+）
+
+
+ 
+
+
+9、生活馆搜索商品的列表信息  
+接口：http://qxu1193880138.my3w.com/haili/mobile/index.php?act=life&op=life_goods
+POST传状态值：传搜索生活馆商品信息名称$life_search（如：传值，蔬菜。。。）分页传值，
+
+分页： curpage 第几页 默认为5条 例如：&curpage=3
+
+
+返回：
+
+
+goods_id 商品id(SKU)
+
+goods_commonid 商品公共表id
+
+goods_name 商品名称
+
+goods_jingle 商品广告词
+
+gc_id 商品分类
+
+gc_name 商品分类
+
+store_id 店铺id
+
+store_name 店铺名称
+
+farm_type 农庄商品的类型，1生成验证码，2为农作物，3为养殖
+
+life_type 生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐，
+
+starttime_life 生活馆中类别商品，开卖时间
+
+endtime_life 生活馆中类别商品，结束时间
+
+spec_name 规格名称
+
+spec_value 规格值
+
+brand_id 品牌id
+
+brand_name 品牌名称
+
+type_id 类型id
+
+goods_image 商品主图
+
+goods_attr 商品属性
+
+goods_body 商品内容
+
+goods_state 商品状态 0下架，1正常，10违规（禁售）
+
+goods_stateremark 违规原因
+
+goods_verify 商品审核 1通过，0未通过，10审核中
+
+goods_verifyremark 审核失败原因
+
+goods_lock 商品锁定 0未锁，1已锁
+
+goods_addtime 商品添加时间
+
+goods_selltime 上架时间
+
+goods_specname 规格名称序列化（下标为规格id）
+
+goods_price 商品价格
+
+goods_marketprice 市场价
+
+goods_costprice 成本价
+
+goods_discount 折扣
+
+goods_serial 商家编号
+
+transport_id 运费模板
+
+transport_title 运费模板名称
+
+goods_commend 商品推荐 1是，0否，默认为0
+
+goods_freight 运费 0为免运费
+
+goods_vat 是否开具增值税发票 1是，0否
+
+areaid_1 一级地区id
+
+areaid_2 二级地区id
+
+areaid_3 三级地区id
+
+goods_stcids 店铺分类id 首尾用,隔开
+
+plateid_top 顶部关联板式
+
+plateid_bottom 底部关联板式
+
+goods_shicai 
+
+goods_zzbz 
+
+goods_xts 
+
+goods_shicaidetail
+
+
+
+Array
+(
+    [0] => Array
+        (
+            [goods_id] => 26
+            [goods_commonid] => 17
+            [goods_name] => 生活馆中商品类测试添加商品5
+            [goods_jingle] => ddd
+            [store_id] => 9
+            [store_name] => 美味生活馆
+            [gc_id] => 1221
+            [brand_id] => 294
+            [goods_price] => 112.00
+            [goods_marketprice] => 155.00
+            [goods_serial] => 
+            [goods_click] => 0
+            [goods_salenum] => 0
+            [goods_collect] => 0
+            [goods_spec] => a:3:{i:443;s:9:"蔬菜地";i:437;s:6:"蔬菜";i:445;s:9:"半托管";}
+            [goods_storage] => 32
+            [goods_image] => 9_04762708400105268.jpg
+            [goods_state] => 1
+            [goods_verify] => 1
+            [goods_addtime] => 1425292979
+            [goods_edittime] => 1427178138
+            [areaid_1] => 1
+            [areaid_2] => 36
+            [areaid_3] => 0
+            [color_id] => 443
+            [transport_id] => 0
+            [goods_freight] => 0.00
+            [goods_vat] => 0
+            [goods_commend] => 0
+            [goods_stcids] => ,0,
+            [evaluation_good_star] => 5
+            [evaluation_count] => 0
+            [gc_name] => 开心农庄 &gt;土地庄主
+            [farm_type] => 0
+            [life_type] => 0
+            [starttime_life] => 00:05
+            [endtime_life] => 00:05
+            [spec_name] => a:3:{i:1;s:12:"土地选择";i:15;s:12:"农作选择";i:20;s:12:"种植方式";}
+            [spec_value] => a:3:{i:1;a:4:{i:442;s:6:"水田";i:443;s:9:"蔬菜地";i:446;s:6:"旱地";i:447;s:6:"林地";}i:15;a:3:{i:436;s:6:"水稻";i:437;s:6:"蔬菜";i:448;s:6:"小麦";}i:20;a:2:{i:444;s:9:"全托管";i:445;s:9:"半托管";}}
+            [brand_name] => 益益乳业
+            [type_id] => 40
+            [goods_attr] => a:3:{i:226;a:2:{s:4:"name";s:12:"土地选择";i:3220;s:36:"水田，蔬菜地，旱地，林地";}i:227;a:2:{s:4:"name";s:15:"农作物选择";i:3221;s:24:"水稻，蔬菜，小麦";}i:228;a:2:{s:4:"name";s:12:"种植方式";i:3223;s:9:"半托管";}}
+            [goods_body] => <img alt="image" src="http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_1280.jpg" />
+            [goods_stateremark] => 
+            [goods_verifyremark] => 
+            [goods_lock] => 0
+            [goods_selltime] => 0
+            [goods_specname] => 
+            [goods_costprice] => 0.00
+            [goods_discount] => 72
+            [transport_title] => 
+            [plateid_top] => 0
+            [plateid_bottom] => 0
+            [goods_shicai] => 
+            [goods_zzbz] => 
+            [goods_xts] => 
+            [goods_shicaidetail] => 
+        )
+）
+
+
+
+
+
+
+10.分类固定写死八个分类，获取每个分类下的商品列表，带分页
+接口：act=life&op=life_classify
+POST传值： 需要同时传$gc_id和$store_id两个值，$gc_id是需要查看分类所对应的id值， $store_id是需要查看店铺的id值。
+
+返回值：
+
+
+
+goods_id 商品id(SKU)
+
+goods_commonid 商品公共表id
+
+goods_name 商品名称
+
+goods_jingle 商品广告词
+
+gc_id 商品分类
+
+gc_name 商品分类
+
+store_id 店铺id
+
+store_name 店铺名称
+
+farm_type 农庄商品的类型，1生成验证码，2为农作物，3为养殖
+
+life_type 生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐，
+
+starttime_life 生活馆中类别商品，开卖时间
+
+endtime_life 生活馆中类别商品，结束时间
+
+spec_name 规格名称
+
+spec_value 规格值
+
+brand_id 品牌id
+
+brand_name 品牌名称
+
+type_id 类型id
+
+goods_image 商品主图
+
+goods_attr 商品属性
+
+goods_body 商品内容
+
+goods_state 商品状态 0下架，1正常，10违规（禁售）
+
+goods_stateremark 违规原因
+
+goods_verify 商品审核 1通过，0未通过，10审核中
+
+goods_verifyremark 审核失败原因
+
+goods_lock 商品锁定 0未锁，1已锁
+
+goods_addtime 商品添加时间
+
+goods_selltime 上架时间
+
+goods_specname 规格名称序列化（下标为规格id）
+
+goods_price 商品价格
+
+goods_marketprice 市场价
+
+goods_costprice 成本价
+
+goods_discount 折扣
+
+goods_serial 商家编号
+
+transport_id 运费模板
+
+transport_title 运费模板名称
+
+goods_commend 商品推荐 1是，0否，默认为0
+
+goods_freight 运费 0为免运费
+
+goods_vat 是否开具增值税发票 1是，0否
+
+areaid_1 一级地区id
+
+areaid_2 二级地区id
+
+areaid_3 三级地区id
+
+goods_stcids 店铺分类id 首尾用,隔开
+
+plateid_top 顶部关联板式
+
+plateid_bottom 底部关联板式
+
+goods_shicai 
+
+goods_zzbz 
+
+goods_xts 
+
+goods_shicaidetail
+
+
+
+Array
+(
+    [0] => Array
+        (
+            [goods_id] => 13
+            [goods_commonid] => 13
+            [goods_name] => 生活馆中商品类测试添加商品
+            [goods_jingle] => 
+            [store_id] => 9
+            [store_name] => 美味生活馆
+            [gc_id] => 1217
+            [brand_id] => 0
+            [goods_price] => 12.00
+            [goods_marketprice] => 12.00
+            [goods_serial] => 
+            [goods_click] => 1
+            [goods_salenum] => 3
+            [goods_collect] => 0
+            [goods_spec] => N;
+            [goods_storage] => 120
+            [goods_image] => 9_04762708400105268.jpg
+            [goods_state] => 1
+            [goods_verify] => 1
+            [goods_addtime] => 1425285925
+            [goods_edittime] => 1425286361
+            [areaid_1] => 2
+            [areaid_2] => 40
+            [areaid_3] => 0
+            [color_id] => 0
+            [transport_id] => 0
+            [goods_freight] => 0.00
+            [goods_vat] => 0
+            [goods_commend] => 1
+            [goods_stcids] => ,0,
+            [evaluation_good_star] => 5
+            [evaluation_count] => 0
+            [gc_name] => 生活馆 &gt;开分类1
+            [farm_type] => 0
+            [life_type] => 0
+            [starttime_life] => 14:05
+            [endtime_life] => 19:05
+            [spec_name] => N;
+            [spec_value] => N;
+            [brand_name] => 
+            [type_id] => 0
+            [goods_attr] => N;
+            [goods_body] => <img src="http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_1280.jpg" alt="image" /><img src="http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_1280.jpg" alt="image" />
+            [goods_stateremark] => 
+            [goods_verifyremark] => 
+            [goods_lock] => 0
+            [goods_selltime] => 0
+            [goods_specname] => 
+            [goods_costprice] => 0.00
+            [goods_discount] => 100
+            [transport_title] => 
+            [plateid_top] => 0
+            [plateid_bottom] => 0
+            [goods_shicai] => 
+            [goods_zzbz] => 
+            [goods_xts] => 
+            [goods_shicaidetail] => 
+        )
+
+)
+
+11. 获取指定商品的图片列表
+接口：act=life&op= the_goods
+POST传值： 需要传一个商品的$goods_id值，$goods_id是需要查看商品所对应的id值。
+
+返回值：
+为指定商品的图片
+
+Array
+(
+    [0] => http://localhost/haili/data/upload/shop/store/goods/1/1_04751630533474817_240.jpg
+)
+
+
+
+
+12、获取指定商品的信息，如图  *   13、获取同类推荐的商品列表,数量5个左右  合并
+act=goods&op=goods_detail
+POST数据参数：goods_id
+返回数据如下：    其中：goods_info为指定商品的详细信息，goods_commend_list 为同类推荐的商品
+
+ 	goods_collect  	
+        goods_zzbz	无厨***
+        goods_name	商品名称（+规格名称）
+        goods_storage 商品库存	
+        goods_salenum 销售数量 
+        goods_serial 商家编号
+        goods_click 商品点击数量  
+        transport_id 运费模板  
+        areaid_1 一级地区id
+        areaid_2 二级地区id
+        goods_price 商品价格  
+        areaid_3 三级地区id
+        goods_spec 商品规格序列化
+        evaluation_good_star 好评星级 
+        goods_xts	无厨***
+        goods_specname 规格名称序列化（下标为规格id）
+        transport_title 运费模板名称 
+        goods_marketprice 市场价
+        evaluation_count 评价数
+        store_id	商铺ID
+        goods_shicai	无厨***
+        goods_image 商品主图 
+        goods_vat 是否开具增值税发票 1是，0否
+        type_id	商品分类
+        spec_name 规格名称
+        goods_freight 运费 0为免运费
+        goods_shicaidetail
+        plateid_top 顶部关联板式 
+        goods_attr 商品属性  
+        goods_stcids 店铺分类id 首尾用,隔开 
+        spec_value 规格值  
+        color_id 颜色规格id 
+        plateid_bottom 底部关联板式
+        goods_body 商品描述
+        goods_id	商品ID
+        goods_jingle 商品广告词
+        goods_costprice 成本价
+        goods_discount 	折扣 
+Array
+(
+    [goods_info] => Array
+        (
+            [goods_name] => 开心农庄中商品类测试添加商品4----***
+            [goods_jingle] => 
+            [store_id] => 9
+            [farm_type] => 1
+            [life_type] => 0
+            [starttime_life] => 
+            [endtime_life] => 
+            [spec_name] => 
+            [spec_value] => 
+            [type_id] => 0
+            [goods_image] => 9_04762708400105268.jpg
+            [goods_attr] => 
+            [goods_body] => <img src="http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_1280.jpg" alt="image" />
+            [goods_specname] => 
+            [goods_price] => 12.00
+            [goods_marketprice] => 12.00
+            [goods_costprice] => 0.00
+            [goods_discount] => 100
+            [goods_serial] => 
+            [transport_id] => 0
+            [transport_title] => 
+            [goods_freight] => 0.00
+            [goods_vat] => 0
+            [areaid_1] => 0
+            [areaid_2] => 0
+            [areaid_3] => 0
+            [goods_stcids] => ,0,
+            [plateid_top] => 0
+            [plateid_bottom] => 0
+            [goods_shicai] => 
+            [goods_zzbz] => 
+            [goods_xts] => 
+            [goods_shicaidetail] => 
+            [goods_id] => 15
+            [goods_click] => 13
+            [goods_salenum] => 0
+            [goods_collect] => 0
+            [goods_spec] => 
+            [goods_storage] => 12
+            [color_id] => 0
+            [evaluation_good_star] => 5
+            [evaluation_count] => 0
+        )
+
+    [spec_image] => Array
+        (
+            [0] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_60.jpg
+        )
+
+    [mansong_info] => 
+    [goods_commend_list] => Array
+        (
+            [0] => Array
+                (
+                    [goods_id] => 146
+                    [goods_name] => 开心农庄中商品类测试添加商品6 水田 半托管
+                    [goods_price] => 10.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg
+                )
+
+            [1] => Array
+                (
+                    [goods_id] => 133
+                    [goods_name] => 土地类型测试 水田 全托管
+                    [goods_price] => 10.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_240.jpg
+                )
+
+            [2] => Array
+                (
+                    [goods_id] => 125
+                    [goods_name] => 农庄中商品类测试添加商品5 小猪
+                    [goods_price] => 112.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg
+                )
+
+            [3] => Array
+                (
+                    [goods_id] => 15
+                    [goods_name] => 开心农庄中商品类测试添加商品4----***
+                    [goods_price] => 12.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg
+                )
+
+            [4] => Array
+                (
+                    [goods_id] => 128
+                    [goods_name] => 开心农庄中商品类测试添加商品３ 水田 一分地 全托管
+                    [goods_price] => 12.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg
+                )
+
+            [5] => Array
+                (
+                    [goods_id] => 134
+                    [goods_name] => 土地类型测试 水田 半托管
+                    [goods_price] => 10.00
+                    [goods_image_url] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_240.jpg
+                )
+
+        )
+
+    [spec_list] => Array
+        (
+            [] => 15
+        )
+
+    [goods_image] => http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_360.jpg
+    [is_fav] => 0
+)
+
+
+
+
+
+14、商品加入购物车
+act=member_cart&op=cart_add
+POST数据参数： goods_id 商品ID  quantity  数量
+返回
+成功返回 1
+
+14、购物车批量删除
+act=member_cart&op=cart_all_del
+POST数据参数：cart_id  单个删除为int，多个删除为数组
+
+
+
+
+
+
+18、获取全部评价、好评、中评、差评数量  19、获取分类评价下的评价列表
+act=goods&op=goods_comment
+POST数据：goods_id
+
+返回
+all  评价个数
+goods  好评个数
+normal 中评个数
+bad  差评个数
+
+good_percent    好评%
+normal_percent 中评%
+bad_percent 差评%
+
+
+
+
+
+20.配送地址接口
+http://www.zq2014.com/haili/mobile/index.php?act=life&op=getstorelifeaddr
+传值：POST store_id    生活馆店铺ID
+返回数据：
+life_id 配送城市序号	
+seller_id 卖家id	
+province 配送省份	
+city 配送市	
+district 配送区	
+street 配送街道
