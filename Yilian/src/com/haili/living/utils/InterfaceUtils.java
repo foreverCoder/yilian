@@ -2,16 +2,21 @@ package com.haili.living.utils;
 
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";
-	
+
 	/*
 	 * 生活馆图片类型
 	 */
 	public static class ShopPicType {
 		public static String MORNING_SPECIAL = "1";// 早市特卖
+		public static String KEY_MORNING_SPECIAL = "APP_zaoshi";// 早市特卖map键
 		public static String EVENING_SPECIAL = "2";// 晚市特卖
-		public static String BREAKFAST_OUT = "3";// 餐饮外卖-早餐
-		public static String LANCHER_OUT = "4";// 餐饮外卖-午餐
-		public static String SUPER_OUT = "5";// 餐饮外卖-晚餐
+		public static String KEY_EVENING_SPECIAL = "APP_wanshi";// 晚市特卖map键
+		public static String DINNER_OUT = "3,4,5";// 餐饮外卖
+		public static String KEY_DINNER_OUT = "APP_canyin";// 餐饮外卖map键
+		public static String TODAY_NEW = "0";// 今日新品特卖
+		public static String KEY_TODAY_NEW = "APP_temai";// 今日新品特卖map键
+		public static String GROUP_BUY = "";//团购
+		public static String KEY_GROUP_BUY = "APP_tuangou";//团购map键
 	}
 
 	/*
@@ -61,21 +66,20 @@ public class InterfaceUtils {
 	}
 
 	/**
-	 * 7. 获取今日新品、餐饮、早市特卖、晚市特卖的图片 接口：act=life&op= life_images POST传值：
-	 * 需要传一个导航状态值的$life_type和商家店铺的$store_id值
-	 * ，$life_type等于1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，
-	 * 4为餐饮外卖-午餐，5为餐饮外卖-晚餐的图片，$store_id是需要查看商家所对应的id值。
+	 * 7. 获取今日新品、餐饮、早市特卖、晚市特卖的图片 接口：act=life&op= life_images 返回：
+	 * 获取今日新品、餐饮、早市特卖、晚市特卖的图片
+	 * APP_canyin(餐饮图片)，APP_temai（特卖）,APP_tuangou(团购),APP_wanshi
+	 * (晚市),APP_zaoshi(早市)
 	 */
 	public static String getLiveShopHeadPic() {
-		return getBaseURI() + "act=life&op= life_images";
+		return getBaseURI() + "act=life&op=life_images";
 	}
-	
+
 	/**
-	 * 8.获取今日新品的商品列表
-接口：act=life&op= life_new
-POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值。
+	 * 8.获取今日新品的商品列表 接口：act=life&op= life_new POST传值：
+	 * 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值。
 	 */
-	public static String getGoodListByPicType(){
+	public static String getGoodListByPicType() {
 		return getBaseURI() + "act=life&op= life_new";
 	}
 
