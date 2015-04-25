@@ -2,12 +2,14 @@ package com.haili.living.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -33,8 +35,10 @@ import com.haili.living.adapter.ClassifyItemAdapter;
 import com.haili.living.adapter.GoodsItemAdapter;
 import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
+import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
 import com.haili.living.utils.ConstantValue;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.Utils;
@@ -62,7 +66,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	private int pageNum = 1;// 当前页数
 	private String sortStyle = InterfaceUtils.SortStyle.MULTIPLE;// 排序方式
 	private String sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
-
+	private ProgressDialog progressDialog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,6 +78,9 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	}
 
 	private void initViews() {
+		progressDialog=new ProgressDialog(context);
+		progressDialog.setIndeterminate(false);
+		progressDialog.setMessage("请稍候...");
 		top_title = (TextView) findViewById(R.id.top_title);
 		top_title.setVisibility(View.GONE);
 		top_left = (ImageView) findViewById(R.id.top_left);
@@ -123,20 +130,23 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			@Override
 			public void onRefresh() {
 				pageNum = 1;
-				getGoodListByClassify(cVoList.get(0).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
 						true);
 			}
 
 			@Override
 			public void onLoadMore() {
 				pageNum += 1;
-				getGoodListByClassify(cVoList.get(0).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
 						false);
 			}
 		});
 		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
 				cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(arg2));
 				cAdapter.notifyDataSetChanged();
 				pageNum = 1;
@@ -191,28 +201,43 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		if (arg1) {
 			int id = arg0.getId();
+			pageNum = 1;
+			sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
 			switch (id) {
 			// 综合
 			case R.id.radio_zh:
 				initJgButton();
-				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
 				sortStyle = InterfaceUtils.SortStyle.MULTIPLE;
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
 				break;
 			// 销量
 			case R.id.radio_xl:
 				initJgButton();
-				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
 				sortStyle = InterfaceUtils.SortStyle.SALES;
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
 				break;
 			// 价格
 			case R.id.radio_jg:
 				sortStyle = InterfaceUtils.SortStyle.PRICE;
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
 				break;
 			// 距离
 			case R.id.radio_jl:
 				initJgButton();
-				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
-				sortStyle = InterfaceUtils.SortStyle.PRICE;// TODO 距离排序
+//				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
+//				sortStyle = InterfaceUtils.SortStyle.PRICE;// TODO 距离排序
 				break;
 
 			default:
@@ -239,15 +264,29 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			Drawable drawable = null;
 			RadioButton btn = (RadioButton) findViewById(arg0.getId());
 			int a = Utils.dip2px(getBaseContext(), 15);
-			if (priceTag == -1) {
+			if (priceTag == -1) {//价格未选中
 				drawable = getResources().getDrawable(R.drawable.ic_jg1);
 				priceTag = 0;
-			} else if (priceTag == 0) {
+			} else if (priceTag == 0) {//价格降序
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
+				sortStyle = InterfaceUtils.SortStyle.PRICE;
+				sortDirect = InterfaceUtils.SortDirect.REVERSE;
 				drawable = getResources().getDrawable(R.drawable.ic_jg2);
 				priceTag = 1;
-			} else if (priceTag == 1) {
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
+			} else if (priceTag == 1) {//价格升序
+				if (!progressDialog.isShowing()) {
+					progressDialog.show();
+				}
+				sortStyle = InterfaceUtils.SortStyle.PRICE;
+				sortDirect = InterfaceUtils.SortDirect.POSITIVE;
 				drawable = getResources().getDrawable(R.drawable.ic_jg1);
 				priceTag = 0;
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
+						pageNum + "", true);
 			}
 			drawable.setBounds(0, 0, a, a);
 			btn.setCompoundDrawables(null, null, drawable, null);
@@ -330,11 +369,11 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	private void getGoodListByClassify(String gcId, String key, String order, String page, final String curpage, final Boolean flag) {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("gc_id", gcId);
-		params.addBodyParameter("key", gcId);
+		params.addBodyParameter("key", key);
 		params.addBodyParameter("order", order);
 		params.addBodyParameter("page", page);
 		params.addBodyParameter("curpage", curpage);
-		System.out.println("   当前页面    ：" + curpage + "    每页数据：" + page);
+		System.out.println("   当前页面    ：" + curpage + "    每页数据：" + page+"  分类ID："+gcId+"  排序类型："+key +" 排序方向："+order);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByClassify(), params, new RequestCallBack<String>() {
 
@@ -349,6 +388,9 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
+				if (progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
 				onLoad();
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d(result);
@@ -377,7 +419,10 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 							}
 						}
 					} else {
-						toastShort("接口返回失败");
+						lVoList.clear();
+						gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
+						mListView.setAdapter(gAdapter);
+						toastShort("暂无数据");
 					}
 				} catch (JsonParseException e) {
 					e.printStackTrace();
@@ -392,6 +437,10 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
+				if (progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+				onLoad();
 				toastLong("请求失败");
 			}
 		});

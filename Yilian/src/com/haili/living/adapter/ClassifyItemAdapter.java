@@ -34,6 +34,10 @@ public class ClassifyItemAdapter extends BaseAdapter {
 	public void setSelected(GoodClassEntity vo){
 		selected = vo;
 	}
+	
+	public GoodClassEntity getSelected() {
+		return selected;
+	}
 	@Override
 	public int getCount() {
 		return list.size();
