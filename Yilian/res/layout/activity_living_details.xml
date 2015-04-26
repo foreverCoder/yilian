@@ -38,17 +38,33 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/l_detail_back" />
 
-                    <TextView
-                        android:id="@+id/details_info"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#39892f"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="3dp"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                        android:background="#39892f" >
+
+                        <TextView
+                            android:id="@+id/details_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@+id/img_psfw"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="3dp"
+                            android:text="11d大打算打打算打\n"
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
+
+                        <ImageButton
+                            android:id="@+id/img_psfw"
+                            android:layout_width="70dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="2dp"
+                            android:background="@drawable/button_psfw" />
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -123,11 +139,11 @@
     </com.haili.living.view.ScrollViewExtend>
 
     <ImageView
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:id="@+id/back_top"
         android:layout_width="35dp"
         android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="15dp"
