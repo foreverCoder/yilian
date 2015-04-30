@@ -15,8 +15,8 @@ public class InterfaceUtils {
 		public static String KEY_DINNER_OUT = "APP_canyin";// 餐饮外卖map键
 		public static String TODAY_NEW = "0";// 今日新品特卖
 		public static String KEY_TODAY_NEW = "APP_temai";// 今日新品特卖map键
-		public static String GROUP_BUY = "";//团购
-		public static String KEY_GROUP_BUY = "APP_tuangou";//团购map键
+		public static String GROUP_BUY = "";// 团购
+		public static String KEY_GROUP_BUY = "APP_tuangou";// 团购map键
 	}
 
 	/*
@@ -56,6 +56,18 @@ public class InterfaceUtils {
 
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
+
+	/**
+	 * @return 9、生活馆搜索商品的列表信息
+	 *         接口：http://qxu1193880138.my3w.com/haili/mobile/index
+	 *         .php?act=life&op=life_goods
+	 *         POST传状态值：传搜索生活馆商品信息名称$life_search（如：传值，蔬菜。。。）分页传值，
+	 * 
+	 *         分页： curpage 第几页 默认为5条 例如：&curpage=3
+	 */
+	public static String getShopSearchGoods() {
+		return getBaseURI() + "act=life&op=life_goods";
+	}
 
 	/*
 	 * 6. 获取当前生活馆的信息，如原型图 接口：act=life&op= index POST传值：

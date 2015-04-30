@@ -21,9 +21,9 @@ import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
 import com.haili.living.entity.interfaces.ShopInfoInterfaceEntity;
+import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.JacksonUtils;
-import com.haili.living.utils.InterfaceUtils.ShopPicType;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -100,10 +100,94 @@ public class InterfaceTestActivity extends BaseActivity {
 	public void testShopDistribution(View view){//获取生活馆配送范围
 		getShopDistribution("19");//传入生活馆ID
 	}
-//	@OnClick(R.id.btnShopHeadPic)
-//	public void testShopHeadPic(View view){//获取生活馆头部四张图片
-//		getShopHeadPic();//传入生活馆ID
-//	}
+	@OnClick(R.id.btnShopHeadPic)
+	public void testShopHeadPic(View view){//获取生活馆头部四张图片
+		getShopHeadPic();//传入生活馆ID
+	}
+	@OnClick(R.id.btnShopSearchGood)
+	public void testShopSearchGoods(View view){//搜索生活馆商品列表
+		getShopSearchGoods("猪肉", "1");
+	}
+	
+	public void getShopSearchGoods(String keyWord,String curPage){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("life_search",keyWord);
+		params.addBodyParameter("curpage",curPage);
+		
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.getShopSearchGoods(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String historyResult = responseInfo.result;
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d("**"+result);
+						
+						
+						ObjectMapper mapper = new ObjectMapper();
+						List<GoodEntity> goodEntities = new ArrayList<GoodEntity>();
+						try {
+							ShopSearchGoodsInterfaceEntity entity = mapper.readValue(
+									result, ShopSearchGoodsInterfaceEntity.class);// 接口实体类
+
+							if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+									.getResult())) {// 如果result返回1
+								LogUtils.d("entity " + entity.getCode() + " "
+										+ entity.getResult() + " ");
+
+								if (entity.hasDatas()) {
+									goodEntities = entity.getDatas().getGoods_list();
+									
+									/*
+									 * 业务逻辑处理
+									 */
+									Iterator<GoodEntity> iterator = goodEntities
+											.iterator();
+									while (iterator.hasNext()) {
+										GoodEntity good = iterator.next();
+
+										LogUtils.d("good "
+												+ good.getGoods_name()+good.getGoods_price());
+									}
+								}
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+	}
 	
 	
 	

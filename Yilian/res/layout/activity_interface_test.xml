@@ -56,4 +56,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="生活馆头部四个图片"/>
+    <Button
+        android:id="@+id/btnShopSearchGood"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="生活馆搜索商品"/>
+    
 </LinearLayout>
