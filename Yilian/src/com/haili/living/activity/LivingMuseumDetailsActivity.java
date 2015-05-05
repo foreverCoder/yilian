@@ -2,7 +2,9 @@ package com.haili.living.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
@@ -28,10 +30,12 @@ import android.widget.Toast;
 import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.GoodsItemAdapter;
-import com.haili.living.entity.LivingGoodsVo;
+import com.haili.living.entity.GoodEntity;
 import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.interfaces.ShopInfoInterfaceEntity;
+import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
+import com.haili.living.utils.LoadNetworkPic;
 import com.haili.living.utils.Utils;
 import com.haili.living.view.ScrollViewExtend;
 import com.haili.living.view.ScrollViewExtend.OnScrollListener1;
@@ -49,10 +53,13 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrollListener1 {
+	protected LoadNetworkPic imageLoader;
 	// 滑动距离及坐标
 	private float xDistance, yDistance, xLast, yLast;
-	private List<LivingGoodsVo> lVoList = new ArrayList<LivingGoodsVo>();
 	private GoodsItemAdapter gAdapter;
+	private List<GoodEntity> lVoList = new ArrayList<GoodEntity>();
+	private int pageNum = 1;// 当前页数
+	private String searchStr;
 	private boolean changeedGroup = true;
 	public static int totalHeight;
 	public static int topHeight;
@@ -103,10 +110,10 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	@OnClick(R.id.img_psfw)
 	// 查看配送范围
 	public void goToDeliveryScopeActivity(View v) {
-		Intent intent =new Intent(LivingMuseumDetailsActivity.this,DeliveryScopeActivity.class);
-		intent.putExtra("store_id", "19");//TODO
+		Intent intent = new Intent(LivingMuseumDetailsActivity.this, DeliveryScopeActivity.class);
+		intent.putExtra("store_id", "19");// TODO
 		startActivity(intent);
-	  
+
 	}
 
 	@ViewInject(R.id.top_search)
@@ -249,21 +256,30 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					changeedGroup = false;
 					radio_group2.clearCheck();
 					changeedGroup = true;
+					pageNum=1;
 					switch (checkedId) {
 					// 粮油副食
 					case R.id.radio_lyfs:
+						searchStr="粮油副食";
+						getShopSearchGoods(searchStr,pageNum+"",true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "粮油副食", Toast.LENGTH_SHORT).show();
 						break;
 					// 休闲食品
 					case R.id.radio_xxsp:
+						searchStr="休闲食品";
+						getShopSearchGoods(searchStr,pageNum+"",true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "休闲食品", Toast.LENGTH_SHORT).show();
 						break;
 					// 酒水茶饮
 					case R.id.radio_jscy:
+						searchStr="酒水茶饮";
+						getShopSearchGoods(searchStr,pageNum+"",true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "酒水茶饮", Toast.LENGTH_SHORT).show();
 						break;
 					// 方便速食
 					case R.id.radio_fbss:
+						searchStr="方便速食";
+						getShopSearchGoods(searchStr,pageNum+"",true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "方便速食", Toast.LENGTH_SHORT).show();
 						break;
 					default:
@@ -280,21 +296,30 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 						changeedGroup = false;
 						radio_group1.clearCheck();
 						changeedGroup = true;
+						pageNum=1;
 						switch (checkedId) {
 						// 保健品
 						case R.id.radio_bjsp:
+							searchStr="保健品";
+							getShopSearchGoods(searchStr,pageNum+"",true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "保健品", Toast.LENGTH_SHORT).show();
 							break;
 						// 牛奶乳制品
 						case R.id.radio_nnrzp:
+							searchStr="牛奶乳制品";
+							getShopSearchGoods(searchStr,pageNum+"",true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "牛奶乳制品", Toast.LENGTH_SHORT).show();
 							break;
 						// 生鲜
 						case R.id.radio_sx:
+							searchStr="生鲜";
+							getShopSearchGoods(searchStr,pageNum+"",true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "生鲜", Toast.LENGTH_SHORT).show();
 							break;
 						// 餐饮
 						case R.id.radio_cy:
+							searchStr="餐饮";
+							getShopSearchGoods(searchStr,pageNum+"",true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
 							break;
 						default:
@@ -322,45 +347,31 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
+				pageNum = 1;
+				searchStr="保健品";
+				getShopSearchGoods(searchStr,pageNum+"",true);
 			}
 
 			@Override
 			public void onLoadMore() {
+				pageNum += 1;
+				searchStr="保健品";
+				getShopSearchGoods(searchStr,pageNum+"",false);
 			}
 		});
 	}
 
 	private void initData() {
+		imageLoader = new LoadNetworkPic(LivingMuseumDetailsActivity.this);
 		screenHeight = findViewById(R.id.parent_layout).getHeight();
 		mListView.setPullLoadEnable(true);
 		mListView.setPullRefreshEnable(false);
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
-	
-		getLiveShopInfo("9");	// 传生活馆参数 获取生活馆信息
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("http://101.231.141.156/upl/uploads/images/goodLogo/2015-03-10/10020_1425950595365640.png",
-				"美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		lVoList.add(new LivingGoodsVo("", "美味七七碧根果", "19.7", "250g"));
-		// gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this,
-		// lVoList);
-		// mListView.setAdapter(gAdapter);
+
+		getLiveShopInfo("9"); // 传生活馆参数 获取生活馆信息
+		getShopHeadPic(); // 传生活馆参数 获取生活馆图片
+		searchStr="粮油副食";
+		getShopSearchGoods(searchStr,pageNum+"",true);//获取生活馆商品列表
 		topHeight = top_bar.getHeight();
 		Utils.setListViewHeight(mListView, topHeight);
 	}
@@ -433,5 +444,144 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		});
 	}
 
+	/**
+	 * 获取首页图片并展示
+	 * **/
+	void getShopHeadPic() {
+		RequestParams params = new RequestParams();
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getLiveShopHeadPic(), params, new RequestCallBack<String>() {
+			@Override
+			public void onStart() {
+			}
 
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("getShopHeadPic = " + result);
+				ObjectMapper m = new ObjectMapper();
+				Map<String, String> picMap = new HashMap<String, String>();
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("getShopHeadPic jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+						picMap.put(InterfaceUtils.ShopPicType.KEY_TODAY_NEW,
+								rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_TODAY_NEW).toString());
+						picMap.put(InterfaceUtils.ShopPicType.KEY_DINNER_OUT,
+								rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_DINNER_OUT).toString());
+						picMap.put(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL,
+								rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL).toString());
+						picMap.put(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL,
+								rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL).toString());
+						picMap.put(InterfaceUtils.ShopPicType.KEY_GROUP_BUY,
+								rootNode.path("datas").path(InterfaceUtils.ShopPicType.KEY_GROUP_BUY).toString());
+						imageLoader.DisplayImage(picMap.get(InterfaceUtils.ShopPicType.KEY_TODAY_NEW).replace("\"", ""), img_jrtm);
+						imageLoader.DisplayImage(picMap.get(InterfaceUtils.ShopPicType.KEY_DINNER_OUT).replace("\"", ""), img_cy);
+						imageLoader.DisplayImage(picMap.get(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL).replace("\"", ""),
+								img_mstm);
+						imageLoader.DisplayImage(picMap.get(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL).replace("\"", ""),
+								img_zstm);
+						imageLoader.DisplayImage(picMap.get(InterfaceUtils.ShopPicType.KEY_GROUP_BUY).replace("\"", ""), img_tg);
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+
+	/**
+	 * 生活馆商品列表
+	 * **/
+	public void getShopSearchGoods(String keyWord, String curPage,final Boolean flag) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("life_search", keyWord);
+		params.addBodyParameter("curpage", curPage);
+
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getShopSearchGoods(), params, new RequestCallBack<String>() {
+			@Override
+			public void onStart() {
+			}
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				onLoad();
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+				ObjectMapper mapper = new ObjectMapper();
+				List<GoodEntity> goodEntities = new ArrayList<GoodEntity>();
+				try {
+					ShopSearchGoodsInterfaceEntity entity = mapper.readValue(result, ShopSearchGoodsInterfaceEntity.class);// 接口实体类
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
+						goodEntities = entity.getDatas().getGoods_list();
+						if (flag) {// 刷新
+							lVoList.clear();
+							lVoList = goodEntities;
+							if (lVoList.size() < 1) {
+								toastShort("暂无数据");
+							}
+							gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
+							mListView.setAdapter(gAdapter);
+						} else { // 加载更多
+							if (goodEntities.size() > 0) {
+								lVoList.addAll(entity.getDatas().getGoods_list());
+								gAdapter.notifyDataSetChanged();
+							} else {
+								toastShort("没有更多数据了");
+							}
+						}
+					} else {
+						if (flag) {
+							lVoList.clear();
+							gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
+							mListView.setAdapter(gAdapter);
+							toastShort("暂无数据");
+						}else {
+							toastShort("没有更多数据了");
+						}
+					
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+	private void onLoad() {
+		mListView.stopRefresh();
+		mListView.stopLoadMore();
+		mListView.setRefreshTime("刚刚");
+	}
 }

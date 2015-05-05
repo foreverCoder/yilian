@@ -52,7 +52,6 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:paddingTop="3dp"
-                            android:text="11d大打算打打算打\n"
                             android:textColor="#fff"
                             android:textSize="12sp" />
 
@@ -74,7 +73,7 @@
                         <ImageView
                             android:id="@+id/img_jrtm"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_jrtm" />
@@ -82,7 +81,7 @@
                         <ImageView
                             android:id="@+id/img_cy"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_cy" />
@@ -96,7 +95,7 @@
                         <ImageView
                             android:id="@+id/img_zstm"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_zstm" />
@@ -104,7 +103,7 @@
                         <ImageView
                             android:id="@+id/img_mstm"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_mstm" />
@@ -112,7 +111,7 @@
                         <ImageView
                             android:id="@+id/img_tg"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:scaleType="fitXY"
                             android:src="@drawable/img_tg" />

@@ -419,10 +419,15 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 							}
 						}
 					} else {
-						lVoList.clear();
-						gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
-						mListView.setAdapter(gAdapter);
-						toastShort("暂无数据");
+						if (flag) {// 刷新
+							lVoList.clear();
+							gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
+							mListView.setAdapter(gAdapter);
+							toastShort("暂无数据");
+						}else {
+							toastShort("没有更多数据了");
+						}
+			
 					}
 				} catch (JsonParseException e) {
 					e.printStackTrace();
