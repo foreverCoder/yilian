@@ -178,6 +178,7 @@
                         android:layout_weight="3"
                         android:background="@drawable/add_m"
                         android:gravity="center"
+                        android:text="1"
                         android:textColor="#555" />
 
                     <Button
@@ -198,6 +199,7 @@
                 android:background="#727071" />
 
             <RelativeLayout
+                android:id="@+id/pj_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -226,6 +228,7 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/tx_ms"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/img_up"
@@ -254,6 +257,7 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/tx_fw"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/img_down"
@@ -282,6 +286,7 @@
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/tx_fh"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/img_up"
@@ -302,19 +307,25 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:paddingLeft="10dp"
                         android:text="本单评价"
-                        android:layout_gravity="center_vertical"
                         android:textColor="#555"
                         android:textSize="14sp" />
+                    <!-- style="@style/wmtRatingBar" -->
 
                     <RatingBar
-                        style="@style/wmtRatingBar"
+                        android:id="@+id/ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:numStars="5" />
+                        android:layout_marginLeft="10dp"
+                        android:clickable="false"
+                        android:numStars="5"
+                        android:rating="1"
+                        android:stepSize="0.5" />
                 </LinearLayout>
 
                 <ImageView
@@ -339,7 +350,33 @@
                 android:id="@+id/img_details"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_margin="3dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/img_details" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="同类商品"
+                android:textColor="#575757"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#727071" />
+
+            <com.haili.living.view.HorizontalListView
+                android:id="@+id/horizon_listview"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:paddingTop="2dp" />
         </LinearLayout>
     </com.haili.living.view.ScrollViewExtend>
 

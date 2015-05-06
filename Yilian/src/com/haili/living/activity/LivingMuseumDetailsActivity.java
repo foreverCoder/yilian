@@ -101,6 +101,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	@OnClick(R.id.top_right)
 	// 切换生活馆
 	public void changeOtherLivingMusenum(View v) {
+		startActivity(new Intent(LivingMuseumDetailsActivity.this,GoodsDetailsActivity.class));
 		Toast.makeText(LivingMuseumDetailsActivity.this, "切换生活馆", Toast.LENGTH_SHORT).show();
 	}
 

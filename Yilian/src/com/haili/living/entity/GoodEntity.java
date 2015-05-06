@@ -5,6 +5,8 @@ package com.haili.living.entity;
  */
 public class GoodEntity {
 
+
+
 	/**
 	 * 商品分类列表返回字段 goods_price : 0.01 group_flag : false goods_marketprice :
 	 * 10.00 goods_id : 97 goods_image_url :
