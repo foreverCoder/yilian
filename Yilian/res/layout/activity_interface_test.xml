@@ -61,5 +61,26 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="生活馆搜索商品"/>
+    <Button
+        android:id="@+id/btnShopListByClass"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取固定写死分类下的商品列表"/>
+    
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="6dp"
+        android:background="@drawable/blue"/>
+     <Button
+        android:id="@+id/btnImgListByGood"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取指定商品的图片列表"/>
+     <Button
+        android:id="@+id/btnInfoAndRecommendByGood"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取指定商品的信息和推荐商品列表"/>
+    
     
 </LinearLayout>
