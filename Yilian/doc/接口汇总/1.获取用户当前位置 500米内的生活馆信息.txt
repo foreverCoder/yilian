@@ -1,0 +1,8 @@
+1.获取用户当前位置 500米内的生活馆信息
+http://www.zq2014.com/haili/mobile/index.php?act=life&op=mapgetlife
+POST传值 经度 参数：lng 纬度参数：lat
+
+返回：      [store_id]      生活馆店铺ID
+            [store_name]   生活馆店铺名
+            [type_id]     店铺类型   1商城 2，生活馆；3农庄
+            [maplnglat]  生活馆店铺的经纬度  117.259462,31.860109

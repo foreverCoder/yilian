@@ -1,0 +1,36 @@
+18、获取全部评价、好评、中评、差评数量  19、获取分类评价下的评价列表
+act=goods&op=goods_comment
+POST数据：goods_id
+
+
+
+返回：
+
+"result": "1" 返回值正常
+
+all  评价个数
+goods  好评个数
+normal 中评个数
+bad  差评个数
+
+good_percent    好评%
+normal_percent 中评%
+bad_percent 差评%
+
+
+正常：
+
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "good": "0",
+        "normal": "0",
+        "bad": "0",
+        "all": 0,
+        "good_percent": 100,
+        "normal_percent": 0,
+        "bad_percent": 0,
+        "good_star": 5
+    }
+}

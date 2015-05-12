@@ -1,0 +1,32 @@
+20.配送地址接口
+http://www.zq2014.com/haili/mobile/index.php?act=life&op=getstorelifeaddr
+
+传值：POST store_id    生活馆店铺ID
+
+
+返回值： 配送地址
+
+"result":  1表示正常，0表示异常 
+
+"info" :   配送地址
+
+
+正常：
+
+{
+    "code": 200,
+    "result": 1,
+    "datas": {
+        "info": "5b895fbd7701</b>  540880a55e02</b> \n87005c71533a</b> 9ece96335bb682d1 "
+    }
+}
+
+异常：
+
+{
+    "code": 200,
+    "result": 0,
+    "datas": {
+        "info": ""
+    }
+}

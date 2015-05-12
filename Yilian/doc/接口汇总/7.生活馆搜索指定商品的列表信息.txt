@@ -1,0 +1,69 @@
+7.生活馆搜索商品的列表信息
+接口：act=life&op=life_goods
+
+POST传值： 需要传一个商品的$life_search值，$life_search是需要查看商品所对应的id值。
+
+
+返回值：生活馆搜索商品的列表信息
+
+"result":  1表示正常，0表示没有值，-1表示异常 
+
+ goods_id 商品id(SKU)
+ 
+ goods_commonid  商品公共表id
+ 
+ goods_name 商品名称
+
+ store_id   店铺id
+
+ store_name 店铺名称
+ 
+ gc_id    分类id
+
+ goods_price 商品价格
+
+ goods_image 图片地址
+ 
+ farm_type  农庄商品的类型，1生成验证码，2为农作物，3为养殖
+
+
+
+正常：
+
+{
+    "code": 200,
+    "result": "1",
+    "hasmore": true,
+    "page_total": 2,
+    "datas": [
+        {
+            "goods_id": "17",
+            "goods_commonid": "17",
+            "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c15",
+            "store_id": "9",
+            "store_name": "7f8e5473751f6d3b9986",
+            "gc_id": "1221",
+            "goods_price": "112.00",
+            "goods_image": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif",
+            "farm_type": "0"
+        }
+    ]
+}
+
+异常：
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}
+
+空值：
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "datas": ""
+    }
+}

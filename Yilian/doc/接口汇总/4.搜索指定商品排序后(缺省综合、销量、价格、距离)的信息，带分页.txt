@@ -1,0 +1,84 @@
+4.搜索指定商品排序后(缺省综合、销量、价格)的信息，带分页
+
+接口：http://www.zq2014.com/haili/mobile/index.php?act=classify&op=goods
+
+POST传值： $key是排序类型（比如2综合、1销量、3价格)， $order是排序方向（1正序，默认倒叙），$goods_id是查询分类的id(比如生活馆的分类goods_id是20)
+
+返回：搜索指定商品排序后(缺省综合、销量、价格)的信息，带分页
+
+
+
+"result":  1表示正常，0表示没有值，-1表示异常 
+
+ goods_id 商品id(SKU)
+
+ goods_name 商品名称
+
+ goods_price 商品价格
+ 
+ goods_marketprice 市场价
+
+ goods_image 商品主图（图片信息名）
+ 
+ goods_salenum 销售数量
+
+ evaluation_good_star 好评星级 
+
+ evaluation_count 评价数
+
+ group_flag 团购
+
+ xianshi_flag 限时折扣
+
+ goods_image_url  ：图片信息链接
+
+
+
+
+
+
+正常：
+{
+    "code": 200,
+    "result": "1",
+    "hasmore": false,
+    "page_total": 1,
+    "datas": {
+        "goods_list": [
+            {
+                "goods_id": "20",
+                "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c15 6c347530 852c83dc 534a62587ba1",
+                "goods_price": "123.00",
+                "goods_marketprice": "155.00",
+                "goods_image": "9_04762708400105268.jpg",
+                "goods_salenum": "0",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif"
+            }
+        ]
+    }
+}
+
+
+异常：
+
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}
+
+空值：
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "datas": ""
+    }
+}
+

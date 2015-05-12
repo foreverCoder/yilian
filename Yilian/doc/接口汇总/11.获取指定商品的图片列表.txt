@@ -1,0 +1,33 @@
+11.接口：act=life&op= the_goods
+POST传值： 需要传一个商品的$goods_id值，$goods_id是需要查看商品所对应的id值。
+
+返回值：为指定商品的图片
+
+"result":  1表示正常，0表示异常 
+
+"goods_image"  ：图片信息
+
+
+
+正常：
+
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "goods_image": [
+            "http://localhost/haili/data/upload/shop/common/default_goods_image_240.gif"      
+        ]
+    }
+}
+
+
+异常：
+
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "goods_image": []
+    }
+}

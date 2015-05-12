@@ -1,0 +1,136 @@
+3.获取某个分类下排序后(缺省综合、销量、价格、距离)的商品列表，带分页
+
+接口：http://www.zq2014.com/haili/mobile/index.php?act=classify&op=class
+
+POST传值： $key是排序类型（比如2综合、1销量、3价格)， $order是排序方向（1为正序，默认倒叙），$gc_id是查询分类的id(比如生活馆的分类gc_id是1211)
+
+返回：某个分类下排序后(缺省综合、销量、价格、距离)的商品列表，带分页
+
+"result":  1表示正常，0表示没有值，-1表示异常 
+
+ goods_id 商品id(SKU)
+
+ goods_name 商品名称
+
+ goods_price 商品价格
+ 
+ goods_marketprice 市场价
+
+ goods_image 商品主图（图片信息名）
+ 
+ goods_salenum 销售数量
+
+ evaluation_good_star 好评星级 
+
+ evaluation_count 评价数
+
+ group_flag 团购
+
+ xianshi_flag 限时折扣
+
+ goods_image_url  ：图片信息链接
+
+
+
+正常：
+
+{
+    "code": 200,
+    "result": "1",
+    "hasmore": false,
+    "page_total": 1,
+    "datas": {
+        "goods_list": [
+            {
+                "goods_id": "72",
+                "goods_name": "51a5738b661f6d4b8bd5751f6d3b99865f0052067c7b",
+                "goods_price": "22.00",
+                "goods_marketprice": "2222.00",
+                "goods_image": "11_04817293440393382.jpg",
+                "goods_salenum": "0",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/store/goods/11/11_04817293440393382_360.jpg"
+            },
+            {
+                "goods_id": "15",
+                "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c14",
+                "goods_price": "12.00",
+                "goods_marketprice": "12.00",
+                "goods_image": "9_04762708400105268.jpg",
+                "goods_salenum": "1",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif"
+            },
+            {
+                "goods_id": "14",
+                "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c1ff12",
+                "goods_price": "12.00",
+                "goods_marketprice": "12.00",
+                "goods_image": "9_04762708560323065.jpg",
+                "goods_salenum": "2",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif"
+            },
+            {
+                "goods_id": "13",
+                "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c1",
+                "goods_price": "12.00",
+                "goods_marketprice": "12.00",
+                "goods_image": "9_04762708400105268.jpg",
+                "goods_salenum": "3",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif"
+            },
+            {
+                "goods_id": "11",
+                "goods_name": "751f6d3b99867c7b6d4b8bd5",
+                "goods_price": "10.00",
+                "goods_marketprice": "100.00",
+                "goods_image": "9_04762708400105268.jpg",
+                "goods_salenum": "2",
+                "evaluation_good_star": "5",
+                "evaluation_count": "0",
+                "group_flag": false,
+                "xianshi_flag": false,
+                "goods_image_url": "http://localhost/haili/data/upload/shop/common/default_goods_image_360.gif"
+            }
+        ]
+    }
+}
+
+
+异常：
+
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}
+
+
+没有值：
+
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "datas": ""
+    }
+}
+
+
+

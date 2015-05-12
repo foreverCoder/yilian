@@ -1,0 +1,29 @@
+
+15、购物车批量删除
+act=member_cart&op=cart_all_del
+POST数据参数：cart_id  单个删除为int，多个删除为数组
+成功：
+
+返回
+
+
+"result":  1表示正常，0表示程序执行未插入数据库，-1表示异常 
+
+"datas" : 返回状态，成功返回 1，异常返回空值，0表示为POST传goods_id不存在
+
+
+正常：
+{
+    "code": 200,
+    "result": "1",
+    "datas": "1"
+}
+
+
+异常：
+
+{
+    "code": 200,
+    "result": "-1",
+    "datas": "0"
+}

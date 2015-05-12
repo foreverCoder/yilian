@@ -1,0 +1,43 @@
+10.获取今日新品、餐饮、早市特卖、晚市特卖的图片
+
+APP_canyin(餐饮图片)，APP_temai（特卖）,APP_tuangou(团购),APP_wanshi(晚市),APP_zaoshi(早市)
+
+接口：act=life&op= life_images
+
+返回值：指定分类的图片信息
+
+"result":  1表示正常，-1表示异常 
+
+APP_canyin(餐饮图片)
+
+APP_temai（特卖）
+
+APP_tuangou(团购)
+
+APP_wanshi(晚市)
+
+APP_zaoshi(早市)
+
+
+
+正常：
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "APP_canyin": "http://localhost/haili/mobile/lifepic/APP_canyin.png",
+        "APP_temai": "http://localhost/haili/mobile/lifepic/APP_temai.png",
+        "APP_tuangou": "http://localhost/haili/mobile/lifepic/APP_tuangou.png",
+        "APP_wanshi": "http://localhost/haili/mobile/lifepic/APP_wanshi.png",
+        "APP_zaoshi": "http://localhost/haili/mobile/lifepic/APP_zaoshi.png"
+    }
+}
+
+异常：
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}

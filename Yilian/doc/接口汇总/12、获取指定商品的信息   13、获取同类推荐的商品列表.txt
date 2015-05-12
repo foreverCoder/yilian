@@ -1,0 +1,106 @@
+12、获取指定商品的信息   13、获取同类推荐的商品列表,数量6个   
+act=goods&op=goods_detail
+POST数据参数：goods_id
+返回数据如下：    
+
+goods_info为指定商品的详细信息
+goods_commend_list 为同类推荐的商品
+goods_commonid  商品公共表id
+goods_name	商品名称  
+gc_id  商品分类id
+store_id	商铺ID 
+store_name 	商铺名
+farm_type      农庄商品的类型，1生成验证码，2为农作物，3为养殖，4为发物流
+life_type      生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐
+goods_image 	商品图片  
+goods_price  	商品价格
+goods_marketprice   市场价 
+goods_commend   商品推荐 1是，0否 默认0
+goods_id   商品ID
+goods_click  商品点击数量 
+goods_storage 商品库存 
+goods_salenum 	销售数量 
+goods_collect	收藏数量
+evaluation_good_star 好评星级 
+evaluation_count    评价数
+goods_id   商品ID
+goods_name	商品名称 
+goods_price  	商品价格
+goods_image_url		商品图片
+
+
+
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "goods_info": {
+            "goods_commonid": "16",
+            "goods_name": "开心农庄中商品类测试添加商品4----***",
+            "gc_id": "1214",
+            "store_id": "9",
+            "store_name": "美味生活馆",
+            "farm_type": "1",
+            "life_type": "0",
+            "goods_image": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg",
+            "goods_price": "12.00",
+            "goods_marketprice": "12.00",
+            "goods_commend": "1",
+            "goods_id": "15",
+            "goods_click": "14",
+            "goods_storage": "12",
+            "goods_salenum": "0",
+            "goods_collect": "0",
+            "evaluation_good_star": "5",
+            "evaluation_count": "0"
+        },
+        "goods_commend_list": [
+            {
+                "goods_id": "125",
+                "goods_name": "农庄中商品类测试添加商品5 小猪",
+                "goods_price": "112.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg"
+            },
+            {
+                "goods_id": "15",
+                "goods_name": "开心农庄中商品类测试添加商品4----***",
+                "goods_price": "12.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg"
+            },
+            {
+                "goods_id": "133",
+                "goods_name": "土地类型测试 水田 全托管",
+                "goods_price": "10.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_240.jpg"
+            },
+            {
+                "goods_id": "128",
+                "goods_name": "开心农庄中商品类测试添加商品３ 水田 一分地 全托管",
+                "goods_price": "12.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_240.jpg"
+            },
+            {
+                "goods_id": "134",
+                "goods_name": "土地类型测试 水田 半托管",
+                "goods_price": "10.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_240.jpg"
+            },
+            {
+                "goods_id": "135",
+                "goods_name": "土地类型测试 山地 全托管",
+                "goods_price": "10.00",
+                "goods_image_url": "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_240.jpg"
+            }
+        ]
+    }
+}
+
+
+错误返回：
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}

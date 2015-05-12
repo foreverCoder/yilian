@@ -1,0 +1,45 @@
+9.获取当前生活馆的信息，如原型图
+
+接口：act=life&op=index
+
+POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家信息所对应的id值。
+
+返回值：当前生活馆的信息
+
+"result":  1表示正常，0表示没有值
+
+store_id：店铺id
+store_name:店铺名
+store_address：店铺地址
+store_label：店铺logo
+store_tel：店铺电话
+street：配送街道
+store_workingtime：店铺工作时间
+
+
+
+正常：
+{
+    "code": 200,
+    "result": "1",
+    "datas": [
+        {
+            "store_id": "9",
+            "store_name": "7f8e5473751f6d3b9986",
+            "store_address": "",
+            "store_label": null,
+            "store_tel": "",
+            "street": "9ece96335bb682d1",
+            "store_workingtime": null
+        }
+    ]
+}
+
+空值：
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "datas": ""
+    }
+}

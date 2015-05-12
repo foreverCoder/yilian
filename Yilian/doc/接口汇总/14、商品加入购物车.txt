@@ -1,0 +1,28 @@
+14、商品加入购物车
+act=member_cart&op=cart_add
+POST数据参数： goods_id 商品ID  quantity  数量
+
+返回
+
+
+"result":  1表示正常，0表示程序执行未插入数据库，-1表示异常 
+
+"datas" : 返回状态，成功返回 1，异常返回空值，0表示为POST传goods_id不存在
+
+成功：
+{
+    "code": 200,
+    "result": "1",
+    "datas": "1"
+}
+
+
+异常：
+
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}

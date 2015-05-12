@@ -1,0 +1,192 @@
+2.获取商品的所有分类，包括农庄和商城
+
+接口：http://www.zq2014.com/haili/mobile/index.php?act=classify&op=index
+
+POST传状态值：状态值style为1表示全部分类值，3表示开心农庄分类值
+
+返回：商品的所有分类，包括农庄和商城
+
+
+"result":  1表示正常，-1表示异常 
+
+ "gc_id": 索引ID,
+ "gc_name": 分类名称,
+ "type_id": 类型id,
+ "gc_parent_id": 父ID,
+ "gc_sort": 排序,
+ "pic": 图片
+
+
+
+
+正常：（商城分类）
+
+
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "good_class": [
+            {
+                "gc_id": "1073",
+                "gc_name": "6c34 679c",
+                "type_id": "38",
+                "gc_parent_id": "0",
+                "gc_sort": "1",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1074",
+                "gc_name": "65f6852c7d2083dc",
+                "type_id": "35",
+                "gc_parent_id": "0",
+                "gc_sort": "2",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1075",
+                "gc_name": "86cb80895bb679bd",
+                "type_id": "35",
+                "gc_parent_id": "0",
+                "gc_sort": "3",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1076",
+                "gc_name": "6d779c9c6c344ea7",
+                "type_id": "35",
+                "gc_parent_id": "0",
+                "gc_sort": "4",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1088",
+                "gc_name": "4fdd506554c1",
+                "type_id": "37",
+                "gc_parent_id": "0",
+                "gc_sort": "5",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1087",
+                "gc_name": "571f72794ea754c1",
+                "type_id": "0",
+                "gc_parent_id": "0",
+                "gc_sort": "6",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1086",
+                "gc_name": "91526c348336996e",
+                "type_id": "36",
+                "gc_parent_id": "0",
+                "gc_sort": "7",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1085",
+                "gc_name": "7cae6cb9526f98df",
+                "type_id": "36",
+                "gc_parent_id": "0",
+                "gc_sort": "8",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1084",
+                "gc_name": "65b94fbf901f98df",
+                "type_id": "34",
+                "gc_parent_id": "0",
+                "gc_sort": "9",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1083",
+                "gc_name": "4f1195f298df54c1",
+                "type_id": "34",
+                "gc_parent_id": "0",
+                "gc_sort": "10",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1082",
+                "gc_name": "725b59764e7354c1",
+                "type_id": "34",
+                "gc_parent_id": "0",
+                "gc_sort": "11",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1090",
+                "gc_name": "6bcf65e565b054c1",
+                "type_id": "0",
+                "gc_parent_id": "0",
+                "gc_sort": "12",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1091",
+                "gc_name": "65e053a8",
+                "type_id": "39",
+                "gc_parent_id": "0",
+                "gc_sort": "13",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1092",
+                "gc_name": "6bcd5a74752854c1",
+                "type_id": "0",
+                "gc_parent_id": "0",
+                "gc_sort": "14",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1211",
+                "gc_name": "751f6d3b9986",
+                "type_id": "0",
+                "gc_parent_id": "0",
+                "gc_sort": "254",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            },
+            {
+                "gc_id": "1212",
+                "gc_name": "5f005fc3519c5e84",
+                "type_id": "40",
+                "gc_parent_id": "0",
+                "gc_sort": "255",
+                "pic": "http://localhost/haili/data/upload/shop/common/category-pic-1073.jpg"
+            }
+        ]
+    }
+}
+
+
+
+正常（农庄）：
+
+说明：数字表示分类的gc_id值，“：”后键值是对应分类名称
+
+{
+    "code": 200,
+    "result": "1",
+    "datas": {
+        "1213": "519c5bb64e50",
+        "1214": "57829493",
+        "1215": "91c76458",
+        "1216": "4eb25b506e38",
+        "1220": "91ce8425",
+        "1221": "571f57305e844e3b",
+        "1222": "7267573a5e844e3b"
+    }
+}
+
+
+
+
+异常：
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}

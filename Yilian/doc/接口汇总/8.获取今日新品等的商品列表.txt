@@ -1,0 +1,191 @@
+8..获取今日新品的商品列表
+接口：act=life&op=life_new
+
+POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值,
+需要传状态值$life_type,life_type表示(早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）)，
+
+返回：今日新品的商品列表
+
+
+"result":  1表示正常，0表示没有值，-1表示异常 
+
+goods_id 商品id(SKU)
+
+goods_commonid 商品公共表id
+
+goods_name 商品名称
+
+goods_jingle 商品广告词
+
+gc_id 商品分类
+
+gc_name 商品分类
+
+store_id 店铺id
+
+store_name 店铺名称
+
+farm_type 农庄商品的类型，1生成验证码，2为农作物，3为养殖
+
+life_type 生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐，
+
+starttime_life 生活馆中类别商品，开卖时间
+
+endtime_life 生活馆中类别商品，结束时间
+
+spec_name 规格名称
+
+spec_value 规格值
+
+brand_id 品牌id
+
+brand_name 品牌名称
+
+type_id 类型id
+
+goods_image 商品主图
+
+goods_attr 商品属性
+
+goods_body 商品内容
+
+goods_state 商品状态 0下架，1正常，10违规（禁售）
+
+goods_stateremark 违规原因
+
+goods_verify 商品审核 1通过，0未通过，10审核中
+
+goods_verifyremark 审核失败原因
+
+goods_lock 商品锁定 0未锁，1已锁
+
+goods_addtime 商品添加时间
+
+goods_selltime 上架时间
+
+goods_specname 规格名称序列化（下标为规格id）
+
+goods_price 商品价格
+
+goods_marketprice 市场价
+
+goods_costprice 成本价
+
+goods_discount 折扣
+
+goods_serial 商家编号
+
+transport_id 运费模板
+
+transport_title 运费模板名称
+
+goods_commend 商品推荐 1是，0否，默认为0
+
+goods_freight 运费 0为免运费
+
+goods_vat 是否开具增值税发票 1是，0否
+
+areaid_1 一级地区id
+
+areaid_2 二级地区id
+
+areaid_3 三级地区id
+
+goods_stcids 店铺分类id 首尾用,隔开
+
+plateid_top 顶部关联板式
+
+plateid_bottom 底部关联板式
+
+
+
+
+
+
+
+正常：
+{
+    "code": 200,
+    "result": "1",
+    "hasmore": false,
+    "page_total": 1,
+    "datas": [
+        {
+            "goods_id": "13",
+            "goods_commonid": "13",
+            "goods_name": "751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c1",
+            "goods_jingle": "",
+            "store_id": "9",
+            "store_name": "7f8e5473751f6d3b9986",
+            "gc_id": "1217",
+            "brand_id": "0",
+            "goods_price": "12.00",
+            "goods_marketprice": "12.00",
+            "goods_serial": "",
+            "goods_click": "1",
+            "goods_salenum": "3",
+            "goods_collect": "0",
+            "goods_spec": "N;",
+            "goods_storage": "120",
+            "goods_image": "9_04762708400105268.jpg",
+            "goods_state": "1",
+            "goods_verify": "1",
+            "goods_addtime": "1425285925",
+            "goods_edittime": "1425286361",
+            "areaid_1": "2",
+            "areaid_2": "40",
+            "areaid_3": "0",
+            "color_id": "0",
+            "transport_id": "0",
+            "goods_freight": "0.00",
+            "goods_vat": "0",
+            "goods_commend": "1",
+            "goods_stcids": ",0,",
+            "evaluation_good_star": "5",
+            "evaluation_count": "0",
+            "gc_name": "751f6d3b9986 >5f0052067c7b1",
+            "farm_type": "0",
+            "life_type": "2",
+            "starttime_life": "14:05",
+            "endtime_life": "19:05",
+            "spec_name": "N;",
+            "spec_value": "N;",
+            "brand_name": "",
+            "type_id": "0",
+            "goods_attr": "N;",
+            "goods_body": "\"image\"\"image\"",
+            "goods_stateremark": null,
+            "goods_verifyremark": null,
+            "goods_lock": "0",
+            "goods_selltime": "0",
+            "goods_specname": "",
+            "goods_costprice": "0.00",
+            "goods_discount": "100",
+            "transport_title": "",
+            "plateid_top": "0",
+            "plateid_bottom": "0",
+            "goods_shicai": null,
+            "goods_zzbz": null,
+            "goods_xts": null,
+            "goods_shicaidetail": null
+        }
+    ]
+}
+
+异常：
+{
+    "code": 200,
+    "result": "-1",
+    "datas": {
+        "datas": ""
+    }
+}
+
+空值：
+{
+    "code": 200,
+    "result": "0",
+    "datas": {
+        "datas": ""
+    }
+}
