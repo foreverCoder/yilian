@@ -17,105 +17,49 @@ public class GoodEntity {
 	 */
 	private String goods_price;// 商品价格
 	private boolean group_flag;
-	private String goods_marketprice;// 商品超市价格
+	private String goods_marketprice;// 市场价 
 	private String goods_id;// 商品ID
 	private String goods_image_url;// 商品图片地址
-	private String evaluation_count;
-	private String goods_name;
+	private String evaluation_count;//评价数
+	private String goods_name;//商品名称 
 	private String evaluation_good_star;// 评价星级
 	private String goods_image;
-	private String goods_salenum;
+	private String goods_salenum;//销售数量
 	private boolean xianshi_flag;
+	
+	 /**
+	  * 以下是生活馆搜索商品的接口
+     * gc_id : 1217
+     * goods_price : 11.00
+     * farm_type : null
+     * goods_commonid : 20
+     * goods_id : 43
+     * store_id : 11
+     * goods_name : 测试生活馆2
+     * goods_image : http://www.zq2014.com/haili/data/upload/shop/store/goods/11/11_04805073382771374_360.jpg
+     * store_name : 生活馆大学城店
+     */
+    private String gc_id;//商品分类id
+    private String farm_type;//农庄商品的类型，1生成验证码，2为农作物，3为养殖，4为发物流
+    private String goods_commonid;//商品公共表id
+    private String store_id;//商铺ID 
+    private String store_name;//商铺名
 
-	/*
-	 * 以下是 生活馆页面接口返回的实体字段，太多无用字段，没做任何优化处理，也是醉了
-	 * 
-	 * /** goods_collect : 0 goods_zzbz : null life_type : 0 goods_storage : 123
-	 * goods_salenum : 0 brand_name : goods_commonid : 14 goods_selltime : 0
-	 * goods_edittime : 1425286290 store_name : 7f8e5473751f6d3b9986 goods_lock
-	 * : 0 goods_marketprice : 12.00 brand_id : 0 store_id : 9 goods_state : 1
-	 * goods_shicaidetail : null goods_stateremark : null goods_attr : N;
-	 * spec_value : N; plateid_bottom : 0 goods_body : <img src=
-	 * "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708400105268_1280.jpg"
-	 * alt="image" /><img src=
-	 * "http://localhost/eathaili/data/upload/shop/store/goods/9/9_04762708560323065_1280.jpg"
-	 * alt="image" /> goods_id : 14 goods_costprice : 0.00 goods_discount : 100
-	 * gc_id : 1217 goods_name :
-	 * 751f6d3b99864e2d554654c17c7b6d4b8bd56dfb52a0554654c1ff12 goods_verify : 1
-	 * goods_serial : goods_click : 8 transport_id : 0 areaid_1 : 0 areaid_2 : 0
-	 * goods_price : 12.00 endtime_life : 00:05 areaid_3 : 0 farm_type : null
-	 * goods_verifyremark : null goods_spec : N; goods_xts : null
-	 * evaluation_good_star : 5 goods_specname : transport_title :
-	 * evaluation_count : 0 goods_shicai : null goods_addtime : 1425286262
-	 * goods_image : 9_04762708560323065.jpg goods_vat : 0 type_id : 0 spec_name
-	 * : N; goods_freight : 0.00 plateid_top : 0 goods_commend : 1 goods_stcids
-	 * : ,0, gc_name : 751f6d3b9986 &gt;5f0052067c7b1 starttime_life : 00:05
-	 * color_id : 0 goods_jingle :
-	 */
-	private String goods_collect;
-	private String goods_zzbz;
-	private String life_type;
-	private String goods_storage;
-	private String brand_name;
-	private String goods_commonid;
-	private String goods_selltime;
-	private String goods_edittime;
-	private String store_name;
-	private String goods_lock;
-	private String brand_id;
-	private String store_id;
-	private String goods_state;
-	private String goods_shicaidetail;
-	private String goods_stateremark;
-	private String goods_attr;
-	private String spec_value;
-	private String plateid_bottom;
-	private String goods_body;
-	private String goods_costprice;
-	private String goods_discount;
-	private String gc_id;
-	private String goods_verify;
-	private String goods_serial;
-	private String goods_click;
-	private String transport_id;
-	private String areaid_1;
-	private String areaid_2;
-	private String endtime_life;
-	private String areaid_3;
-	private String farm_type;
-	private String goods_verifyremark;
-	private String goods_spec;
-	private String goods_xts;
-	private String goods_specname;
-	private String transport_title;
-	private String goods_shicai;
-	private String goods_addtime;
-	private String goods_vat;
-	private String type_id;
-	private String spec_name;
-	private String goods_freight;
-	private String plateid_top;
-	private String goods_commend;
-	private String goods_stcids;
-	private String gc_name;
-	private String starttime_life;
-	private String color_id;
-	private String goods_jingle;
-
+    /*
+     *指定商品信息的多出字段
+     */
+    private String goods_collect;//收藏数量
+    private String life_type;//生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐
+    private String goods_storage;//商品库存 
+    private int goods_click;//商品点击数量 
+    private String goods_commend;//商品推荐 1是，0否 默认0
+    
 	public String getGoods_collect() {
 		return goods_collect;
 	}
 
 	public void setGoods_collect(String goods_collect) {
 		this.goods_collect = goods_collect;
-	}
-
-	public String getGoods_zzbz() {
-		return goods_zzbz;
-	}
-
-	public void setGoods_zzbz(String goods_zzbz) {
-		this.goods_zzbz = goods_zzbz;
 	}
 
 	public String getLife_type() {
@@ -134,316 +78,12 @@ public class GoodEntity {
 		this.goods_storage = goods_storage;
 	}
 
-	public String getBrand_name() {
-		return brand_name;
-	}
-
-	public void setBrand_name(String brand_name) {
-		this.brand_name = brand_name;
-	}
-
-	public String getGoods_commonid() {
-		return goods_commonid;
-	}
-
-	public void setGoods_commonid(String goods_commonid) {
-		this.goods_commonid = goods_commonid;
-	}
-
-	public String getGoods_selltime() {
-		return goods_selltime;
-	}
-
-	public void setGoods_selltime(String goods_selltime) {
-		this.goods_selltime = goods_selltime;
-	}
-
-	public String getGoods_edittime() {
-		return goods_edittime;
-	}
-
-	public void setGoods_edittime(String goods_edittime) {
-		this.goods_edittime = goods_edittime;
-	}
-
-	public String getStore_name() {
-		return store_name;
-	}
-
-	public void setStore_name(String store_name) {
-		this.store_name = store_name;
-	}
-
-	public String getGoods_lock() {
-		return goods_lock;
-	}
-
-	public void setGoods_lock(String goods_lock) {
-		this.goods_lock = goods_lock;
-	}
-
-	public String getBrand_id() {
-		return brand_id;
-	}
-
-	public void setBrand_id(String brand_id) {
-		this.brand_id = brand_id;
-	}
-
-	public String getStore_id() {
-		return store_id;
-	}
-
-	public void setStore_id(String store_id) {
-		this.store_id = store_id;
-	}
-
-	public String getGoods_state() {
-		return goods_state;
-	}
-
-	public void setGoods_state(String goods_state) {
-		this.goods_state = goods_state;
-	}
-
-	public String getGoods_shicaidetail() {
-		return goods_shicaidetail;
-	}
-
-	public void setGoods_shicaidetail(String goods_shicaidetail) {
-		this.goods_shicaidetail = goods_shicaidetail;
-	}
-
-	public String getGoods_stateremark() {
-		return goods_stateremark;
-	}
-
-	public void setGoods_stateremark(String goods_stateremark) {
-		this.goods_stateremark = goods_stateremark;
-	}
-
-	public String getGoods_attr() {
-		return goods_attr;
-	}
-
-	public void setGoods_attr(String goods_attr) {
-		this.goods_attr = goods_attr;
-	}
-
-	public String getSpec_value() {
-		return spec_value;
-	}
-
-	public void setSpec_value(String spec_value) {
-		this.spec_value = spec_value;
-	}
-
-	public String getPlateid_bottom() {
-		return plateid_bottom;
-	}
-
-	public void setPlateid_bottom(String plateid_bottom) {
-		this.plateid_bottom = plateid_bottom;
-	}
-
-	public String getGoods_body() {
-		return goods_body;
-	}
-
-	public void setGoods_body(String goods_body) {
-		this.goods_body = goods_body;
-	}
-
-	public String getGoods_costprice() {
-		return goods_costprice;
-	}
-
-	public void setGoods_costprice(String goods_costprice) {
-		this.goods_costprice = goods_costprice;
-	}
-
-	public String getGoods_discount() {
-		return goods_discount;
-	}
-
-	public void setGoods_discount(String goods_discount) {
-		this.goods_discount = goods_discount;
-	}
-
-	public String getGc_id() {
-		return gc_id;
-	}
-
-	public void setGc_id(String gc_id) {
-		this.gc_id = gc_id;
-	}
-
-	public String getGoods_verify() {
-		return goods_verify;
-	}
-
-	public void setGoods_verify(String goods_verify) {
-		this.goods_verify = goods_verify;
-	}
-
-	public String getGoods_serial() {
-		return goods_serial;
-	}
-
-	public void setGoods_serial(String goods_serial) {
-		this.goods_serial = goods_serial;
-	}
-
-	public String getGoods_click() {
+	public int getGoods_click() {
 		return goods_click;
 	}
 
-	public void setGoods_click(String goods_click) {
+	public void setGoods_click(int goods_click) {
 		this.goods_click = goods_click;
-	}
-
-	public String getTransport_id() {
-		return transport_id;
-	}
-
-	public void setTransport_id(String transport_id) {
-		this.transport_id = transport_id;
-	}
-
-	public String getAreaid_1() {
-		return areaid_1;
-	}
-
-	public void setAreaid_1(String areaid_1) {
-		this.areaid_1 = areaid_1;
-	}
-
-	public String getAreaid_2() {
-		return areaid_2;
-	}
-
-	public void setAreaid_2(String areaid_2) {
-		this.areaid_2 = areaid_2;
-	}
-
-	public String getEndtime_life() {
-		return endtime_life;
-	}
-
-	public void setEndtime_life(String endtime_life) {
-		this.endtime_life = endtime_life;
-	}
-
-	public String getAreaid_3() {
-		return areaid_3;
-	}
-
-	public void setAreaid_3(String areaid_3) {
-		this.areaid_3 = areaid_3;
-	}
-
-	public String getFarm_type() {
-		return farm_type;
-	}
-
-	public void setFarm_type(String farm_type) {
-		this.farm_type = farm_type;
-	}
-
-	public String getGoods_verifyremark() {
-		return goods_verifyremark;
-	}
-
-	public void setGoods_verifyremark(String goods_verifyremark) {
-		this.goods_verifyremark = goods_verifyremark;
-	}
-
-	public String getGoods_spec() {
-		return goods_spec;
-	}
-
-	public void setGoods_spec(String goods_spec) {
-		this.goods_spec = goods_spec;
-	}
-
-	public String getGoods_xts() {
-		return goods_xts;
-	}
-
-	public void setGoods_xts(String goods_xts) {
-		this.goods_xts = goods_xts;
-	}
-
-	public String getGoods_specname() {
-		return goods_specname;
-	}
-
-	public void setGoods_specname(String goods_specname) {
-		this.goods_specname = goods_specname;
-	}
-
-	public String getTransport_title() {
-		return transport_title;
-	}
-
-	public void setTransport_title(String transport_title) {
-		this.transport_title = transport_title;
-	}
-
-	public String getGoods_shicai() {
-		return goods_shicai;
-	}
-
-	public void setGoods_shicai(String goods_shicai) {
-		this.goods_shicai = goods_shicai;
-	}
-
-	public String getGoods_addtime() {
-		return goods_addtime;
-	}
-
-	public void setGoods_addtime(String goods_addtime) {
-		this.goods_addtime = goods_addtime;
-	}
-
-	public String getGoods_vat() {
-		return goods_vat;
-	}
-
-	public void setGoods_vat(String goods_vat) {
-		this.goods_vat = goods_vat;
-	}
-
-	public String getType_id() {
-		return type_id;
-	}
-
-	public void setType_id(String type_id) {
-		this.type_id = type_id;
-	}
-
-	public String getSpec_name() {
-		return spec_name;
-	}
-
-	public void setSpec_name(String spec_name) {
-		this.spec_name = spec_name;
-	}
-
-	public String getGoods_freight() {
-		return goods_freight;
-	}
-
-	public void setGoods_freight(String goods_freight) {
-		this.goods_freight = goods_freight;
-	}
-
-	public String getPlateid_top() {
-		return plateid_top;
-	}
-
-	public void setPlateid_top(String plateid_top) {
-		this.plateid_top = plateid_top;
 	}
 
 	public String getGoods_commend() {
@@ -454,44 +94,44 @@ public class GoodEntity {
 		this.goods_commend = goods_commend;
 	}
 
-	public String getGoods_stcids() {
-		return goods_stcids;
+	public String getGc_id() {
+		return gc_id;
 	}
 
-	public void setGoods_stcids(String goods_stcids) {
-		this.goods_stcids = goods_stcids;
+	public void setGc_id(String gc_id) {
+		this.gc_id = gc_id;
 	}
 
-	public String getGc_name() {
-		return gc_name;
+	public String getFarm_type() {
+		return farm_type;
 	}
 
-	public void setGc_name(String gc_name) {
-		this.gc_name = gc_name;
+	public void setFarm_type(String farm_type) {
+		this.farm_type = farm_type;
 	}
 
-	public String getStarttime_life() {
-		return starttime_life;
+	public String getGoods_commonid() {
+		return goods_commonid;
 	}
 
-	public void setStarttime_life(String starttime_life) {
-		this.starttime_life = starttime_life;
+	public void setGoods_commonid(String goods_commonid) {
+		this.goods_commonid = goods_commonid;
 	}
 
-	public String getColor_id() {
-		return color_id;
+	public String getStore_id() {
+		return store_id;
 	}
 
-	public void setColor_id(String color_id) {
-		this.color_id = color_id;
+	public void setStore_id(String store_id) {
+		this.store_id = store_id;
 	}
 
-	public String getGoods_jingle() {
-		return goods_jingle;
+	public String getStore_name() {
+		return store_name;
 	}
 
-	public void setGoods_jingle(String goods_jingle) {
-		this.goods_jingle = goods_jingle;
+	public void setStore_name(String store_name) {
+		this.store_name = store_name;
 	}
 
 	public void setGoods_price(String goods_price) {

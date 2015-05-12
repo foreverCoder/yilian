@@ -1,5 +1,7 @@
 package com.haili.living.utils;
 
+import android.R.string;
+
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";
 
@@ -57,13 +59,84 @@ public class InterfaceUtils {
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
 
+	/*
+	 * act=goods&op=goods_detail POST数据参数：goods_id 返回数据如下：
+	 * 
+	 * goods_info为指定商品的详细信息 goods_commend_list 为同类推荐的商品 goods_commonid 商品公共表id
+	 * goods_name 商品名称 gc_id 商品分类id store_id 商铺ID store_name 商铺名 farm_type
+	 * 农庄商品的类型，1生成验证码，2为农作物，3为养殖，4为发物流 life_type
+	 * 生活馆类别,1为早市特卖,2为晚市特卖,3为餐饮外卖-早餐，4为餐饮外卖-午餐，5为餐饮外卖-晚餐 goods_image 商品图片
+	 * goods_price 商品价格 goods_marketprice 市场价 goods_commend 商品推荐 1是，0否 默认0
+	 * goods_id 商品ID goods_click 商品点击数量 goods_storage 商品库存 goods_salenum 销售数量
+	 * goods_collect 收藏数量 evaluation_good_star 好评星级 evaluation_count 评价数
+	 * goods_id 商品ID goods_name 商品名称 goods_price 商品价格 goods_image_url 商品图片
+	 */
+	public static String getTheGoodInfoAndRecommends() {
+		return getBaseURI() + "act=goods&op=goods_detail";
+	}
+
+	/*
+	 * 6. 获取指定商品的图片列表 接口：act=life&op=the_goods POST传值：
+	 * 需要传一个商品的$goods_id值，$goods_id是需要查看商品所对应的id值。
+	 * 
+	 * 返回值：为指定商品的图片
+	 * 
+	 * "result": 1表示正常，0表示没有值，-1表示异常
+	 * 
+	 * goods_image 图片地址
+	 */
+	public static String getTheGoodImgs() {
+		return getBaseURI() + "act=life&op=the_goods";
+	}
+
+	/*
+	 * 5. 分类固定写死八个分类，获取每个分类下的商品列表，带分页
+	 * 
+	 * 接口：act=life&op=life_classify
+	 * 
+	 * POST传值： 需要同时传$gc_id和$store_id两个值，$gc_id是需要查看分类所对应的id值，
+	 * $store_id是需要查看店铺的id值。
+	 * 
+	 * 返回值：分类固定写死八个分类，获取每个分类下的商品列表，带分页
+	 * 
+	 * "result": 1表示正常，0表示没有值，-1表示异常
+	 * 
+	 * goods_id 商品id(SKU)
+	 * 
+	 * goods_commonid 商品公共表id
+	 * 
+	 * goods_name 商品名称
+	 * 
+	 * store_id 店铺id
+	 * 
+	 * store_name 店铺名称
+	 * 
+	 * gc_id 分类id
+	 * 
+	 * goods_price 商品价格
+	 * 
+	 * goods_image 图片地址
+	 * 
+	 * farm_type 农庄商品的类型，1生成验证码，2为农作物，3为养殖
+	 */
+	public static String getGoodListByShopClass() {
+		return getBaseURI() + "act=life&op=life_classify";
+	}
+
 	/**
-	 * @return 9、生活馆搜索商品的列表信息
-	 *         接口：http://qxu1193880138.my3w.com/haili/mobile/index
-	 *         .php?act=life&op=life_goods
+	 * @return 9、生活馆搜索商品的列表信息 接口：act=life&op=life_goods
 	 *         POST传状态值：传搜索生活馆商品信息名称$life_search（如：传值，蔬菜。。。）分页传值，
 	 * 
 	 *         分页： curpage 第几页 默认为5条 例如：&curpage=3
+	 * 
+	 * 
+	 *         {"code":200,"result":"1","hasmore":false,"page_total":1,"datas":[
+	 *         {"goods_id":"43","goods_commonid":"20","goods_name":"测试生活馆2",
+	 *         "store_id"
+	 *         :"11","store_name":"生活馆大学城店","gc_id":"1217","goods_price"
+	 *         :"11.00","goods_image":
+	 *         "http://www.zq2014.com/haili/data/upload/shop/store/goods/11/11_04805073382771374_360.jpg"
+	 *         ,"farm_type":null}]}
 	 */
 	public static String getShopSearchGoods() {
 		return getBaseURI() + "act=life&op=life_goods";
