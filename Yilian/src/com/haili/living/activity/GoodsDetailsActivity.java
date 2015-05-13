@@ -1,7 +1,13 @@
 package com.haili.living.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -14,9 +20,21 @@ import android.widget.Toast;
 import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.OthersGoodItemAdapter;
+import com.haili.living.entity.GoodEntity;
 import com.haili.living.entity.LivingGoodsVo;
+import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
+import com.haili.living.entity.interfaces.ImgsTheGoodInterfaceEntity;
+import com.haili.living.utils.InterfaceUtils;
+import com.haili.living.utils.LoadNetworkPic;
 import com.haili.living.view.HorizontalListView;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
@@ -25,7 +43,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
  * @version 创建时间：2015年4月25日 下午7:26:52 类说明
  */
 public class GoodsDetailsActivity extends BaseActivity {
-	
+	private GoodEntity vo;
+	private GoodEntity goodEntity;// 商品详情实体
+	List<GoodEntity> goodEntityList = new ArrayList<GoodEntity>();// 推荐的商品实体列表
+	protected LoadNetworkPic imageLoader;
 	@ViewInject(R.id.img_good)
 	private ImageView img_good;
 	@ViewInject(R.id.top_left)
@@ -52,7 +73,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 	private TextView tx_fw;
 	@ViewInject(R.id.tx_fh)
 	private TextView tx_fh;
-	
+
 	@ViewInject(R.id.horizon_listview)
 	private HorizontalListView horizon_listview;
 
@@ -103,8 +124,8 @@ public class GoodsDetailsActivity extends BaseActivity {
 		add_m.setText(num + "");
 	}
 
-   private OthersGoodItemAdapter adapter;
-   
+	private OthersGoodItemAdapter adapter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -114,28 +135,139 @@ public class GoodsDetailsActivity extends BaseActivity {
 	}
 
 	private void initView() {
+		imageLoader = new LoadNetworkPic(GoodsDetailsActivity.this);
+		vo = (GoodEntity) getIntent().getSerializableExtra("vo");
 		tx_market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-		ratingBar.setRating(4.5f);
-		List<LivingGoodsVo> voList=new ArrayList<LivingGoodsVo>();
-		voList.add(new LivingGoodsVo( "","含羞草开心果 80g","15.90"));
-		voList.add(new LivingGoodsVo( "","含羞草开心果 80g","15.90"));
-		voList.add(new LivingGoodsVo( "","含羞草开心果 80g","15.90"));
-		voList.add(new LivingGoodsVo( "","含羞草开心果 80g","15.90"));
-		
-		adapter=new OthersGoodItemAdapter(context, voList);
-		horizon_listview.setAdapter(adapter);
-		
-//		int a=com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
-//		Drawable[] drawables =tx_fh.getCompoundDrawables();
-//		drawables[2].setBounds(0, 0, a, a);
-//		tx_fh.setCompoundDrawables(drawables[0],drawables[1],drawables[2],drawables[3]);
-//		Drawable[] drawables2 =tx_fw.getCompoundDrawables();
-//		drawables2[2].setBounds(0, 0, a, a);
-//		tx_fw.setCompoundDrawables(drawables2[0],drawables2[1],drawables2[2],drawables2[3]);
-//		Drawable[] drawables3 =tx_ms.getCompoundDrawables();
-//		drawables3[2].setBounds(0, 0, a, a);
-//		tx_ms.setCompoundDrawables(drawables3[0],drawables3[1],drawables3[2],drawables3[3]);
-		
+		// int a=com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
+		// Drawable[] drawables =tx_fh.getCompoundDrawables();
+		// drawables[2].setBounds(0, 0, a, a);
+		// tx_fh.setCompoundDrawables(drawables[0],drawables[1],drawables[2],drawables[3]);
+		// Drawable[] drawables2 =tx_fw.getCompoundDrawables();
+		// drawables2[2].setBounds(0, 0, a, a);
+		// tx_fw.setCompoundDrawables(drawables2[0],drawables2[1],drawables2[2],drawables2[3]);
+		// Drawable[] drawables3 =tx_ms.getCompoundDrawables();
+		// drawables3[2].setBounds(0, 0, a, a);
+		// tx_ms.setCompoundDrawables(drawables3[0],drawables3[1],drawables3[2],drawables3[3]);
+
+		getImgListByGood(vo.getGoods_id());// 获取商品图片
+		getShopInfoAndRecommendByGood(vo.getGoods_id());//获取商品信息
 	}
 
+	public void getImgListByGood(String goodsId) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getTheGoodImgs(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String historyResult = responseInfo.result;
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+
+				ObjectMapper mapper = new ObjectMapper();
+				List<String> imgList = new ArrayList<String>();
+				try {
+					ImgsTheGoodInterfaceEntity entity = mapper.readValue(result, ImgsTheGoodInterfaceEntity.class);// 接口实体类
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
+						if (entity.hasDatas()) {
+							imgList = entity.getDatas();
+							Iterator<String> iterator = imgList.iterator();
+							while (iterator.hasNext()) {
+								String imgUrl = iterator.next();
+								LogUtils.d("imgUrl  " + imgUrl);
+							}
+							imageLoader.DisplayImage(imgList.get(0), img_good);
+						}
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+
+	public void getShopInfoAndRecommendByGood(String goodsId) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getTheGoodInfoAndRecommends(), params, new RequestCallBack<String>() {
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					GoodInfoAndRecommendInterfaceEntity entity = mapper.readValue(result, GoodInfoAndRecommendInterfaceEntity.class);// 接口实体类
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						goodEntity = entity.getDatas().getGoods_info();// 获得商品详情实体
+						initViewData();
+						if (entity.hasDatas()) {
+							goodEntityList = entity.getDatas().getGoods_commend_list();// 获得推荐的商品列表
+							adapter = new OthersGoodItemAdapter(context, goodEntityList);
+							horizon_listview.setAdapter(adapter);
+						}
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+	private void initViewData(){
+		if(goodEntity!=null){
+			tx_goodName.setText(goodEntity.getGoods_name());
+			tx_price.setText("￥"+goodEntity.getGoods_price());
+			tx_market_price.setText("市场价:￥"+goodEntity.getGoods_marketprice());
+			tx_salesNum.setText(goodEntity.getGoods_salenum()+"件");
+			float starNum=Float.parseFloat(goodEntity.getEvaluation_good_star());//星级
+			ratingBar.setRating(starNum);
+		}
+		
+	}
 }

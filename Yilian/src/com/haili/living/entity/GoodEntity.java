@@ -1,11 +1,11 @@
 package com.haili.living.entity;
 
+import java.io.Serializable;
+
 /**
  * 商品实体 一个实体有600行，可见接口字段多么的丰富多彩 Created by liteng on 2015/4/21.
  */
-public class GoodEntity {
-
-
+public class GoodEntity implements Serializable{
 
 	/**
 	 * 商品分类列表返回字段 goods_price : 0.01 group_flag : false goods_marketprice :

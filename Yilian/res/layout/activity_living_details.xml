@@ -75,16 +75,14 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_jrtm" />
+                            android:scaleType="fitXY"/>
 
                         <ImageView
                             android:id="@+id/img_cy"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_cy" />
+                            android:scaleType="fitXY"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -97,24 +95,21 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_zstm" />
+                            android:scaleType="fitXY" />
 
                         <ImageView
                             android:id="@+id/img_mstm"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_mstm" />
+                            android:scaleType="fitXY" />
 
                         <ImageView
                             android:id="@+id/img_tg"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/img_tg" />
+                            android:scaleType="fitXY"/>
                     </LinearLayout>
                 </LinearLayout>
 
