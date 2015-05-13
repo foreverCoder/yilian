@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parent_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/activity_top" />
+
+            <LinearLayout
+                android:layout_below="@+id/top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/mLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <com.haili.living.view.XListView
+                        android:id="@+id/mlistview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="#fff"
+                        android:dividerHeight="10dp" >
+                    </com.haili.living.view.XListView>
+                </LinearLayout>
+            </LinearLayout>
+</RelativeLayout>

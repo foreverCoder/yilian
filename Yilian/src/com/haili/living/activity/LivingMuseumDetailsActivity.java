@@ -11,10 +11,14 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -330,6 +334,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 				}
 			}
 		});
+		
 	}
 
 	private void setListeners() {
@@ -356,6 +361,26 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			public void onLoadMore() {
 				pageNum += 1;
 				getShopSearchGoods(searchStr,pageNum+"",false);
+			}
+		});
+		top_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+							.hideSoftInputFromWindow(LivingMuseumDetailsActivity.this.getCurrentFocus().getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
+					if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
+						Toast.makeText(LivingMuseumDetailsActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
+					} else {
+						// TODO 跳转
+						Intent intent = new Intent(LivingMuseumDetailsActivity.this, LivingMuseumDetailsSearchActivity.class);
+						intent.putExtra("searchValue", top_search.getText().toString().trim());
+						startActivity(intent);
+					}
+					return true;
+				}
+				return false;
 			}
 		});
 	}

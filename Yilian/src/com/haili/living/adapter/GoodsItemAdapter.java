@@ -70,7 +70,13 @@ public class GoodsItemAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-	    imageLoader.DisplayImage(list.get(position).getGoods_image_url(), holder.goods_icon);
+		String imgUrl;
+		if (list.get(position).getGoods_image_url()!=null) {
+			imgUrl=list.get(position).getGoods_image_url();
+		}else{
+			imgUrl=list.get(position).getGoods_image();
+		}
+	    imageLoader.DisplayImage(imgUrl, holder.goods_icon);
 		holder.goods_price.setText("￥"+list.get(position).getGoods_price());
 		holder.goods_name.setText(list.get(position).getGoods_name());
 //		holder.goods_weight.setText(list.get(position).getGoods_salenum());
