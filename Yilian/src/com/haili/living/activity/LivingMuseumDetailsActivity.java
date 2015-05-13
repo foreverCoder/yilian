@@ -349,14 +349,12 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			@Override
 			public void onRefresh() {
 				pageNum = 1;
-				searchStr="保健品";
 				getShopSearchGoods(searchStr,pageNum+"",true);
 			}
 
 			@Override
 			public void onLoadMore() {
 				pageNum += 1;
-				searchStr="保健品";
 				getShopSearchGoods(searchStr,pageNum+"",false);
 			}
 		});
@@ -374,7 +372,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		searchStr="粮油副食";
 		getShopSearchGoods(searchStr,pageNum+"",true);//获取生活馆商品列表
 		topHeight = top_bar.getHeight();
-		Utils.setListViewHeight(mListView, topHeight);
+	
 	}
 
 	@Override
@@ -536,7 +534,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					ShopSearchGoodsInterfaceEntity entity = mapper.readValue(result, ShopSearchGoodsInterfaceEntity.class);// 接口实体类
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
-						goodEntities = entity.getDatas().getGoods_list();
+						goodEntities = entity.getDatas();
 						if (flag) {// 刷新
 							lVoList.clear();
 							lVoList = goodEntities;
@@ -545,10 +543,12 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 							}
 							gAdapter = new GoodsItemAdapter(LivingMuseumDetailsActivity.this, lVoList);
 							mListView.setAdapter(gAdapter);
+							Utils.setListViewHeight(mListView, topHeight);
 						} else { // 加载更多
 							if (goodEntities.size() > 0) {
-								lVoList.addAll(entity.getDatas().getGoods_list());
+								lVoList.addAll(entity.getDatas());
 								gAdapter.notifyDataSetChanged();
+								Utils.setListViewHeight(mListView, topHeight);
 							} else {
 								toastShort("没有更多数据了");
 							}

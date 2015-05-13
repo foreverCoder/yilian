@@ -412,6 +412,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 							mListView.setAdapter(gAdapter);
 						} else { // 加载更多
 							if (goodList.size() > 0) {
+								lVoList.addAll(0, entity.getDatas().getGoods_list());
 								lVoList.addAll(entity.getDatas().getGoods_list());
 								gAdapter.notifyDataSetChanged();
 							} else {
