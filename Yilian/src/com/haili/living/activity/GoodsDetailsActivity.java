@@ -21,7 +21,6 @@ import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.OthersGoodItemAdapter;
 import com.haili.living.entity.GoodEntity;
-import com.haili.living.entity.LivingGoodsVo;
 import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.ImgsTheGoodInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;

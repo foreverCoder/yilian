@@ -91,9 +91,9 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 			public void onRefresh() {
 				pageNum = 1;
 				if (searchType != null) {
-					getGoodListByClass(searchStr, pageNum + "", false);
+					getGoodListByClass(searchStr, pageNum + "", true);
 				} else {
-					getShopSearchGoods(searchStr, pageNum + "", false);// 获取生活馆商品列表
+					getShopSearchGoods(searchStr, pageNum + "", true);// 获取生活馆商品列表
 				}
 			}
 
@@ -202,6 +202,7 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 
 			@Override
 			public void onFailure(HttpException error, String msg) {
+				onLoad();
 				toastLong("请求失败");
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
@@ -218,15 +219,16 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 
 	/**
 	 * 生活馆商品列表
-	 * **/
+	 * 早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）
+	 * 	 * **/
 	public void getGoodListByClass(String gcId, String curPage, final Boolean flag) {
 		RequestParams params = new RequestParams();
-		params.addBodyParameter("gc_id", gcId);
+		params.addBodyParameter("life_type", gcId);
 		params.addBodyParameter("store_id", storeId);
 		params.addBodyParameter("curpage", curPage);
 
 		HttpUtils http = new HttpUtils();
-		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByShopClass(), params, new RequestCallBack<String>() {
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodsByTodayType(), params, new RequestCallBack<String>() {
 			@Override
 			public void onStart() {
 				toastLong("请求服务器");
@@ -239,6 +241,7 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
+				onLoad();
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}
@@ -291,6 +294,7 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				toastLong("请求失败");
+				onLoad();
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}

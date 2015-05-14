@@ -142,15 +142,17 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	ImageView img_tg;
 
 	@OnClick({ R.id.img_jrtm, R.id.img_cy, R.id.img_zstm, R.id.img_mstm, R.id.img_tg })
-	// 特卖筛选 今日特卖 餐饮 早市特卖 晚市特卖 团购
+	/**
+	 *  特卖筛选 今日特卖 餐饮 早市特卖 晚市特卖 团购
+	 * 早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）
+	 */
 	public void changeTm(View v) {
 		Intent intent = new Intent(LivingMuseumDetailsActivity.this, LivingMuseumDetailsSearchActivity.class);
-		intent.putExtra("storeId", "9");//TODO 生活馆ID
+		intent.putExtra("storeId", "19");//TODO 生活馆ID
 		switch (v.getId()) {
 		// 今日特卖
 		case R.id.img_jrtm:
-			// TODO 跳转
-			intent.putExtra("searchValue", InterfaceUtils.ShopPicType.TODAY_NEW);//TODO 类型ID
+			intent.putExtra("searchValue", ConstantValue.S_JRXP);//TODO 类型ID
 			intent.putExtra("searchType", "今日特卖");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "今日特卖", Toast.LENGTH_SHORT).show();
@@ -158,23 +160,21 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		// 餐饮
 		case R.id.img_cy:
 			// TODO 跳转
-			intent.putExtra("searchValue", InterfaceUtils.ShopPicType.DINNER_OUT);
+			intent.putExtra("searchValue", ConstantValue.S_CYWM_A);
 			intent.putExtra("searchType", "餐饮");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
 			break;
 		// 早市特卖
 		case R.id.img_zstm:
-			// TODO 跳转
-			intent.putExtra("searchValue", InterfaceUtils.ShopPicType.MORNING_SPECIAL);
+			intent.putExtra("searchValue", ConstantValue.S_ZSTM);
 			intent.putExtra("searchType", "早市特卖");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "早市特卖", Toast.LENGTH_SHORT).show();
 			break;
 		// 晚市特卖
 		case R.id.img_mstm:
-			// TODO 跳转
-			intent.putExtra("searchValue", InterfaceUtils.ShopPicType.EVENING_SPECIAL);
+			intent.putExtra("searchValue", ConstantValue.S_WSTM);
 			intent.putExtra("searchType", "晚市特卖");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "晚市特卖", Toast.LENGTH_SHORT).show();
@@ -182,7 +182,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		// 团购
 		case R.id.img_tg:
 			// TODO 跳转
-			intent.putExtra("searchValue", InterfaceUtils.ShopPicType.GROUP_BUY);
+			intent.putExtra("searchValue", ConstantValue.S_WSTM);
 			intent.putExtra("searchType", "团购");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "团购", Toast.LENGTH_SHORT).show();
@@ -418,7 +418,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		mListView.setPullRefreshEnable(false);
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
 
-		getLiveShopInfo("9"); // 传生活馆参数 获取生活馆信息
+		getLiveShopInfo("19"); // 传生活馆参数 获取生活馆信息
 		getShopHeadPic(); // 传生活馆参数 获取生活馆图片
 		searchStr = ConstantValue.S_LYFS+"";
 		getGoodListByClass(searchStr, pageNum + "", true);// 获取生活馆商品列表
@@ -554,7 +554,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	 * 生活馆商品列表
 	 * **/
 	public void getGoodListByClass(String gcId,  String curPage, final Boolean flag) {
-		String storeId="1211";//生活馆ID
+		String storeId="19";//生活馆ID
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("gc_id", gcId);
 		params.addBodyParameter("store_id", storeId);
@@ -575,6 +575,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
+				onLoad();
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
 				ObjectMapper mapper = new ObjectMapper();
@@ -625,6 +626,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				toastLong("请求失败");
+				onLoad();
 			}
 		});
 	}

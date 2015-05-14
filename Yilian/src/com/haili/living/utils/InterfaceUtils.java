@@ -228,7 +228,15 @@ public class InterfaceUtils {
 		return getBaseURI() + "act=life&op=getstorelifeaddr";
 
 	}
+	/**
+	 * http://www.zq2014.com/haili/mobile/index.php?act=life&op=life_new
+	 * POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值,
+                需要传状态值$life_type,life_type表示(早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）)，
+	 * **/
+	public static String getGoodsByTodayType() {
+		return getBaseURI() + "act=life&op=life_new";
 
+	}
 	public static String getResponseResult(String result) {
 		return UnicodeUtils.decodeUnicode(result);
 	}
