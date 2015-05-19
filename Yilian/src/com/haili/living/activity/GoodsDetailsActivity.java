@@ -9,10 +9,16 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +31,7 @@ import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.ImgsTheGoodInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.LoadNetworkPic;
+import com.haili.living.utils.Utils;
 import com.haili.living.view.HorizontalListView;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
@@ -46,6 +53,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 	private GoodEntity goodEntity;// 商品详情实体
 	List<GoodEntity> goodEntityList = new ArrayList<GoodEntity>();// 推荐的商品实体列表
 	protected LoadNetworkPic imageLoader;
+	private PopupWindow popWindow;
 	@ViewInject(R.id.img_good)
 	private ImageView img_good;
 	@ViewInject(R.id.top_left)
@@ -82,6 +90,44 @@ public class GoodsDetailsActivity extends BaseActivity {
 	@OnClick(R.id.top_left)
 	public void finsh(View v) {
 		finish();
+	}
+
+	@OnClick(R.id.img_help)
+	public void showPopWindow(View v) {
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View vPopWindow = inflater.inflate(R.layout.pop_window, null, false);
+		popWindow = new PopupWindow(vPopWindow, LinearLayout.LayoutParams.MATCH_PARENT,Utils.dip2px(context, 50), true);
+		popWindow.setOutsideTouchable(true);
+		popWindow.setBackgroundDrawable(new BitmapDrawable());
+		popWindow.showAsDropDown(v, 0, -(v.getHeight()+popWindow.getHeight()));
+		popWindow.setFocusable(true);
+		
+		ImageView callImageView=(ImageView)vPopWindow.findViewById(R.id.btn_call);
+		callImageView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+		ImageView btn_help=(ImageView)vPopWindow.findViewById(R.id.btn_help);
+		btn_help.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+		ImageView btn_ps=(ImageView)vPopWindow.findViewById(R.id.btn_ps);
+		btn_ps.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+			}
+		});
+	}
+
+	@OnClick(R.id.img_add)
+	public void addGwc(View v) {
+	}
+
+	@OnClick(R.id.img_buy)
+	public void buy(View v) {
 	}
 
 	@OnClick(R.id.btn_fx)
@@ -149,7 +195,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 		// tx_ms.setCompoundDrawables(drawables3[0],drawables3[1],drawables3[2],drawables3[3]);
 
 		getImgListByGood(vo.getGoods_id());// 获取商品图片
-		getShopInfoAndRecommendByGood(vo.getGoods_id());//获取商品信息
+		getShopInfoAndRecommendByGood(vo.getGoods_id());// 获取商品信息
 	}
 
 	public void getImgListByGood(String goodsId) {
@@ -171,10 +217,8 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
-				String historyResult = responseInfo.result;
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
-
 				ObjectMapper mapper = new ObjectMapper();
 				List<String> imgList = new ArrayList<String>();
 				try {
@@ -220,10 +264,12 @@ public class GoodsDetailsActivity extends BaseActivity {
 			public void onStart() {
 				toastLong("请求服务器");
 			}
+
 			@Override
 			public void onLoading(long total, long current, boolean isUploading) {
 
 			}
+
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
@@ -252,21 +298,32 @@ public class GoodsDetailsActivity extends BaseActivity {
 					e.printStackTrace();
 				}
 			}
+
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				toastLong("请求失败");
 			}
 		});
 	}
-	private void initViewData(){
-		if(goodEntity!=null){
+
+	private void initViewData() {
+		if (goodEntity != null) {
 			tx_goodName.setText(goodEntity.getGoods_name());
-			tx_price.setText("￥"+goodEntity.getGoods_price());
-			tx_market_price.setText("市场价:￥"+goodEntity.getGoods_marketprice());
-			tx_salesNum.setText(goodEntity.getGoods_salenum()+"件");
-			float starNum=Float.parseFloat(goodEntity.getEvaluation_good_star());//星级
+			tx_price.setText("￥" + goodEntity.getGoods_price());
+			tx_market_price.setText("市场价:￥" + goodEntity.getGoods_marketprice());
+			tx_salesNum.setText(goodEntity.getGoods_salenum() + "件");
+			float starNum = Float.parseFloat(goodEntity.getEvaluation_good_star());// 星级
 			ratingBar.setRating(starNum);
 		}
-		
+
 	}
+
+	@Override
+	protected void onPause() {
+		if (popWindow!=null&&popWindow.isShowing()) {
+			popWindow.dismiss();
+		}
+		super.onPause();
+	}
+	
 }
