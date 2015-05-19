@@ -3,6 +3,7 @@ package com.haili.living.entity.interfaces;
 import java.util.List;
 
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.Store_credit;
 
 public class GoodInfoAndRecommendInterfaceEntity {
 
@@ -47,8 +48,17 @@ public class GoodInfoAndRecommendInterfaceEntity {
          */
         private GoodEntity goods_info;//商品详情
         private List<GoodEntity> goods_commend_list;//推荐的商品集合
+        private Store_credit store_credit;//评价
 
-        public void setGoods_info(GoodEntity goods_info) {
+		public Store_credit getStore_credit() {
+			return store_credit;
+		}
+
+		public void setStore_credit(Store_credit store_credit) {
+			this.store_credit = store_credit;
+		}
+
+		public void setGoods_info(GoodEntity goods_info) {
             this.goods_info = goods_info;
         }
 

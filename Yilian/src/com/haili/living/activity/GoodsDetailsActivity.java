@@ -27,6 +27,8 @@ import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.OthersGoodItemAdapter;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.Store_credit;
+import com.haili.living.entity.Store_desccredit;
 import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.ImgsTheGoodInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
@@ -52,6 +54,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 	private GoodEntity vo;
 	private GoodEntity goodEntity;// 商品详情实体
 	List<GoodEntity> goodEntityList = new ArrayList<GoodEntity>();// 推荐的商品实体列表
+	private Store_credit pjVo;
 	protected LoadNetworkPic imageLoader;
 	private PopupWindow popWindow;
 	@ViewInject(R.id.img_good)
@@ -279,6 +282,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 					GoodInfoAndRecommendInterfaceEntity entity = mapper.readValue(result, GoodInfoAndRecommendInterfaceEntity.class);// 接口实体类
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						goodEntity = entity.getDatas().getGoods_info();// 获得商品详情实体
+						pjVo=entity.getDatas().getStore_credit();//获取评价
 						initViewData();
 						if (entity.hasDatas()) {
 							goodEntityList = entity.getDatas().getGoods_commend_list();// 获得推荐的商品列表
@@ -315,7 +319,14 @@ public class GoodsDetailsActivity extends BaseActivity {
 			float starNum = Float.parseFloat(goodEntity.getEvaluation_good_star());// 星级
 			ratingBar.setRating(starNum);
 		}
-
+		if(pjVo!=null){
+			Store_desccredit vo1=pjVo.getStore_deliverycredit();//发货速度
+			Store_desccredit vo2=pjVo.getStore_desccredit();//描述相符
+			Store_desccredit vo3=pjVo.getStore_servicecredit();//服务
+			tx_ms.setText(vo2.getCredit()+"");
+			tx_fw.setText(vo3.getCredit()+"");
+			tx_fh.setText(vo1.getCredit()+"");
+		}
 	}
 
 	@Override
