@@ -14,13 +14,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.amap.api.location.f;
 import com.haili.living.BaseActivity;
 import com.haili.living.R;
-import com.haili.living.adapter.GoodsItemAdapter;
 import com.haili.living.adapter.LivingSearchItemAdapter;
 import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
@@ -39,7 +38,7 @@ import com.lidroid.xutils.util.LogUtils;
 
 public class LivingSearchActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
 	private TextView top_title, top_right;
-	private TextView top_left;
+	private ImageView top_left;
 	private XListView mListView;
 	private List<GoodForSearchEntity> lVoList = new ArrayList<GoodForSearchEntity>();
 	private LivingSearchItemAdapter gAdapter;
@@ -64,7 +63,7 @@ public class LivingSearchActivity extends BaseActivity implements CompoundButton
 		progressDialog.setIndeterminate(false);
 		progressDialog.setMessage("请稍候...");
 		top_title = (TextView) findViewById(R.id.top_title);
-		top_left = (TextView) findViewById(R.id.top_left);
+		top_left = (ImageView) findViewById(R.id.top_left);
 		top_right = (TextView) findViewById(R.id.top_right);
 		top_right.setVisibility(View.GONE);
 		initRadioBtns();

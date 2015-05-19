@@ -11,7 +11,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -186,16 +188,6 @@ public class GoodsDetailsActivity extends BaseActivity {
 		imageLoader = new LoadNetworkPic(GoodsDetailsActivity.this);
 		vo = (GoodEntity) getIntent().getSerializableExtra("vo");
 		tx_market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
-		// int a=com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
-		// Drawable[] drawables =tx_fh.getCompoundDrawables();
-		// drawables[2].setBounds(0, 0, a, a);
-		// tx_fh.setCompoundDrawables(drawables[0],drawables[1],drawables[2],drawables[3]);
-		// Drawable[] drawables2 =tx_fw.getCompoundDrawables();
-		// drawables2[2].setBounds(0, 0, a, a);
-		// tx_fw.setCompoundDrawables(drawables2[0],drawables2[1],drawables2[2],drawables2[3]);
-		// Drawable[] drawables3 =tx_ms.getCompoundDrawables();
-		// drawables3[2].setBounds(0, 0, a, a);
-		// tx_ms.setCompoundDrawables(drawables3[0],drawables3[1],drawables3[2],drawables3[3]);
 
 		getImgListByGood(vo.getGoods_id());// 获取商品图片
 		getShopInfoAndRecommendByGood(vo.getGoods_id());// 获取商品信息
@@ -210,7 +202,6 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 			@Override
 			public void onStart() {
-				toastLong("请求服务器");
 			}
 
 			@Override
@@ -265,7 +256,6 @@ public class GoodsDetailsActivity extends BaseActivity {
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getTheGoodInfoAndRecommends(), params, new RequestCallBack<String>() {
 			@Override
 			public void onStart() {
-				toastLong("请求服务器");
 			}
 
 			@Override
@@ -326,6 +316,31 @@ public class GoodsDetailsActivity extends BaseActivity {
 			tx_ms.setText(vo2.getCredit()+"");
 			tx_fw.setText(vo3.getCredit()+"");
 			tx_fh.setText(vo1.getCredit()+"");
+			
+			
+			 int b=com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
+			 int a=com.haili.living.utils.Utils.dip2px(getBaseContext(), 15);
+			//设置整数的宽高
+			Rect rect = new Rect(0, 0, a, b);
+			Drawable up=getResources().getDrawable(R.drawable.img_up);
+			Drawable down=getResources().getDrawable(R.drawable.img_down);
+			up.setBounds(rect);
+			down.setBounds(rect);
+			if("低于".equals(vo1.getPercent_text())){
+				tx_fh.setCompoundDrawables(null, null, down, null);
+			}else{
+				tx_fh.setCompoundDrawables(null, null, up, null);
+			}
+			if("低于".equals(vo2.getPercent_text())){
+				tx_ms.setCompoundDrawables(null, null, down, null);
+			}else{
+				tx_ms.setCompoundDrawables(null, null, up, null);
+			}
+			if("低于".equals(vo3.getPercent_text())){
+				tx_fw.setCompoundDrawables(null, null, down, null);
+			}else{
+				tx_fw.setCompoundDrawables(null, null, up, null);
+			}
 		}
 	}
 
