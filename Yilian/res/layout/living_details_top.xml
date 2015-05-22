@@ -16,23 +16,38 @@
         android:scaleType="fitXY"
         android:src="@drawable/top_left_back" />
 
-    <EditText
-        android:id="@+id/top_search"
+
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="8dp"
         android:layout_toLeftOf="@+id/top_right"
-        android:layout_toRightOf="@+id/top_left"
-        android:background="@drawable/search_bg2"
-        android:gravity="center_vertical"
-        android:imeOptions="actionSearch"
-        android:paddingLeft="30dp"
-        android:hint="请输入类别或关键字"
-        android:singleLine="true"
-        android:textColor="#000"
-        android:textSize="15.0dip" />
+        android:layout_toRightOf="@+id/top_left" >
+
+        <EditText
+            android:id="@+id/top_search"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/search_bg2"
+            android:gravity="center_vertical"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="30dp"
+            android:singleLine="true"
+            android:textColor="#000"
+            android:textSize="15.0dip"/>
+
+        <ImageButton
+            android:id="@+id/img_btn"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|right"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_search_selected" />
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/top_right"

@@ -60,6 +60,7 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrollListener1 {
 	protected LoadNetworkPic imageLoader;
+	private final int pageToal=10; 
 	// 滑动距离及坐标
 	private float xDistance, yDistance, xLast, yLast;
 	private GoodsItemAdapter gAdapter;
@@ -559,6 +560,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		params.addBodyParameter("gc_id", gcId);
 		params.addBodyParameter("store_id", storeId);
 		params.addBodyParameter("curpage", curPage);
+		params.addBodyParameter("pageToal", pageToal+"");
 
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByShopClass(), params, new RequestCallBack<String>() {

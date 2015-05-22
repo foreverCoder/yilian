@@ -7,19 +7,6 @@
     android:focusable="true"
     android:focusableInTouchMode="true" >
 
-    <!--
-         <TextView
-        android:id="@+id/top_left"
-        style="@style/top_but"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:drawableLeft="@drawable/back"
-        android:gravity="center_vertical" >
-    </TextView>
-    -->
-
     <ImageView
         android:id="@+id/top_left"
         android:layout_width="48dp"
@@ -51,25 +38,40 @@
         android:gravity="center"
         android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/top_search"
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/top_left"
-        android:background="@drawable/search_bg"
-        android:gravity="center_vertical"
-        android:imeOptions="actionSearch"
-        android:paddingBottom="0dp"
-        android:paddingLeft="30dp"
-        android:paddingTop="0dp"
-        android:singleLine="true"
-        android:textColor="#000"
-        android:textSize="15.0dip"
-        android:visibility="gone" />
+        android:layout_toRightOf="@+id/top_left" >
+
+        <EditText
+            android:id="@+id/top_search"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/search_bg"
+            android:gravity="center_vertical"
+            android:imeOptions="actionSearch"
+            android:paddingBottom="0dp"
+            android:paddingLeft="30dp"
+            android:paddingTop="0dp"    
+            android:singleLine="true"
+            android:textColor="#000"
+            android:textSize="15.0dip"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:layout_width="45dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center|right"
+            android:visibility="gone"
+            android:background="@drawable/btn_search_selected" />
+    </FrameLayout>
 
 </RelativeLayout>
