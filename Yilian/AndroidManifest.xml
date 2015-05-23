@@ -14,40 +14,39 @@
         android:theme="@style/AppNoAnimalTheme" >
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="2592458cfe089c81b89e35d4631bc50c" />
+            android:value="9a664dae99396a46949916a79ccdc70d" />
 
         <activity
             android:name="com.haili.living.MapActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
 
-            <!--
                  <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
         <activity
             android:name="com.haili.living.activity.LivingMuseumActivity"
             android:label="@string/app_name" >
+     <!--       
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter> 
+               -->
         </activity>
         <activity
             android:name="com.haili.living.InterfaceTestActivity"
             android:screenOrientation="portrait" >
-
-            <!--
+<!-- 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
+             -->
         </activity>
         <activity
             android:name="com.haili.living.InterfaceShowActivity"
@@ -86,7 +85,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
- 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
+    
 </manifest>

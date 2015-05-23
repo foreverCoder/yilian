@@ -374,7 +374,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		params.addBodyParameter("page", page);
 		params.addBodyParameter("pageToal", page);
 		params.addBodyParameter("curpage", curpage);
-		System.out.println("   当前页面    ：" + curpage + "    每页数据：" + page+"  分类ID："+gcId+"  排序类型："+key +" 排序方向："+order);
+		System.out.println("   当前页面curpage：" + curpage + "    每页数据page：" + page+"  分类ID gc_id："+gcId+"  排序类型key："+key +" 排序方向order："+order);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByClassify(), params, new RequestCallBack<String>() {
 

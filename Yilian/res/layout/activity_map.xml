@@ -44,4 +44,15 @@
             android:textColor="@android:color/black" />
     </RadioGroup>
 
+    <Button
+        android:id="@+id/btnNearShop"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textAlignment="inherit"
+        android:alpha="0.8"
+        android:text="最近生活馆" />
+
 </FrameLayout>

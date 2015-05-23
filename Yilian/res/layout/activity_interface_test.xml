@@ -3,6 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
     <Button
         android:id="@+id/btnLbsShops"
         android:layout_width="fill_parent"
@@ -81,6 +88,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="获取指定商品的信息和推荐商品列表"/>
-    
-    
+     <Button
+        android:id="@+id/btnAddGoodToCart"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="商品加入到购物车"/>
+     <Button
+        android:id="@+id/btnGetGoodEvaluation"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取商品的全部评价"/>
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

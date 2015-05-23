@@ -60,6 +60,33 @@ public class InterfaceUtils {
 	private static String MOBILE_PATH = "";
 
 	/*
+	 * 18、获取全部评价、好评、中评、差评数量 19、获取分类评价下的评价列表 act=goods&op=goods_comment
+	 * POST数据：goods_id
+	 * 
+	 * 
+	 * 
+	 * 返回：
+	 * 
+	 * "result": "1" 返回值正常
+	 * 
+	 * all 评价个数 goods 好评个数 normal 中评个数 bad 差评个数
+	 * 
+	 * good_percent 好评% normal_percent 中评% bad_percent 差评%
+	 */
+	public static String getGoodEvaluation() {
+		return getBaseURI() + "act=goods&op=goods_comment";
+	}
+
+	/*
+	 * 14、商品加入购物车 act=member_cart&op=cart_add POST数据参数： goods_id 商品ID quantity
+	 * 数量 返回 "result": 1表示正常，0表示程序执行未插入数据库，-1表示异常 "datas" : 返回状态，成功返回
+	 * 1，异常返回空值，0表示为POST传goods_id不存在
+	 */
+	public static String addGoodToCart() {
+		return getBaseURI() + "act=member_cart&op=cart_add";
+	}
+
+	/*
 	 * act=goods&op=goods_detail POST数据参数：goods_id 返回数据如下：
 	 * 
 	 * goods_info为指定商品的详细信息 goods_commend_list 为同类推荐的商品 goods_commonid 商品公共表id

@@ -18,10 +18,12 @@ import org.codehaus.jackson.type.JavaType;
 
 import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.GoodEvaluation;
 import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.TestEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
+import com.haili.living.entity.interfaces.GoodEvaluationInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
@@ -130,7 +132,144 @@ public class InterfaceTestActivity extends BaseActivity {
 	public void testInfoAndRecommendByGood(View view) {// 获取指定商品的信息和推荐商品列表
 		getShopInfoAndRecommendByGood("15");
 	}
+	@OnClick(R.id.btnAddGoodToCart)
+	public void testAddGoodToCart(View view){//商品添加到购物车
+		addGoodToCart("15", 1);
+	}
+	@OnClick(R.id.btnGetGoodEvaluation)
+	public void testGetGoodEvaluation(View view){//获取商品的全部评价
+		getGoodEvaluation("15");
+	}
+public void getGoodEvaluation(String goodsId){
+	RequestParams params = new RequestParams();
+	params.addBodyParameter("goods_id", goodsId);
 
+	HttpUtils http = new HttpUtils();
+	http.send(HttpRequest.HttpMethod.POST,
+			InterfaceUtils.getGoodEvaluation(), params,
+			new RequestCallBack<String>() {
+
+				@Override
+				public void onStart() {
+					toastLong("请求服务器");
+				}
+
+				@Override
+				public void onLoading(long total, long current,
+						boolean isUploading) {
+
+				}
+
+				@Override
+				public void onSuccess(ResponseInfo<String> responseInfo) {
+					String historyResult = responseInfo.result;
+					String result = InterfaceUtils
+							.getResponseResult(responseInfo.result);
+					LogUtils.d("**" + result);
+
+					ObjectMapper mapper = new ObjectMapper();
+					GoodEvaluation goodEvaluation = new GoodEvaluation();// 商品评价实体
+					try {
+						GoodEvaluationInterfaceEntity entity = mapper
+								.readValue(
+										result,
+										GoodEvaluationInterfaceEntity.class);// 接口实体类
+
+						if (InterfaceUtils.RESULT_SUCCESS.equals(entity
+								.getResult())) {// 如果result返回1
+							LogUtils.d("entity " + entity.getCode() + " "
+									+ entity.getResult() + " ");
+
+							goodEvaluation = entity.getDatas();// 获得商品评价实体
+							LogUtils.d("商品评价个数" +goodEvaluation.getAll()+"好评数"+goodEvaluation.getGood() );
+							
+							
+						} else {
+							LogUtils.d("--------数据异常");
+						}
+					} catch (JsonParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonMappingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void onFailure(HttpException error, String msg) {
+					toastLong("请求失败");
+				}
+			});
+}
+	public void addGoodToCart(String goodsId,int quantity){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+		params.addBodyParameter("quantity", String.valueOf(quantity));
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST,
+				InterfaceUtils.addGoodToCart(), params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+						toastLong("请求服务器");
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						String result = InterfaceUtils
+								.getResponseResult(responseInfo.result);
+						LogUtils.d("addGoodToCart = " + result);
+
+						ObjectMapper m = new ObjectMapper();
+
+						Map<String, String> picMap = new HashMap<String, String>();
+						try {
+							JsonNode rootNode = m.readValue(result,
+									JsonNode.class);
+							String jsonResult = rootNode.path("result")
+									.getTextValue();
+							LogUtils.d("addGoodToCart jsonResult = "
+									+ jsonResult);
+							if (InterfaceUtils.RESULT_SUCCESS
+									.equals(jsonResult)) {
+
+								LogUtils.d("addGoodToCart 添加商品到购物车成功");
+
+							} else {
+								LogUtils.d("--------数据异常");
+							}
+						} catch (JsonParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JsonMappingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						toastLong("请求失败");
+					}
+				});
+	}
 	public void getShopInfoAndRecommendByGood(String goodsId) {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
@@ -500,27 +639,27 @@ public class InterfaceTestActivity extends BaseActivity {
 										InterfaceUtils.ShopPicType.KEY_TODAY_NEW,
 										rootNode.path("datas")
 												.path(InterfaceUtils.ShopPicType.KEY_TODAY_NEW)
-												.toString());
+												.toString());//今日新品
 								picMap.put(
 										InterfaceUtils.ShopPicType.KEY_DINNER_OUT,
 										rootNode.path("datas")
 												.path(InterfaceUtils.ShopPicType.KEY_DINNER_OUT)
-												.toString());
+												.toString());// 餐饮外卖
 								picMap.put(
 										InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL,
 										rootNode.path("datas")
 												.path(InterfaceUtils.ShopPicType.KEY_EVENING_SPECIAL)
-												.toString());
+												.toString());//晚市特卖
 								picMap.put(
 										InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL,
 										rootNode.path("datas")
 												.path(InterfaceUtils.ShopPicType.KEY_MORNING_SPECIAL)
-												.toString());
+												.toString());//早市特卖
 								picMap.put(
 										InterfaceUtils.ShopPicType.KEY_GROUP_BUY,
 										rootNode.path("datas")
 												.path(InterfaceUtils.ShopPicType.KEY_GROUP_BUY)
-												.toString());
+												.toString());//团购
 
 								LogUtils.d("getShopHeadPic = "
 										+ picMap.toString());
