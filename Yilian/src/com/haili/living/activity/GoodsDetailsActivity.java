@@ -10,6 +10,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haili.living.BaseActivity;
+import com.haili.living.MapActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.OthersGoodItemAdapter;
 import com.haili.living.entity.GoodEntity;
@@ -137,6 +139,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 	@OnClick(R.id.btn_fx)
 	public void share(View v) {
+		startActivity(new Intent(GoodsDetailsActivity.this,LivingMuseumActivity.class));
 		Toast.makeText(GoodsDetailsActivity.this, "分享", Toast.LENGTH_SHORT).show();
 	}
 

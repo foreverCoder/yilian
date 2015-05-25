@@ -2,7 +2,6 @@ package com.haili.living.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
@@ -35,10 +34,8 @@ import com.haili.living.adapter.ClassifyItemAdapter;
 import com.haili.living.adapter.GoodsItemAdapter;
 import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.GoodEntity;
-import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
-import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
 import com.haili.living.utils.ConstantValue;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.Utils;

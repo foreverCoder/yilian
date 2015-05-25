@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haili.living.BaseActivity;
+import com.haili.living.MapActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.GoodsItemAdapter;
 import com.haili.living.entity.GoodEntity;
@@ -60,7 +61,8 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrollListener1 {
 	protected LoadNetworkPic imageLoader;
-	private final int pageToal=10; 
+	private final int pageToal = 10;
+	private String storeId;// 生活馆ID
 	// 滑动距离及坐标
 	private float xDistance, yDistance, xLast, yLast;
 	private GoodsItemAdapter gAdapter;
@@ -108,9 +110,8 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	@OnClick(R.id.top_right)
 	// 切换生活馆
 	public void changeOtherLivingMusenum(View v) {
-		// startActivity(new
-		// Intent(LivingMuseumDetailsActivity.this,GoodsDetailsActivity.class));
-		Toast.makeText(LivingMuseumDetailsActivity.this, "切换生活馆", Toast.LENGTH_SHORT).show();
+		startActivity(new Intent(LivingMuseumDetailsActivity.this, MapActivity.class));
+		finish();
 	}
 
 	@ViewInject(R.id.img_psfw)
@@ -120,7 +121,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	// 查看配送范围
 	public void goToDeliveryScopeActivity(View v) {
 		Intent intent = new Intent(LivingMuseumDetailsActivity.this, DeliveryScopeActivity.class);
-		intent.putExtra("store_id", "19");// TODO
+		intent.putExtra("store_id", storeId);// TODO
 		startActivity(intent);
 
 	}
@@ -149,11 +150,11 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	 */
 	public void changeTm(View v) {
 		Intent intent = new Intent(LivingMuseumDetailsActivity.this, LivingMuseumDetailsSearchActivity.class);
-		intent.putExtra("storeId", "19");//TODO 生活馆ID
+		intent.putExtra("storeId", "19");// TODO 生活馆ID
 		switch (v.getId()) {
 		// 今日特卖
 		case R.id.img_jrtm:
-			intent.putExtra("searchValue", ConstantValue.S_JRXP);//TODO 类型ID
+			intent.putExtra("searchValue", ConstantValue.S_JRXP);// TODO 类型ID
 			intent.putExtra("searchType", "今日特卖");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "今日特卖", Toast.LENGTH_SHORT).show();
@@ -291,26 +292,26 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					switch (checkedId) {
 					// 粮油副食
 					case R.id.radio_lyfs:
-						searchStr = ConstantValue.S_LYFS+"";
-						getGoodListByClass(ConstantValue.S_LYFS+"", pageNum + "", true);
+						searchStr = ConstantValue.S_LYFS + "";
+						getGoodListByClass(ConstantValue.S_LYFS + "", pageNum + "", true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "粮油副食", Toast.LENGTH_SHORT).show();
 						break;
 					// 休闲食品
 					case R.id.radio_xxsp:
-						searchStr = ConstantValue.S_XXSP+"";
-						getGoodListByClass(ConstantValue.S_XXSP+"", pageNum + "", true);
+						searchStr = ConstantValue.S_XXSP + "";
+						getGoodListByClass(ConstantValue.S_XXSP + "", pageNum + "", true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "休闲食品", Toast.LENGTH_SHORT).show();
 						break;
 					// 酒水茶饮
 					case R.id.radio_jscy:
-						searchStr = ConstantValue.S_JSCY+"";
-						getGoodListByClass(ConstantValue.S_JSCY+"", pageNum + "", true);
+						searchStr = ConstantValue.S_JSCY + "";
+						getGoodListByClass(ConstantValue.S_JSCY + "", pageNum + "", true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "酒水茶饮", Toast.LENGTH_SHORT).show();
 						break;
 					// 方便速食
 					case R.id.radio_fbss:
-						searchStr = ConstantValue.S_FBSS+"";
-						getGoodListByClass(ConstantValue.S_FBSS+"", pageNum + "", true);
+						searchStr = ConstantValue.S_FBSS + "";
+						getGoodListByClass(ConstantValue.S_FBSS + "", pageNum + "", true);
 						Toast.makeText(LivingMuseumDetailsActivity.this, "方便速食", Toast.LENGTH_SHORT).show();
 						break;
 					default:
@@ -331,26 +332,26 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 						switch (checkedId) {
 						// 保健品
 						case R.id.radio_bjsp:
-							searchStr = ConstantValue.S_BJP+"";
-							getGoodListByClass(ConstantValue.S_BJP+"", pageNum + "", true);
+							searchStr = ConstantValue.S_BJP + "";
+							getGoodListByClass(ConstantValue.S_BJP + "", pageNum + "", true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "保健品", Toast.LENGTH_SHORT).show();
 							break;
 						// 牛奶乳制品
 						case R.id.radio_nnrzp:
-							searchStr = ConstantValue.S_NNRZP+"";
-							getGoodListByClass(ConstantValue.S_NNRZP+"", pageNum + "", true);
+							searchStr = ConstantValue.S_NNRZP + "";
+							getGoodListByClass(ConstantValue.S_NNRZP + "", pageNum + "", true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "牛奶乳制品", Toast.LENGTH_SHORT).show();
 							break;
 						// 生鲜
 						case R.id.radio_sx:
-							searchStr = ConstantValue.S_SX+"";
-							getGoodListByClass(ConstantValue.S_SX+"", pageNum + "", true);
+							searchStr = ConstantValue.S_SX + "";
+							getGoodListByClass(ConstantValue.S_SX + "", pageNum + "", true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "生鲜", Toast.LENGTH_SHORT).show();
 							break;
 						// 餐饮
 						case R.id.radio_cy:
-							searchStr = ConstantValue.S_CY+"";
-							getGoodListByClass(ConstantValue.S_CY+"", pageNum + "", true);
+							searchStr = ConstantValue.S_CY + "";
+							getGoodListByClass(ConstantValue.S_CY + "", pageNum + "", true);
 							Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
 							break;
 						default:
@@ -413,15 +414,18 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	}
 
 	private void initData() {
+		storeId = getIntent().getStringExtra("storeId");
 		imageLoader = new LoadNetworkPic(LivingMuseumDetailsActivity.this);
 		screenHeight = findViewById(R.id.parent_layout).getHeight();
 		mListView.setPullLoadEnable(true);
 		mListView.setPullRefreshEnable(false);
 		top_search.setPadding(Utils.dip2px(LivingMuseumDetailsActivity.this, 35), 0, 0, 0);
 
-		getLiveShopInfo("19"); // 传生活馆参数 获取生活馆信息
+		getLiveShopInfo(storeId); // 传生活馆参数 获取生活馆信息
+		// getLiveShopInfo("19"); // 传生活馆参数 获取生活馆信息
+
 		getShopHeadPic(); // 传生活馆参数 获取生活馆图片
-		searchStr = ConstantValue.S_LYFS+"";
+		searchStr = ConstantValue.S_LYFS + "";
 		getGoodListByClass(searchStr, pageNum + "", true);// 获取生活馆商品列表
 		topHeight = top_bar.getHeight();
 
@@ -554,13 +558,13 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	/**
 	 * 生活馆商品列表
 	 * **/
-	public void getGoodListByClass(String gcId,  String curPage, final Boolean flag) {
-		String storeId="19";//生活馆ID
+	public void getGoodListByClass(String gcId, String curPage, final Boolean flag) {
+		// String storeId="19";//生活馆ID
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("gc_id", gcId);
 		params.addBodyParameter("store_id", storeId);
 		params.addBodyParameter("curpage", curPage);
-		params.addBodyParameter("pageToal", pageToal+"");
+		params.addBodyParameter("pageToal", pageToal + "");
 
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByShopClass(), params, new RequestCallBack<String>() {
@@ -625,6 +629,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					e.printStackTrace();
 				}
 			}
+
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				toastLong("请求失败");
