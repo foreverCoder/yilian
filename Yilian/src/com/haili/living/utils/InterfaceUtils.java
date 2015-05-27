@@ -1,6 +1,5 @@
 package com.haili.living.utils;
 
-import android.R.string;
 
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";

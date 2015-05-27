@@ -1,6 +1,7 @@
 package com.haili.living.adapter;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -23,7 +24,7 @@ public class GoodsItemAdapter extends BaseAdapter {
 	protected LoadNetworkPic imageLoader;
 	private Context mContext;
 	private LayoutInflater layoutInflater;
-	private List<GoodEntity> list;
+	private List<GoodEntity> list=new ArrayList<GoodEntity>();
 	private DecimalFormat df;
 
 	public GoodsItemAdapter(Context mContext, List<GoodEntity> voList) {

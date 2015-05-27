@@ -16,12 +16,13 @@
         android:scaleType="fitXY"
         android:src="@drawable/top_left_back" />
 
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_toLeftOf="@+id/top_right"
-        android:layout_toRightOf="@+id/top_left" >
+        android:layout_toRightOf="@+id/top_left"
+        android:focusable="true"
+        android:focusableInTouchMode="true" >
 
         <EditText
             android:id="@+id/top_search"
@@ -31,12 +32,13 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/search_bg2"
+            android:focusableInTouchMode="true"
             android:gravity="center_vertical"
             android:imeOptions="actionSearch"
             android:paddingLeft="30dp"
             android:singleLine="true"
             android:textColor="#000"
-            android:textSize="15.0dip"/>
+            android:textSize="15.0dip" />
 
         <ImageButton
             android:id="@+id/img_btn"

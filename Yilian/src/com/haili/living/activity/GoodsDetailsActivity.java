@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haili.living.BaseActivity;
-import com.haili.living.MapActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.OthersGoodItemAdapter;
 import com.haili.living.entity.GoodEntity;
@@ -55,9 +56,10 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
  * @version 创建时间：2015年4月25日 下午7:26:52 类说明
  */
 public class GoodsDetailsActivity extends BaseActivity {
-	private GoodEntity vo;
-	private GoodEntity goodEntity;// 商品详情实体
+	private GoodEntity vo; // 简单信息
+	private GoodEntity goodEntity;// 商品详情实体 （详情）
 	List<GoodEntity> goodEntityList = new ArrayList<GoodEntity>();// 推荐的商品实体列表
+	private String sPhoneNum;//商家电话号码
 	private Store_credit pjVo;
 	protected LoadNetworkPic imageLoader;
 	private PopupWindow popWindow;
@@ -103,34 +105,40 @@ public class GoodsDetailsActivity extends BaseActivity {
 	public void showPopWindow(View v) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		final View vPopWindow = inflater.inflate(R.layout.pop_window, null, false);
-		popWindow = new PopupWindow(vPopWindow, LinearLayout.LayoutParams.MATCH_PARENT,Utils.dip2px(context, 50), true);
+		popWindow = new PopupWindow(vPopWindow, LinearLayout.LayoutParams.MATCH_PARENT, Utils.dip2px(context, 50), true);
 		popWindow.setOutsideTouchable(true);
 		popWindow.setBackgroundDrawable(new BitmapDrawable());
-		popWindow.showAsDropDown(v, 0, -(v.getHeight()+popWindow.getHeight()));
+		popWindow.showAsDropDown(v, 0, -(v.getHeight() + popWindow.getHeight()));
 		popWindow.setFocusable(true);
-		
-		ImageView callImageView=(ImageView)vPopWindow.findViewById(R.id.btn_call);
+
+		ImageView callImageView = (ImageView) vPopWindow.findViewById(R.id.btn_call);
 		callImageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent phoneIntent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + sPhoneNum));
+				startActivity(phoneIntent);
 			}
 		});
-		ImageView btn_help=(ImageView)vPopWindow.findViewById(R.id.btn_help);
+		ImageView btn_help = (ImageView) vPopWindow.findViewById(R.id.btn_help);
 		btn_help.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 			}
 		});
-		ImageView btn_ps=(ImageView)vPopWindow.findViewById(R.id.btn_ps);
+		ImageView btn_ps = (ImageView) vPopWindow.findViewById(R.id.btn_ps);
 		btn_ps.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(GoodsDetailsActivity.this, DeliveryScopeActivity.class);
+				intent.putExtra("store_id", goodEntity.getStore_id());// TODO
+				startActivity(intent);
 			}
 		});
 	}
 
 	@OnClick(R.id.img_add)
 	public void addGwc(View v) {
+		addGoodToCart(goodEntity.getGoods_id(), add_m.getText().toString().trim());
 	}
 
 	@OnClick(R.id.img_buy)
@@ -139,7 +147,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 	@OnClick(R.id.btn_fx)
 	public void share(View v) {
-		startActivity(new Intent(GoodsDetailsActivity.this,LivingMuseumActivity.class));
+		startActivity(new Intent(GoodsDetailsActivity.this, LivingMuseumActivity.class));
 		Toast.makeText(GoodsDetailsActivity.this, "分享", Toast.LENGTH_SHORT).show();
 	}
 
@@ -190,6 +198,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 	private void initView() {
 		imageLoader = new LoadNetworkPic(GoodsDetailsActivity.this);
 		vo = (GoodEntity) getIntent().getSerializableExtra("vo");
+		sPhoneNum=getIntent().getStringExtra("sPhoneNum");
 		tx_market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
 
 		getImgListByGood(vo.getGoods_id());// 获取商品图片
@@ -275,7 +284,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 					GoodInfoAndRecommendInterfaceEntity entity = mapper.readValue(result, GoodInfoAndRecommendInterfaceEntity.class);// 接口实体类
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						goodEntity = entity.getDatas().getGoods_info();// 获得商品详情实体
-						pjVo=entity.getDatas().getStore_credit();//获取评价
+						pjVo = entity.getDatas().getStore_credit();// 获取评价
 						initViewData();
 						if (entity.hasDatas()) {
 							goodEntityList = entity.getDatas().getGoods_commend_list();// 获得推荐的商品列表
@@ -312,36 +321,35 @@ public class GoodsDetailsActivity extends BaseActivity {
 			float starNum = Float.parseFloat(goodEntity.getEvaluation_good_star());// 星级
 			ratingBar.setRating(starNum);
 		}
-		if(pjVo!=null){
-			Store_desccredit vo1=pjVo.getStore_deliverycredit();//发货速度
-			Store_desccredit vo2=pjVo.getStore_desccredit();//描述相符
-			Store_desccredit vo3=pjVo.getStore_servicecredit();//服务
-			tx_ms.setText(vo2.getCredit()+"");
-			tx_fw.setText(vo3.getCredit()+"");
-			tx_fh.setText(vo1.getCredit()+"");
-			
-			
-			 int b=com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
-			 int a=com.haili.living.utils.Utils.dip2px(getBaseContext(), 15);
-			//设置整数的宽高
+		if (pjVo != null) {
+			Store_desccredit vo1 = pjVo.getStore_deliverycredit();// 发货速度
+			Store_desccredit vo2 = pjVo.getStore_desccredit();// 描述相符
+			Store_desccredit vo3 = pjVo.getStore_servicecredit();// 服务
+			tx_ms.setText(vo2.getCredit() + "");
+			tx_fw.setText(vo3.getCredit() + "");
+			tx_fh.setText(vo1.getCredit() + "");
+
+			int b = com.haili.living.utils.Utils.dip2px(getBaseContext(), 35);
+			int a = com.haili.living.utils.Utils.dip2px(getBaseContext(), 15);
+			// 设置整数的宽高
 			Rect rect = new Rect(0, 0, a, b);
-			Drawable up=getResources().getDrawable(R.drawable.img_up);
-			Drawable down=getResources().getDrawable(R.drawable.img_down);
+			Drawable up = getResources().getDrawable(R.drawable.img_up);
+			Drawable down = getResources().getDrawable(R.drawable.img_down);
 			up.setBounds(rect);
 			down.setBounds(rect);
-			if("低于".equals(vo1.getPercent_text())){
+			if ("低于".equals(vo1.getPercent_text())) {
 				tx_fh.setCompoundDrawables(null, null, down, null);
-			}else{
+			} else {
 				tx_fh.setCompoundDrawables(null, null, up, null);
 			}
-			if("低于".equals(vo2.getPercent_text())){
+			if ("低于".equals(vo2.getPercent_text())) {
 				tx_ms.setCompoundDrawables(null, null, down, null);
-			}else{
+			} else {
 				tx_ms.setCompoundDrawables(null, null, up, null);
 			}
-			if("低于".equals(vo3.getPercent_text())){
+			if ("低于".equals(vo3.getPercent_text())) {
 				tx_fw.setCompoundDrawables(null, null, down, null);
-			}else{
+			} else {
 				tx_fw.setCompoundDrawables(null, null, up, null);
 			}
 		}
@@ -349,10 +357,55 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 	@Override
 	protected void onPause() {
-		if (popWindow!=null&&popWindow.isShowing()) {
+		if (popWindow != null && popWindow.isShowing()) {
 			popWindow.dismiss();
 		}
 		super.onPause();
 	}
-	
+
+	public void addGoodToCart(String goodsId, String quantity) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+		params.addBodyParameter("quantity", String.valueOf(quantity));
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.addGoodToCart(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("addGoodToCart = " + result);
+				ObjectMapper m = new ObjectMapper();
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+						toastLong("添加商品到购物车成功");
+						LogUtils.d("addGoodToCart 添加商品到购物车成功");
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
 }

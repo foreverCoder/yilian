@@ -16,7 +16,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -28,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +47,7 @@ import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
 import com.haili.living.utils.ConstantValue;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.LoadNetworkPic;
+import com.haili.living.utils.ObjectMappingCustomer;
 import com.haili.living.utils.Utils;
 import com.haili.living.view.ScrollViewExtend;
 import com.haili.living.view.ScrollViewExtend.OnScrollListener1;
@@ -88,6 +93,11 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	ImageView top_left;
 	@ViewInject(R.id.back_top)
 	ImageView back_top;
+	@ViewInject(R.id.img_btn)
+	ImageButton img_btn;
+	@ViewInject(R.id.parent_layout)
+	RelativeLayout parent_layout;
+	
 
 	@OnClick(R.id.back_top)
 	public void goToTop(View v) {
@@ -103,7 +113,16 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	public void finish(View v) {
 		finish();
 	}
-
+	@OnClick(R.id.img_btn)
+	public void search(View v) {
+		if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
+			Toast.makeText(LivingMuseumDetailsActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
+		} else {
+			Intent intent = new Intent(LivingMuseumDetailsActivity.this, LivingMuseumDetailsSearchActivity.class);
+			intent.putExtra("searchValue", top_search.getText().toString().trim());
+			startActivity(intent);
+		}
+	}
 	@ViewInject(R.id.top_right)
 	ImageView top_right;
 
@@ -376,7 +395,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				GoodEntity vo = (GoodEntity) gAdapter.getItem(position - 1);
-				startActivity(new Intent(LivingMuseumDetailsActivity.this, GoodsDetailsActivity.class).putExtra("vo", (Serializable) vo));
+				startActivity(new Intent(LivingMuseumDetailsActivity.this, GoodsDetailsActivity.class).putExtra("vo", (Serializable) vo).putExtra("sPhoneNum", storeEntity.getStore_tel()));
 			}
 		});
 		mListView.setXListViewListener(new IXListViewListener() {
@@ -408,6 +427,30 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					}
 					return true;
 				}
+				return false;
+			}
+		});
+		top_search.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View arg0, boolean arg1) {
+				if (arg1) {// 获得焦点
+					top_left.setVisibility(View.GONE);
+					top_right.setVisibility(View.GONE);
+					img_btn.setVisibility(View.VISIBLE);
+				} else {// 失去焦点
+					top_left.setVisibility(View.VISIBLE);
+					top_right.setVisibility(View.VISIBLE);
+					img_btn.setVisibility(View.GONE);
+				}
+			}
+		});
+		sv.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+//			    top_search.setCursorVisible(false);//失去光标
+			    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+                imm.hideSoftInputFromWindow(arg0.getWindowToken(), 0);
+                top_search.clearFocus();
 				return false;
 			}
 		});
@@ -571,7 +614,6 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 
 			@Override
 			public void onStart() {
-				toastLong("请求服务器");
 			}
 
 			@Override
@@ -584,9 +626,14 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 				onLoad();
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
-				ObjectMapper mapper = new ObjectMapper();
+				// ObjectMapper mapper = new ObjectMapper();
+				ObjectMappingCustomer mapper = new ObjectMappingCustomer();
 				List<GoodEntity> goodEntities = new ArrayList<GoodEntity>();
 				try {
+					// ShopSearchGoodsInterfaceEntity<List<GoodEntity>> entity =
+					// mapper.readValue(result, new
+					// TypeReference<ShopSearchGoodsInterfaceEntity<List<GoodEntity>>>
+					// (){});// 接口实体类
 					ShopSearchGoodsInterfaceEntity entity = mapper.readValue(result, ShopSearchGoodsInterfaceEntity.class);// 接口实体类
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");

@@ -14,14 +14,18 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -42,12 +46,15 @@ import com.haili.living.utils.Utils;
 import com.haili.living.view.XListView;
 import com.haili.living.view.XListView.IXListViewListener;
 import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.util.LogUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
 
 public class LivingMuseumActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, OnClickListener {
 	private TextView top_title, top_right;
@@ -64,10 +71,27 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	private String sortStyle = InterfaceUtils.SortStyle.MULTIPLE;// 排序方式
 	private String sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
 	private ProgressDialog progressDialog;
+	@ViewInject(R.id.img_btn)
+	ImageButton img_btn;
+	@OnClick(R.id.img_btn)
+	public void search(View v) {
+		((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LivingMuseumActivity.this.getCurrentFocus().getWindowToken(),
+				InputMethodManager.HIDE_NOT_ALWAYS);
+		if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
+			Toast.makeText(LivingMuseumActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
+		} else {
+			// TODO 跳转
+			Intent intent = new Intent(LivingMuseumActivity.this, LivingSearchActivity.class);
+			intent.putExtra("searchValue", top_search.getText().toString().trim());
+			startActivity(intent);
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_living_museum);
+		ViewUtils.inject(this); // 注入view和事件、
 		initViews();
 		setListeners();
 		initData();
@@ -75,7 +99,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 	}
 
 	private void initViews() {
-		progressDialog=new ProgressDialog(context);
+		progressDialog = new ProgressDialog(context);
 		progressDialog.setIndeterminate(false);
 		progressDialog.setMessage("请稍候...");
 		top_title = (TextView) findViewById(R.id.top_title);
@@ -98,9 +122,8 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			@Override
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-							.hideSoftInputFromWindow(LivingMuseumActivity.this.getCurrentFocus().getWindowToken(),
-									InputMethodManager.HIDE_NOT_ALWAYS);
+					((InputMethodManager) top_search.getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(LivingMuseumActivity.this.getCurrentFocus().getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
 					if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
 						Toast.makeText(LivingMuseumActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
 					} else {
@@ -127,15 +150,13 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			@Override
 			public void onRefresh() {
 				pageNum = 1;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
-						true);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 			}
 
 			@Override
 			public void onLoadMore() {
 				pageNum += 1;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "",
-						false);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", false);
 			}
 		});
 		classify_list_view.setOnItemClickListener(new OnItemClickListener() {
@@ -147,8 +168,39 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 				cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(arg2));
 				cAdapter.notifyDataSetChanged();
 				pageNum = 1;
-				getGoodListByClassify(cVoList.get(arg2).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
+				getGoodListByClassify(cVoList.get(arg2).getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
+			}
+		});
+		top_search.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View arg0, boolean arg1) {
+				if (arg1) {// 获得焦点
+					top_left.setVisibility(View.GONE);
+					top_right.setVisibility(View.GONE);
+					img_btn.setVisibility(View.VISIBLE);
+				} else {// 失去焦点
+					top_left.setVisibility(View.VISIBLE);
+					top_right.setVisibility(View.VISIBLE);
+					img_btn.setVisibility(View.GONE);
+				}
+			}
+		});
+		mListView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+			    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+                imm.hideSoftInputFromWindow(arg0.getWindowToken(), 0);
+                top_search.clearFocus();
+				return false;
+			}
+		});
+		classify_list_view.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+			    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
+                imm.hideSoftInputFromWindow(arg0.getWindowToken(), 0);
+                top_search.clearFocus();
+				return false;
 			}
 		});
 	}
@@ -165,8 +217,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			classify_list_view.setAdapter(cAdapter);
 			cAdapter.setSelected((GoodClassEntity) cAdapter.getItem(0));
 			// 根据分类查询商品 默认
-			getGoodListByClassify(cVoList.get(0).getGc_id(), InterfaceUtils.SortStyle.MULTIPLE, InterfaceUtils.SortDirect.POSITIVE,
-					ConstantValue.PAGE_COUNT + "", pageNum + "", true);
+			getGoodListByClassify(cVoList.get(0).getGc_id(), InterfaceUtils.SortStyle.MULTIPLE, InterfaceUtils.SortDirect.POSITIVE, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 		}
 	}
 
@@ -205,8 +256,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			case R.id.radio_zh:
 				initJgButton();
 				sortStyle = InterfaceUtils.SortStyle.MULTIPLE;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 				if (!progressDialog.isShowing()) {
 					progressDialog.show();
 				}
@@ -215,8 +265,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			case R.id.radio_xl:
 				initJgButton();
 				sortStyle = InterfaceUtils.SortStyle.SALES;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 				if (!progressDialog.isShowing()) {
 					progressDialog.show();
 				}
@@ -224,8 +273,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			// 价格
 			case R.id.radio_jg:
 				sortStyle = InterfaceUtils.SortStyle.PRICE;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 				if (!progressDialog.isShowing()) {
 					progressDialog.show();
 				}
@@ -233,8 +281,8 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			// 距离
 			case R.id.radio_jl:
 				initJgButton();
-//				sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
-//				sortStyle = InterfaceUtils.SortStyle.PRICE;// TODO 距离排序
+				// sortDirect = InterfaceUtils.SortDirect.POSITIVE;// 排序大小
+				// sortStyle = InterfaceUtils.SortStyle.PRICE;// TODO 距离排序
 				break;
 
 			default:
@@ -261,10 +309,10 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 			Drawable drawable = null;
 			RadioButton btn = (RadioButton) findViewById(arg0.getId());
 			int a = Utils.dip2px(getBaseContext(), 15);
-			if (priceTag == -1) {//价格未选中
+			if (priceTag == -1) {// 价格未选中
 				drawable = getResources().getDrawable(R.drawable.ic_jg1);
 				priceTag = 0;
-			} else if (priceTag == 0) {//价格降序
+			} else if (priceTag == 0) {// 价格降序
 				if (!progressDialog.isShowing()) {
 					progressDialog.show();
 				}
@@ -272,9 +320,8 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 				sortDirect = InterfaceUtils.SortDirect.REVERSE;
 				drawable = getResources().getDrawable(R.drawable.ic_jg2);
 				priceTag = 1;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
-			} else if (priceTag == 1) {//价格升序
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
+			} else if (priceTag == 1) {// 价格升序
 				if (!progressDialog.isShowing()) {
 					progressDialog.show();
 				}
@@ -282,8 +329,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 				sortDirect = InterfaceUtils.SortDirect.POSITIVE;
 				drawable = getResources().getDrawable(R.drawable.ic_jg1);
 				priceTag = 0;
-				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "",
-						pageNum + "", true);
+				getGoodListByClassify(cAdapter.getSelected().getGc_id(), sortStyle, sortDirect, ConstantValue.PAGE_COUNT + "", pageNum + "", true);
 			}
 			drawable.setBounds(0, 0, a, a);
 			btn.setCompoundDrawables(null, null, drawable, null);
@@ -371,7 +417,7 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 		params.addBodyParameter("page", page);
 		params.addBodyParameter("pageToal", page);
 		params.addBodyParameter("curpage", curpage);
-		System.out.println("   当前页面curpage：" + curpage + "    每页数据page：" + page+"  分类ID gc_id："+gcId+"  排序类型key："+key +" 排序方向order："+order);
+		System.out.println("   当前页面curpage：" + curpage + "    每页数据page：" + page + "  分类ID gc_id：" + gcId + "  排序类型key：" + key + " 排序方向order：" + order);
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodListByClassify(), params, new RequestCallBack<String>() {
 
@@ -423,10 +469,10 @@ public class LivingMuseumActivity extends BaseActivity implements CompoundButton
 							gAdapter = new GoodsItemAdapter(LivingMuseumActivity.this, lVoList);
 							mListView.setAdapter(gAdapter);
 							toastShort("暂无数据");
-						}else {
+						} else {
 							toastShort("没有更多数据了");
 						}
-			
+
 					}
 				} catch (JsonParseException e) {
 					e.printStackTrace();

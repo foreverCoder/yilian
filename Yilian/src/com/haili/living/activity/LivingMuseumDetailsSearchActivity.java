@@ -231,7 +231,6 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodsByTodayType(), params, new RequestCallBack<String>() {
 			@Override
 			public void onStart() {
-				toastLong("请求服务器");
 			}
 
 			@Override
