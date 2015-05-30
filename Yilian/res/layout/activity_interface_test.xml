@@ -98,6 +98,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="获取商品的全部评价"/>
+     <Button
+        android:id="@+id/btnGetGoodBody"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取商品的图文详情"/>
     </LinearLayout>
     </ScrollView>
 </LinearLayout>
