@@ -1,6 +1,5 @@
 package com.haili.living.utils;
 
-
 public class InterfaceUtils {
 	public static String RESULT_SUCCESS = "1";
 
@@ -57,6 +56,18 @@ public class InterfaceUtils {
 
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
+
+	/**
+	 * 接口：index.php?act=life&op=goods_body 传值：goods_id(商品id) 返回：
+	 * 
+	 * 
+	 * "result": 1表示正常，0表示空值。-1表示异常
+	 * 
+	 * "goods_body" : 图片地址
+	 */
+	public static String getGoodBody() {
+		return getBaseURI() +"act=life&op=goods_body";
+	}
 
 	/*
 	 * 18、获取全部评价、好评、中评、差评数量 19、获取分类评价下的评价列表 act=goods&op=goods_comment
@@ -254,15 +265,20 @@ public class InterfaceUtils {
 		return getBaseURI() + "act=life&op=getstorelifeaddr";
 
 	}
+
 	/**
-	 * http://www.zq2014.com/haili/mobile/index.php?act=life&op=life_new
-	 * POST传值： 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值,
-                需要传状态值$life_type,life_type表示(早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）)，
+	 * http://www.zq2014.com/haili/mobile/index.php?act=life&op=life_new POST传值：
+	 * 需要传一个商家的$store_id值，$store_id是需要查看商家所对应的id值,
+	 * 需要传状态值$life_type,life_type表示(早市特卖
+	 * （life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(
+	 * life_type=3），4为餐饮外卖-午餐(life_type=
+	 * 4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）)，
 	 * **/
 	public static String getGoodsByTodayType() {
 		return getBaseURI() + "act=life&op=life_new";
 
 	}
+
 	public static String getResponseResult(String result) {
 		return UnicodeUtils.decodeUnicode(result);
 	}

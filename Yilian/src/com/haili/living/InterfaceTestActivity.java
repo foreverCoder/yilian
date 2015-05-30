@@ -7,11 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonEncoding;
-import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
@@ -132,15 +129,77 @@ public class InterfaceTestActivity extends BaseActivity {
 	}
 
 	@OnClick(R.id.btnAddGoodToCart)
-	public void testAddGoodToCart(View view) {// 商品添加到购物车
+	public void testAddGoodToCart(View view) {// 商品添加到购物车 TODO debug
 		addGoodToCart("15", 1);
 	}
 
 	@OnClick(R.id.btnGetGoodEvaluation)
-	public void testGetGoodEvaluation(View view) {// 获取商品的全部评价
+	public void testGetGoodEvaluation(View view) {// 获取商品的全部评价 TODO debug
 		getGoodEvaluation("15");
 	}
+	@OnClick(R.id.btnGetGoodBody)
+	public void testGetGoodBody(View view){
+		getGoodBody("15");
+	}
 
+	public void getGoodBody(String goodsId){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodBody(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String historyResult = responseInfo.result;
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+
+//				ObjectMapper mapper = new ObjectMapper();
+//				GoodEvaluation goodEvaluation = new GoodEvaluation();// 商品评价实体
+//				try {
+//					GoodEvaluationInterfaceEntity entity = mapper.readValue(result, GoodEvaluationInterfaceEntity.class);// 接口实体类
+//
+//					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+//						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
+//
+//						goodEvaluation = entity.getDatas();// 获得商品评价实体
+//						LogUtils.d("商品评价个数" + goodEvaluation.getAll() + "好评数" + goodEvaluation.getGood());
+//
+//					} else {
+//						LogUtils.d("--------数据异常");
+//					}
+//				} catch (JsonParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (JsonMappingException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
 	public void getGoodEvaluation(String goodsId) {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
