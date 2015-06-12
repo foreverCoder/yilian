@@ -57,6 +57,9 @@ public class InterfaceUtils {
 	private static String BASE_URI = "http://www.zq2014.com/haili/mobile/index.php?";
 	private static String MOBILE_PATH = "";
 
+	public static String getGroupBuyList(){
+		return getBaseURI() + "act=life&op=groupbuy_list";
+	}
 	/**
 	 * 常见问题 index.php?act=life&op=life_question
 	 */

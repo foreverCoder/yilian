@@ -19,6 +19,7 @@ import com.haili.living.entity.GoodEntity;
 import com.haili.living.entity.GoodEvaluation;
 import com.haili.living.entity.GoodForSearchEntity;
 import com.haili.living.entity.Goods_evaluate_infoEntity;
+import com.haili.living.entity.GroupBuyGoodEntity;
 import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.TestEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
@@ -27,6 +28,7 @@ import com.haili.living.entity.interfaces.GoodEvaluationInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodSearchInterfaceEntity;
+import com.haili.living.entity.interfaces.GroupBuyInterfaceEntity;
 import com.haili.living.entity.interfaces.ImgsTheGoodInterfaceEntity;
 import com.haili.living.entity.interfaces.ShopInfoInterfaceEntity;
 import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
@@ -139,7 +141,8 @@ public class InterfaceTestActivity extends BaseActivity {
 
 	@OnClick(R.id.btnGetGoodEvaluation)
 	public void testGetGoodEvaluation(View view) {// 获取商品的全部评价 TODO debug
-		getGoodEvaluation("125","1");//获取第一页商品评价
+//		getGoodEvaluation("125","1");//获取第一页商品评价
+		getGoodEvaluation("156","1");//获取第一页商品评价
 	}
 	@OnClick(R.id.btnGetGoodBody)
 	public void testGetGoodBody(View view){//获取商品的图文详情
@@ -149,7 +152,75 @@ public class InterfaceTestActivity extends BaseActivity {
 	public void testGetQuestionAndAnswer(View view){//获取常见疑问网页
 		getQuestionAndAnswer();
 	}
-	
+	@OnClick(R.id.btnGetGroupBuy)
+	public void testGetGroupBuyList(View view){//获取团购商品列表
+		getGroupBuyList();
+	}
+	@OnClick(R.id.btnGetGroupBuy)
+	public void getGroupBuyList(){//获取团购商品列表
+		getGroupBuyList("11","1","5");
+	}
+	public void getGroupBuyList(String store_id,String curPage,String pagesize ) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("store_id", store_id);
+		params.addBodyParameter("curpage", curPage);
+//		params.addBodyParameter("pagesize", "5");//默认5
+		
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGroupBuyList(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+
+				ObjectMapper mapper = new ObjectMapper();
+				List<GroupBuyGoodEntity> groupBuyGoodEntities = new ArrayList<GroupBuyGoodEntity>();// 团购商品集合
+				try {
+					GroupBuyInterfaceEntity entity = mapper.readValue(result, GroupBuyInterfaceEntity.class);// 接口实体类
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
+						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
+
+						if(entity.hasDatas()){//如果有团购商品
+							groupBuyGoodEntities = entity.getDatas();
+							
+							LogUtils.d("第一个团购商品是＝＝"+groupBuyGoodEntities.get(0).getGoods_name());
+						}
+
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
 	public void getQuestionAndAnswer(){
 		RequestParams params = new RequestParams();
 
@@ -171,6 +242,30 @@ public class InterfaceTestActivity extends BaseActivity {
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
 
+				
+				ObjectMapper m = new ObjectMapper();
+
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+
+						String questionAndAnswerUrl = rootNode.path("datas").path("url").toString();
+						LogUtils.d("questionAndAnswerUrl+"+questionAndAnswerUrl);
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -182,7 +277,6 @@ public class InterfaceTestActivity extends BaseActivity {
 	public void getGoodBody(String goodsId){
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
-
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodBody(), params, new RequestCallBack<String>() {
 
@@ -203,16 +297,14 @@ public class InterfaceTestActivity extends BaseActivity {
 
 				
 				ObjectMapper m = new ObjectMapper();
-
-				Map<String, String> picMap = new HashMap<String, String>();
 				try {
-					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					JsonNode rootNode = m.readValue(responseInfo.result, JsonNode.class);
 					String jsonResult = rootNode.path("result").getTextValue();
 					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
 					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
 
-						
-
+						String goodBody = InterfaceUtils.getResponseResult(rootNode.path("datas").path("goods_body").toString());
+						LogUtils.d("goodBody="+goodBody);
 					} else {
 						LogUtils.d("--------数据异常");
 					}
