@@ -108,6 +108,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="获取商品的常见疑问网页"/>
+     <Button
+        android:id="@+id/btnGetGroupBuy"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取团购商品列表"/>
     </LinearLayout>
     </ScrollView>
 </LinearLayout>
