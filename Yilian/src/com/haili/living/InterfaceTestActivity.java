@@ -13,13 +13,16 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 
+import com.haili.living.entity.Eval_infoEntity;
 import com.haili.living.entity.GoodClassEntity;
 import com.haili.living.entity.GoodEntity;
 import com.haili.living.entity.GoodEvaluation;
 import com.haili.living.entity.GoodForSearchEntity;
+import com.haili.living.entity.Goods_evaluate_infoEntity;
 import com.haili.living.entity.StoreEntity;
 import com.haili.living.entity.TestEntity;
 import com.haili.living.entity.interfaces.GoodClassListInterfaceEntity;
+import com.haili.living.entity.interfaces.GoodCommentsInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodEvaluationInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodInfoAndRecommendInterfaceEntity;
 import com.haili.living.entity.interfaces.GoodListInterfaceEntity;
@@ -39,6 +42,7 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.util.LogUtils;
 import com.lidroid.xutils.view.annotation.ContentView;
 import com.lidroid.xutils.view.annotation.event.OnClick;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -92,7 +96,7 @@ public class InterfaceTestActivity extends BaseActivity {
 	// ======================================生活馆首页接口============================================
 	@OnClick(R.id.btnLiveShopInfo)
 	public void testLiveShopInfo(View view) {// 获取当前生活馆信息
-		getLiveShopInfo("9");// 传入生活馆ID
+		getLiveShopInfo("12");// 传入生活馆ID
 	}
 
 	@OnClick(R.id.btnShopDistribution)
@@ -135,13 +139,46 @@ public class InterfaceTestActivity extends BaseActivity {
 
 	@OnClick(R.id.btnGetGoodEvaluation)
 	public void testGetGoodEvaluation(View view) {// 获取商品的全部评价 TODO debug
-		getGoodEvaluation("15");
+		getGoodEvaluation("125","1");//获取第一页商品评价
 	}
 	@OnClick(R.id.btnGetGoodBody)
-	public void testGetGoodBody(View view){
+	public void testGetGoodBody(View view){//获取商品的图文详情
 		getGoodBody("15");
 	}
+	@OnClick(R.id.btnGetQuestionAndAnswer)
+	public void testGetQuestionAndAnswer(View view){//获取常见疑问网页
+		getQuestionAndAnswer();
+	}
+	
+	public void getQuestionAndAnswer(){
+		RequestParams params = new RequestParams();
 
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getQuestionAndAnswer(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
 	public void getGoodBody(String goodsId){
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
@@ -161,37 +198,34 @@ public class InterfaceTestActivity extends BaseActivity {
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
-				String historyResult = responseInfo.result;
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
 
-//				ObjectMapper mapper = new ObjectMapper();
-//				GoodEvaluation goodEvaluation = new GoodEvaluation();// 商品评价实体
-//				try {
-//					GoodEvaluationInterfaceEntity entity = mapper.readValue(result, GoodEvaluationInterfaceEntity.class);// 接口实体类
-//
-//					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
-//						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
-//
-//						goodEvaluation = entity.getDatas();// 获得商品评价实体
-//						LogUtils.d("商品评价个数" + goodEvaluation.getAll() + "好评数" + goodEvaluation.getGood());
-//
-//					} else {
-//						LogUtils.d("--------数据异常");
-//					}
-//				} catch (JsonParseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (JsonMappingException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				
+				ObjectMapper m = new ObjectMapper();
+
+				Map<String, String> picMap = new HashMap<String, String>();
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+
+						
+
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			@Override
@@ -200,9 +234,10 @@ public class InterfaceTestActivity extends BaseActivity {
 			}
 		});
 	}
-	public void getGoodEvaluation(String goodsId) {
+	public void getGoodEvaluation(String goodsId,String curPage) {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
+		params.addBodyParameter("curpage", curPage);
 
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodEvaluation(), params, new RequestCallBack<String>() {
@@ -219,20 +254,24 @@ public class InterfaceTestActivity extends BaseActivity {
 
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
-				String historyResult = responseInfo.result;
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
 
 				ObjectMapper mapper = new ObjectMapper();
-				GoodEvaluation goodEvaluation = new GoodEvaluation();// 商品评价实体
+				List<Goods_evaluate_infoEntity> goods_evaluate_infoEntities = new ArrayList<Goods_evaluate_infoEntity>();// 商品评价集合实体
+				Eval_infoEntity eval_infoEntity = new Eval_infoEntity();
 				try {
-					GoodEvaluationInterfaceEntity entity = mapper.readValue(result, GoodEvaluationInterfaceEntity.class);// 接口实体类
+					GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
 
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
 
-						goodEvaluation = entity.getDatas();// 获得商品评价实体
-						LogUtils.d("商品评价个数" + goodEvaluation.getAll() + "好评数" + goodEvaluation.getGood());
+						if(entity.hasDatas()){//如果有评价内容
+							goods_evaluate_infoEntities = entity.getDatas().getGoods_evaluate_info();
+							eval_infoEntity = entity.getDatas().getEval_info();
+							
+							LogUtils.d("商品好评比为＝＝"+eval_infoEntity.getGood_percent()+"评价人:"+goods_evaluate_infoEntities.get(0).getGeval_frommembername()+" 评价商品："+goods_evaluate_infoEntities.get(0).getGeval_content());
+						}
 
 					} else {
 						LogUtils.d("--------数据异常");
@@ -263,6 +302,7 @@ public class InterfaceTestActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
 		params.addBodyParameter("quantity", String.valueOf(quantity));
+		params.addBodyParameter("key","d19ce4b6994129e732f9a8bb2e4b85f0");
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.addGoodToCart(), params, new RequestCallBack<String>() {
 

@@ -58,6 +58,13 @@ public class InterfaceUtils {
 	private static String MOBILE_PATH = "";
 
 	/**
+	 * 常见问题 index.php?act=life&op=life_question
+	 */
+	public static String getQuestionAndAnswer() {
+		return getBaseURI() + "act=life&op=life_question";
+	}
+
+	/**
 	 * 接口：index.php?act=life&op=goods_body 传值：goods_id(商品id) 返回：
 	 * 
 	 * 
@@ -66,7 +73,7 @@ public class InterfaceUtils {
 	 * "goods_body" : 图片地址
 	 */
 	public static String getGoodBody() {
-		return getBaseURI() +"act=life&op=goods_body";
+		return getBaseURI() + "act=life&op=goods_body";
 	}
 
 	/*
