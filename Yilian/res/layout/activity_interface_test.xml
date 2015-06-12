@@ -103,6 +103,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="获取商品的图文详情"/>
+     <Button
+        android:id="@+id/btnGetQuestionAndAnswer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="获取商品的常见疑问网页"/>
     </LinearLayout>
     </ScrollView>
 </LinearLayout>
