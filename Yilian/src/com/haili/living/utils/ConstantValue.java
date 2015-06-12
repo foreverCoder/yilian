@@ -35,6 +35,8 @@ public class ConstantValue {
 	public final static String S_ZSTM = "1";
 	// 晚市特卖
 	public final static String S_WSTM = "2";
+	// 团购
+	public final static String S_TG = "6";
 	
 	
 	

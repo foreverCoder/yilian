@@ -2,8 +2,10 @@ package com.haili.living.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
@@ -21,6 +23,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -55,7 +59,7 @@ import com.lidroid.xutils.view.annotation.event.OnClick;
  * @author melody
  * @version 创建时间：2015年4月25日 下午7:26:52 类说明
  */
-public class GoodsDetailsActivity extends BaseActivity {
+public class GoodsDetailsActivity extends BaseActivity implements OnItemClickListener{
 	private GoodEntity vo; // 简单信息
 	private GoodEntity goodEntity;// 商品详情实体 （详情）
 	List<GoodEntity> goodEntityList = new ArrayList<GoodEntity>();// 推荐的商品实体列表
@@ -158,11 +162,13 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 	@OnClick(R.id.img_details)
 	public void goTodetails(View v) {
+		getGoodBody(vo.getGoods_id());//TODO
 		Toast.makeText(GoodsDetailsActivity.this, "图文详情", Toast.LENGTH_SHORT).show();
 	}
 
 	@OnClick(R.id.pj_layout)
 	public void goToPjActivity(View v) {
+		startActivity(new Intent(GoodsDetailsActivity.this, GoodsCommentActivtiy.class).putExtra("goodsId", vo.getGoods_id()));
 		Toast.makeText(GoodsDetailsActivity.this, "查看评价详情", Toast.LENGTH_SHORT).show();
 	}
 
@@ -203,6 +209,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 
 		getImgListByGood(vo.getGoods_id());// 获取商品图片
 		getShopInfoAndRecommendByGood(vo.getGoods_id());// 获取商品信息
+		horizon_listview.setOnItemClickListener(this);
 	}
 
 	public void getImgListByGood(String goodsId) {
@@ -367,6 +374,7 @@ public class GoodsDetailsActivity extends BaseActivity {
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("goods_id", goodsId);
 		params.addBodyParameter("quantity", String.valueOf(quantity));
+		params.addBodyParameter("key","d19ce4b6994129e732f9a8bb2e4b85f0");
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.addGoodToCart(), params, new RequestCallBack<String>() {
 
@@ -390,6 +398,70 @@ public class GoodsDetailsActivity extends BaseActivity {
 					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
 						toastLong("添加商品到购物车成功");
 						LogUtils.d("addGoodToCart 添加商品到购物车成功");
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
+			}
+		});
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		GoodEntity vo=(GoodEntity) adapter.getItem(arg2);
+		Intent intent=new Intent(GoodsDetailsActivity.this,GoodsDetailsActivity.class);
+		intent.putExtra("vo", vo);
+		intent.putExtra("sPhoneNum", sPhoneNum);
+		startActivity(intent);
+		finish();//TODO
+	}
+	/**
+	* @Title: getGoodBody
+	* @Description: 获取图文详情页面
+	* @param @param goodsId    设定文件
+	* @return void    返回类型
+	* @throws
+	 */
+	public void getGoodBody(String goodsId){
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("goods_id", goodsId);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodBody(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+				ObjectMapper m = new ObjectMapper();
+				try {
+					JsonNode rootNode = m.readValue(responseInfo.result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+						String goodBody = InterfaceUtils.getResponseResult(rootNode.path("datas").path("goods_body").toString());
+						startActivity(new Intent(GoodsDetailsActivity.this, GoodImageDetailsActivity.class).putExtra("content", goodBody));
+						LogUtils.d("goodBody="+goodBody);
 					} else {
 						LogUtils.d("--------数据异常");
 					}

@@ -21,8 +21,12 @@ import android.widget.TextView;
 import com.haili.living.BaseActivity;
 import com.haili.living.R;
 import com.haili.living.adapter.GoodsItemAdapter;
+import com.haili.living.adapter.GroupGoodsItemAdapter;
 import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.GroupBuyGoodEntity;
+import com.haili.living.entity.interfaces.GroupBuyInterfaceEntity;
 import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
+import com.haili.living.utils.ConstantValue;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.utils.LoadNetworkPic;
 import com.haili.living.view.XListView;
@@ -42,7 +46,9 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 	protected LoadNetworkPic imageLoader;
 	private ProgressDialog progressDialog;
 	private GoodsItemAdapter gAdapter;
-	private List<GoodEntity> lVoList = new ArrayList<GoodEntity>();
+	private GroupGoodsItemAdapter groupAdapter;
+	private List<GoodEntity> lVoList = new ArrayList<GoodEntity>();//一般商品
+	private List<GroupBuyGoodEntity> groupBuyList = new ArrayList<GroupBuyGoodEntity>();// 团购商品集合
 	private int pageNum = 1;// 当前页数
 	private String searchStr;
 	private String searchType;
@@ -119,6 +125,9 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 		storeId = getIntent().getStringExtra("storeId");
 		if (searchType != null) {
 			top_title.setText(searchType);
+			if(ConstantValue.S_TG.equals(searchType))
+				getGroupBuyList(storeId, pageNum + "", true);
+			else
 			getGoodListByClass(searchStr, pageNum + "", true);
 		} else {
 			top_title.setText("搜索  " + searchStr);
@@ -130,7 +139,7 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 	}
 
 	/**
-	 * 生活馆商品列表
+	 * 其他搜索商品
 	 * **/
 	public void getShopSearchGoods(String keyWord, String curPage, final Boolean flag) {
 		RequestParams params = new RequestParams();
@@ -218,7 +227,7 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 	}
 
 	/**
-	 * 生活馆商品列表
+	 * 生活馆分类商品列表
 	 * 早市特卖（life_type=1），晚市特卖(life_type=2），为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）,为今日新品（life_type=""）
 	 * 	 * **/
 	public void getGoodListByClass(String gcId, String curPage, final Boolean flag) {
@@ -297,6 +306,87 @@ public class LivingMuseumDetailsSearchActivity extends BaseActivity {
 				if (progressDialog.isShowing()) {
 					progressDialog.dismiss();
 				}
+			}
+		});
+	}
+	/**
+	* @Title: getGroupBuyList
+	* @Description: 团购商品
+	* @param @param store_id
+	* @param @param curPage
+	* @param @param pagesize    设定文件
+	* @return void    返回类型
+	* @throws
+	 */
+	public void getGroupBuyList(String store_id,String curPage,final Boolean flag ) {
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("store_id", store_id);
+		params.addBodyParameter("curpage", curPage);
+//		params.addBodyParameter("pagesize", pagesize+"");//默认5
+		
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGroupBuyList(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+				ObjectMapper mapper = new ObjectMapper();
+				List<GroupBuyGoodEntity> groupBuyGoodEntities = new ArrayList<GroupBuyGoodEntity>();// 团购商品集合
+				try {
+					GroupBuyInterfaceEntity entity = mapper.readValue(result, GroupBuyInterfaceEntity.class);// 接口实体类
+					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {
+						groupBuyGoodEntities = entity.getDatas();
+						if (flag) {// 刷新
+							groupBuyList.clear();
+							groupBuyList = groupBuyGoodEntities;
+							if (lVoList.size() < 1) {
+								toastShort("暂无数据");
+							}
+							groupAdapter = new GroupGoodsItemAdapter(LivingMuseumDetailsSearchActivity.this, groupBuyList);
+							mListView.setAdapter(gAdapter);
+						} else { // 加载更多
+							if (groupBuyGoodEntities.size() > 0) {
+								groupBuyList.addAll(entity.getDatas());
+								gAdapter.notifyDataSetChanged();
+							} else {
+								toastShort("没有更多数据了");
+							}
+						}
+					} else {
+						if (flag) {
+							groupBuyList.clear();
+							groupAdapter = new GroupGoodsItemAdapter(LivingMuseumDetailsSearchActivity.this, groupBuyList);
+							mListView.setAdapter(gAdapter);
+							toastShort("暂无数据");
+						} else {
+							toastShort("没有更多数据了");
+						}
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("请求失败");
 			}
 		});
 	}

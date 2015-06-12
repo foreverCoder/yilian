@@ -1,9 +1,16 @@
 package com.haili.living.entity;
+
+import java.util.Date;
+
 /*
  * 商品评价详情内容实体
  */
 public class Goods_evaluate_infoEntity {
-    /**
+	
+    public Goods_evaluate_infoEntity() {
+	}
+
+	/**
      * geval_storeid : 1
      * geval_frommembername : oo7eat
      * geval_ordergoodsid : 180
@@ -30,7 +37,7 @@ public class Goods_evaluate_infoEntity {
     private String geval_ordergoodsid;//订单商品表编号
     private String geval_storename;//店铺名称
     private String geval_goodsprice;//商品价格
-    private String geval_addtime;//评价时间
+    private Date geval_addtime;//评价时间
     private String geval_orderid;//订单表自增ID
     private String geval_goodsname;//商品名称
     private String geval_goodsid;//商品表编号
@@ -66,9 +73,6 @@ public class Goods_evaluate_infoEntity {
         this.geval_goodsprice = geval_goodsprice;
     }
 
-    public void setGeval_addtime(String geval_addtime) {
-        this.geval_addtime = geval_addtime;
-    }
 
     public void setGeval_orderid(String geval_orderid) {
         this.geval_orderid = geval_orderid;
@@ -146,11 +150,16 @@ public class Goods_evaluate_infoEntity {
         return geval_goodsprice;
     }
 
-    public String getGeval_addtime() {
-        return geval_addtime;
-    }
 
-    public String getGeval_orderid() {
+    public Date getGeval_addtime() {
+		return geval_addtime;
+	}
+
+	public void setGeval_addtime(Date geval_addtime) {
+		this.geval_addtime = geval_addtime;
+	}
+
+	public String getGeval_orderid() {
         return geval_orderid;
     }
 

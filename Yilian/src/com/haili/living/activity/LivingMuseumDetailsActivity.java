@@ -130,7 +130,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 	// 切换生活馆
 	public void changeOtherLivingMusenum(View v) {
 		startActivity(new Intent(LivingMuseumDetailsActivity.this, MapActivity.class));
-		finish();
+//		finish(); TODO
 	}
 
 	@ViewInject(R.id.img_psfw)
@@ -202,8 +202,7 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			break;
 		// 团购
 		case R.id.img_tg:
-			// TODO 跳转
-			intent.putExtra("searchValue", ConstantValue.S_WSTM);
+			intent.putExtra("searchValue", ConstantValue.S_TG);
 			intent.putExtra("searchType", "团购");
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "团购", Toast.LENGTH_SHORT).show();
@@ -420,7 +419,6 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 					if ("".equals(top_search.getText().toString().trim()) || top_search.getText() == null) {
 						Toast.makeText(LivingMuseumDetailsActivity.this, "关键字不能为空", Toast.LENGTH_SHORT).show();
 					} else {
-						// TODO 跳转
 						Intent intent = new Intent(LivingMuseumDetailsActivity.this, LivingMuseumDetailsSearchActivity.class);
 						intent.putExtra("searchValue", top_search.getText().toString().trim());
 						startActivity(intent);
