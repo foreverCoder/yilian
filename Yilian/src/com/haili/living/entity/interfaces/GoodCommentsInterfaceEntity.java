@@ -17,12 +17,8 @@ public class GoodCommentsInterfaceEntity {
      * code : 200
      * hasmore : false
      */
-	
     private DatasEntity datas;
-    public GoodCommentsInterfaceEntity() {
-	}
-
-	private String result;
+    private String result;
     private int page_total;
     private int code;
     private boolean hasmore;

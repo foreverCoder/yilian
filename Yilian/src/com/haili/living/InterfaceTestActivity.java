@@ -141,8 +141,8 @@ public class InterfaceTestActivity extends BaseActivity {
 
 	@OnClick(R.id.btnGetGoodEvaluation)
 	public void testGetGoodEvaluation(View view) {// 获取商品的全部评价 TODO debug
-//		getGoodEvaluation("125","1");//获取第一页商品评价
-		getGoodEvaluation("156","1");//获取第一页商品评价
+		getGoodEvaluation("125","1");//获取第一页商品评价
+//		getGoodEvaluation("156","1");//获取第一页商品评价
 	}
 	@OnClick(R.id.btnGetGoodBody)
 	public void testGetGoodBody(View view){//获取商品的图文详情
@@ -152,10 +152,10 @@ public class InterfaceTestActivity extends BaseActivity {
 	public void testGetQuestionAndAnswer(View view){//获取常见疑问网页
 		getQuestionAndAnswer();
 	}
-	@OnClick(R.id.btnGetGroupBuy)
-	public void testGetGroupBuyList(View view){//获取团购商品列表
-		getGroupBuyList();
-	}
+//	@OnClick(R.id.btnGetGroupBuy)
+//	public void testGetGroupBuyList(View view){//获取团购商品列表
+//		getGroupBuyList();
+//	}
 	@OnClick(R.id.btnGetGroupBuy)
 	public void getGroupBuyList(){//获取团购商品列表
 		getGroupBuyList("11","1","5");
@@ -352,22 +352,24 @@ public class InterfaceTestActivity extends BaseActivity {
 				ObjectMapper mapper = new ObjectMapper();
 				List<Goods_evaluate_infoEntity> goods_evaluate_infoEntities = new ArrayList<Goods_evaluate_infoEntity>();// 商品评价集合实体
 				Eval_infoEntity eval_infoEntity = new Eval_infoEntity();
+				
 				try {
-					GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
+					JsonNode rootNode = mapper.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("addGoodToCart jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
 
-					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
-						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
-
+						GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
 						if(entity.hasDatas()){//如果有评价内容
 							goods_evaluate_infoEntities = entity.getDatas().getGoods_evaluate_info();
 							eval_infoEntity = entity.getDatas().getEval_info();
 							
 							LogUtils.d("商品好评比为＝＝"+eval_infoEntity.getGood_percent()+"评价人:"+goods_evaluate_infoEntities.get(0).getGeval_frommembername()+" 评价商品："+goods_evaluate_infoEntities.get(0).getGeval_content());
 						}
-
 					} else {
 						LogUtils.d("--------数据异常");
 					}
+					
 				} catch (JsonParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
