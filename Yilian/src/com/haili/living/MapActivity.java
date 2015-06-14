@@ -60,8 +60,8 @@ import com.lidroid.xutils.util.LogUtils;
 /**
  * Demo首页
  * */
-public class MapActivity extends BaseActivity implements LocationSource,
-		AMapLocationListener, OnCheckedChangeListener,OnMarkerClickListener {
+public class MapActivity extends BaseActivity implements LocationSource, AMapLocationListener, OnCheckedChangeListener,
+		OnMarkerClickListener {
 
 	private AMap aMap;
 	private MapView mapView;
@@ -70,9 +70,10 @@ public class MapActivity extends BaseActivity implements LocationSource,
 	private RadioGroup mGPSModeGroup;
 	private Button btnNearShop;
 
-	private double longitude;//经度
-	private double latitude;//纬度
+	private double longitude;// 经度
+	private double latitude;// 纬度
 	private LatLng nowPoint;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,16 +95,17 @@ public class MapActivity extends BaseActivity implements LocationSource,
 		}
 		mGPSModeGroup = (RadioGroup) findViewById(R.id.gps_radio_group);
 		mGPSModeGroup.setOnCheckedChangeListener(this);
-		
+
 		btnNearShop.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-								getNearShop(String.valueOf(longitude),String.valueOf(latitude) );
+				getNearShop(String.valueOf(longitude), String.valueOf(latitude));
 			}
 		});
 	}
+
 	/**
 	 * // 获取最近的生活馆
 	 * 
@@ -118,70 +120,64 @@ public class MapActivity extends BaseActivity implements LocationSource,
 		params.addBodyParameter("lat", lat);
 		HttpUtils http = new HttpUtils();
 		// http.configResponseTextCharset("GBK");
-		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getNearShop(),
-				params, new RequestCallBack<String>() {
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getNearShop(), params, new RequestCallBack<String>() {
 
-					@Override
-					public void onStart() {
-						toastLong("正在定位最近的生活馆...");
+			@Override
+			public void onStart() {
+				toastLong("正在定位最近的生活馆...");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d(result);
+
+				ObjectMapper m = new ObjectMapper();
+				List<StoreEntity> storeList = new ArrayList<StoreEntity>();// 生活馆列表
+				StoreEntity storeEntity = new StoreEntity();
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+
+						String jsonList = rootNode.path("datas").toString();
+						// StoreEntity[] s = m.readValue(jsonList,
+						// StoreEntity[].class);
+
+						storeEntity = m.readValue(jsonList, StoreEntity.class);
+						startActivity(new Intent(MapActivity.this, LivingMuseumDetailsActivity.class).putExtra("storeId",
+								storeEntity.getStore_id()));
+						// toastLong("要跳转到最近的"+storeEntity.getStore_id()+"生活馆");
+
+					} else {
+						LogUtils.d("数据解析失败！");
 					}
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// toastLong("reply: " + result);
+				// showResultActivity(result);
+			}
 
-					@Override
-					public void onLoading(long total, long current,
-							boolean isUploading) {
-
-					}
-
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo) {
-						String result = InterfaceUtils
-								.getResponseResult(responseInfo.result);
-						LogUtils.d(result);
-
-						ObjectMapper m = new ObjectMapper();
-						List<StoreEntity> storeList = new ArrayList<StoreEntity>();// 生活馆列表
-						StoreEntity storeEntity = new StoreEntity();
-						try {
-							JsonNode rootNode = m.readValue(result,
-									JsonNode.class);
-							String jsonResult = rootNode.path("result")
-									.getTextValue();
-							if (InterfaceUtils.RESULT_SUCCESS
-									.equals(jsonResult)) {
-
-								String jsonList = rootNode.path("datas")
-										.toString();
-								// StoreEntity[] s = m.readValue(jsonList,
-								// StoreEntity[].class);
-
-								storeEntity = m.readValue(jsonList,
-										StoreEntity.class);
-								
-								toastLong("要跳转到最近的"+storeEntity.getStore_id()+"生活馆");
-
-							} else {
-								LogUtils.d("数据解析失败！");
-							}
-						} catch (JsonParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (JsonMappingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						// toastLong("reply: " + result);
-						// showResultActivity(result);
-					}
-
-					@Override
-					public void onFailure(HttpException error, String msg) {
-						toastLong("服务器好像挂了，等一会儿再试试");
-					}
-				});
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("服务器好像挂了，等一会儿再试试");
+			}
+		});
 	}
+
 	/**
 	 * 设置一些amap的属性
 	 */
@@ -191,60 +187,58 @@ public class MapActivity extends BaseActivity implements LocationSource,
 		aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
 		// 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
 		aMap.setMyLocationType(AMap.LOCATION_TYPE_MAP_FOLLOW);
-		
+
 		aMap.setOnMarkerClickListener(this);
-		
+
 		MyLocationStyle myLocationStyle = new MyLocationStyle();
 		myLocationStyle.strokeColor(color.transparent);
 		myLocationStyle.radiusFillColor(color.transparent);
-//		myLocationStyle.strokeWidth(1000);
+		// myLocationStyle.strokeWidth(1000);
 		aMap.setMyLocationStyle(myLocationStyle);
-		
-//		 MyLocationStyle myLocationStyle = new MyLocationStyle();
-//		 myLocationStyle.strokeWidth(100);	
-//		 aMap.setMyLocationStyle(myLocationStyle);
+
+		// MyLocationStyle myLocationStyle = new MyLocationStyle();
+		// myLocationStyle.strokeWidth(100);
+		// aMap.setMyLocationStyle(myLocationStyle);
 	}
-	
-	private void setMarkers(List<StoreEntity> storeList){
-		
-//		aMap.clear();
-//		try {
-//			Thread.sleep(10000);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		if(storeList==null || storeList.size()==0){
+
+	private void setMarkers(List<StoreEntity> storeList) {
+
+		// aMap.clear();
+		// try {
+		// Thread.sleep(10000);
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		if (storeList == null || storeList.size() == 0) {
 			toastLong("抱歉！附近还没有生活馆！");
 			return;
 		}
-		
+
 		Iterator<StoreEntity> storeIterator = storeList.iterator();
-		while(storeIterator.hasNext()){
+		while (storeIterator.hasNext()) {
 			StoreEntity storeEntity = storeIterator.next();
 			String[] lnglatArray = storeEntity.getMaplnglat().split(",");
-			
+
 			Double lng = Double.valueOf(lnglatArray[0]);
 			Double lat = Double.valueOf(lnglatArray[1]);
 			LatLng point1 = new LatLng(lat, lng);
 			CameraUpdate update = CameraUpdateFactory.changeLatLng(point1);
 			aMap.moveCamera(update);
 			MarkerOptions mark1 = new MarkerOptions()
-	        .anchor(0.5f,0.5f)
-	        .position(point1)
-//	        .title(storeEntity.getStore_name())
-//	         .snippet(storeEntity.getStore_id()).icon(BitmapDescriptorFactory
-//	                .fromResource(R.drawable.marker))
-//	        .snippet(storeEntity.getStore_id())
-//	        .icon(BitmapDescriptorFactory
-//	        		.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-	        .icon(BitmapDescriptorFactory.fromView(getMarkView(storeEntity.getStore_name(),storeEntity.getStore_address())))
-	        .perspective(true)
-	        .draggable(false)//标记不可拖拽
-	        .period(50);
+					.anchor(0.5f, 0.5f)
+					.position(point1)
+					// .title(storeEntity.getStore_name())
+					// .snippet(storeEntity.getStore_id()).icon(BitmapDescriptorFactory
+					// .fromResource(R.drawable.marker))
+					// .snippet(storeEntity.getStore_id())
+					// .icon(BitmapDescriptorFactory
+					// .defaultMarker(BitmapDescriptorFactory.HUE_RED))
+					.icon(BitmapDescriptorFactory.fromView(getMarkView(storeEntity.getStore_name(), storeEntity.getStore_address())))
+					.perspective(true).draggable(false)// 标记不可拖拽
+					.period(50);
 			mark1.visible(true);
-		
-			
+
 			Marker marker = aMap.addMarker(mark1);
 			marker.setObject(storeEntity.getStore_id());
 		}
@@ -253,17 +247,17 @@ public class MapActivity extends BaseActivity implements LocationSource,
 	/**
 	 * 把一个xml布局文件转化成view
 	 */
-	public View getMarkView(String storeName,String storeAddress) {
+	public View getMarkView(String storeName, String storeAddress) {
 		View view = getLayoutInflater().inflate(R.layout.map_marker, null);
 		// TextView text_title = (TextView)
 		// view.findViewById(R.id.marker_title);
 		TextView text_text = (TextView) view.findViewById(R.id.marker_text);
 		// text_title.setText(title);
-//		text_text.setText(Html.fromHtml(storeName+"<br/>"+storeAddress));
+		// text_text.setText(Html.fromHtml(storeName+"<br/>"+storeAddress));
 		text_text.setText(Html.fromHtml(storeName));
 		return view;
 	}
-	
+
 	/**
 	 * // 获取用户当前位置 3公里内的生活馆信息
 	 * 
@@ -273,78 +267,69 @@ public class MapActivity extends BaseActivity implements LocationSource,
 	 *            纬度
 	 */
 	private void getLbsShops(String lng, String lat) {
-		LogUtils.d("获取lng="+lng+" lat="+lat+"的附近生活馆");
+		LogUtils.d("获取lng=" + lng + " lat=" + lat + "的附近生活馆");
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("lng", lng);
 		params.addBodyParameter("lat", lat);
 		HttpUtils http = new HttpUtils();
 		// http.configResponseTextCharset("GBK");
-		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getLbsShops(),
-				params, new RequestCallBack<String>() {
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getLbsShops(), params, new RequestCallBack<String>() {
 
-					@Override
-					public void onStart() {
-						toastLong("正在获取附近的生活馆....");
+			@Override
+			public void onStart() {
+				toastLong("正在获取附近的生活馆....");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d(result);
+
+				ObjectMapper m = new ObjectMapper();
+				List<StoreEntity> storeList = new ArrayList<StoreEntity>();// 生活馆列表
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+
+						JavaType javaType = JacksonUtils.getCollectionType(ArrayList.class, StoreEntity.class);
+						String jsonList = rootNode.path("datas").toString();
+						// StoreEntity[] s = m.readValue(jsonList,
+						// StoreEntity[].class);
+
+						storeList = m.readValue(jsonList, javaType);
+
+						setMarkers(storeList);
+
+					} else {
+						LogUtils.d("附近没有生活馆哦");
 					}
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// toastLong("reply: " + result);
+				// showResultActivity(result);
+			}
 
-					@Override
-					public void onLoading(long total, long current,
-							boolean isUploading) {
-
-					}
-
-					@Override
-					public void onSuccess(ResponseInfo<String> responseInfo) {
-						String result = InterfaceUtils
-								.getResponseResult(responseInfo.result);
-						LogUtils.d(result);
-
-						ObjectMapper m = new ObjectMapper();
-						List<StoreEntity> storeList = new ArrayList<StoreEntity>();// 生活馆列表
-						try {
-							JsonNode rootNode = m.readValue(result,
-									JsonNode.class);
-							String jsonResult = rootNode.path("result")
-									.getTextValue();
-							if (InterfaceUtils.RESULT_SUCCESS
-									.equals(jsonResult)) {
-
-								JavaType javaType = JacksonUtils
-										.getCollectionType(ArrayList.class,
-												StoreEntity.class);
-								String jsonList = rootNode.path("datas")
-										.toString();
-								// StoreEntity[] s = m.readValue(jsonList,
-								// StoreEntity[].class);
-
-								storeList = m.readValue(jsonList, javaType);
-
-								setMarkers(storeList);
-								
-							} else {
-								LogUtils.d("附近没有生活馆哦");
-							}
-						} catch (JsonParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (JsonMappingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						// toastLong("reply: " + result);
-						// showResultActivity(result);
-					}
-
-					@Override
-					public void onFailure(HttpException error, String msg) {
-						toastLong("服务器好像挂了，等一会儿再试试");
-					}
-				});
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				toastLong("服务器好像挂了，等一会儿再试试");
+			}
+		});
 	}
-	
+
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		switch (checkedId) {
@@ -426,30 +411,26 @@ public class MapActivity extends BaseActivity implements LocationSource,
 	@Override
 	public void onLocationChanged(AMapLocation amapLocation) {
 		if (mListener != null && amapLocation != null) {
-			if (amapLocation != null
-					&& amapLocation.getAMapException().getErrorCode() == 0) {
+			if (amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0) {
 				btnNearShop.setVisibility(View.VISIBLE);
 				mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
-				
+
 				longitude = aMap.getMyLocation().getLongitude();
 				latitude = aMap.getMyLocation().getLatitude();
 				nowPoint = new LatLng(latitude, longitude);
-				
+
 				aMap.clear();
-				 aMap.addMarker(new MarkerOptions().position(new LatLng(latitude,
-						 longitude)).icon(
-				 BitmapDescriptorFactory
-				 .defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-				
-				aMap.addCircle(new CircleOptions()
-				.center(new LatLng(latitude, longitude)).radius(3000)
-				.strokeColor(Color.argb(50, 1, 1, 1))
-				.fillColor(Color.argb(50, 1, 1, 1)).strokeWidth(5));
-				
-				getLbsShops(String.valueOf(longitude),String.valueOf(latitude) );
+				aMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).icon(
+						BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+				aMap.addCircle(new CircleOptions().center(new LatLng(latitude, longitude)).radius(3000)
+						.strokeColor(Color.argb(50, 1, 1, 1)).fillColor(Color.argb(50, 1, 1, 1)).strokeWidth(5));
+
+				aMap.moveCamera(CameraUpdateFactory.zoomTo(20));
+
+				getLbsShops(String.valueOf(longitude), String.valueOf(latitude));
 			} else {
-				Log.e("AmapErr", "Location ERR:"
-						+ amapLocation.getAMapException().getErrorCode());
+				Log.e("AmapErr", "Location ERR:" + amapLocation.getAMapException().getErrorCode());
 			}
 		}
 	}
@@ -468,8 +449,7 @@ public class MapActivity extends BaseActivity implements LocationSource,
 			// 在定位结束后，在合适的生命周期调用destroy()方法
 			// 其中如果间隔时间为-1，则定位只定一次
 			// 在单次定位情况下，定位无论成功与否，都无需调用removeUpdates()方法移除请求，定位sdk内部会移除
-			mAMapLocationManager.requestLocationData(
-					LocationProviderProxy.AMapNetwork, -1, 10, this);
+			mAMapLocationManager.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 10, this);
 		}
 	}
 
@@ -485,10 +465,9 @@ public class MapActivity extends BaseActivity implements LocationSource,
 		}
 		mAMapLocationManager = null;
 	}
-	
-	protected boolean checkInternet() {//判断网络
-		ConnectivityManager mannager = (ConnectivityManager) this
-				.getSystemService(CONNECTIVITY_SERVICE);
+
+	protected boolean checkInternet() {// 判断网络
+		ConnectivityManager mannager = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
 		NetworkInfo info = mannager.getActiveNetworkInfo();
 		if (info == null || !info.isConnected()) {
 			return false;
@@ -504,11 +483,10 @@ public class MapActivity extends BaseActivity implements LocationSource,
 
 	@Override
 	public boolean onMarkerClick(Marker arg0) {
-		// TODO Auto-generated method stub
-		if(arg0.getObject() != null && !"".equals(arg0.getObject())){//排除当前定位位置的mark
+		if (arg0.getObject() != null && !"".equals(arg0.getObject())) {// 排除当前定位位置的mark
 			String storeId = arg0.getObject().toString();
-			toastLong("要跳转到"+storeId+"生活馆");
-			startActivity(new Intent(MapActivity.this,LivingMuseumDetailsActivity.class).putExtra("storeId", storeId));
+//			toastLong("要跳转到" + storeId + "生活馆");
+			startActivity(new Intent(MapActivity.this, LivingMuseumDetailsActivity.class).putExtra("storeId", storeId));
 		}
 
 		return true;
