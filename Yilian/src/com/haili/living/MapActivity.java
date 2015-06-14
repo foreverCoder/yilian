@@ -34,6 +34,7 @@ import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.LocationProviderProxy;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.OnMarkerClickListener;
+import com.amap.api.maps.AMapUtils;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
@@ -104,6 +105,18 @@ public class MapActivity extends BaseActivity implements LocationSource, AMapLoc
 				getNearShop(String.valueOf(longitude), String.valueOf(latitude));
 			}
 		});
+	}
+	
+	/*
+
+	* 测试两点距离
+
+	*/
+
+	private void testDistance(){
+	LatLng nowLocation = new LatLng(latitude, longitude);
+	LatLng shopLocation = new LatLng(31.774659, 117.210817);
+	toastLong("当前距离是"+AMapUtils.calculateLineDistance(nowLocation, shopLocation));//计算经纬度距离方法
 	}
 
 	/**
