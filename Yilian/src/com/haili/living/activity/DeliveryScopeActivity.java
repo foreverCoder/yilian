@@ -194,8 +194,8 @@ public class DeliveryScopeActivity extends BaseActivity{
 					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
 					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
 						String questionAndAnswerUrl = rootNode.path("datas").path("url").toString();
-						mWebView.loadUrl(questionAndAnswerUrl);
-						LogUtils.d("questionAndAnswerUrl+"+questionAndAnswerUrl.replace("", "\""));
+						mWebView.loadUrl(questionAndAnswerUrl.replace("\"", ""));
+						LogUtils.d("questionAndAnswerUrl+"+questionAndAnswerUrl.replace("\"", ""));
 					} else {
 						LogUtils.d("--------数据异常");
 					}
