@@ -202,8 +202,8 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 			break;
 		// 团购
 		case R.id.img_tg:
-			intent.putExtra("searchValue", ConstantValue.S_TG);
 			intent.putExtra("searchType", "团购");
+			intent.putExtra("storeId", storeId);
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "团购", Toast.LENGTH_SHORT).show();
 			break;
