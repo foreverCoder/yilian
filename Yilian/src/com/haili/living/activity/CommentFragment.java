@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -33,19 +34,19 @@ import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.util.LogUtils;
 
 @SuppressLint("ValidFragment")
-public class CommentFragment  extends Fragment{
+public class CommentFragment extends Fragment {
 	private View rootView;// 缓存Fragment view
-	private XListView  mlistview;
+	private XListView mlistview;
 	private String goodsId;
-	private int curPage=1;
+	private int curPage = 1;
 	private boolean firstLoad = true;
-	private CommentAdapter  adapter;
-	private List<Goods_evaluate_infoEntity> lVoList=new ArrayList<Goods_evaluate_infoEntity>();
-	
+	private CommentAdapter adapter;
+	private List<Goods_evaluate_infoEntity> lVoList = new ArrayList<Goods_evaluate_infoEntity>();
+
 	public CommentFragment() {
 		super();
 	}
-	
+
 	public CommentFragment(String goodsId) {
 		this.goodsId = goodsId;
 	}
@@ -62,43 +63,46 @@ public class CommentFragment  extends Fragment{
 		initViews(rootView);
 		setListeners();
 		if (firstLoad) {
-			getGoodEvaluation(goodsId,curPage);
+			getGoodEvaluation(goodsId, curPage);
 			firstLoad = false;
 		}
 		return rootView;
 	}
+
 	private void setListeners() {
 		mlistview.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
 				curPage = 1;
-				getGoodEvaluation(goodsId,curPage);
+				getGoodEvaluation(goodsId, curPage);
 			}
 
 			@Override
 			public void onLoadMore() {
 				curPage += 1;
-				getGoodEvaluation(goodsId,curPage);
+				getGoodEvaluation(goodsId, curPage);
 			}
 		});
 	}
+
 	private void initViews(View rootView2) {
-		mlistview=(XListView)rootView2.findViewById(R.id.mlistview);
+		mlistview = (XListView) rootView2.findViewById(R.id.mlistview);
 		mlistview.setPullLoadEnable(true);
 	}
+
 	/**
-	* @Title: getGoodEvaluation
-	* @Description: 获取评价
-	* @param @param goodsId
-	* @param @param curPage    设定文件
-	* @return void    返回类型
-	* @throws
+	 * @Title: getGoodEvaluation
+	 * @Description: 获取评价
+	 * @param @param goodsId
+	 * @param @param curPage 设定文件
+	 * @return void 返回类型
+	 * @throws
 	 */
-	public void getGoodEvaluation(String goodsId,final int  curPage) {
+	public void getGoodEvaluation(String goodsId, final int curPage) {
 		RequestParams params = new RequestParams();
 		System.out.println(goodsId);
 		params.addBodyParameter("goods_id", goodsId);
-		params.addBodyParameter("curpage", curPage+"");
+		params.addBodyParameter("curpage", curPage + "");
 
 		HttpUtils http = new HttpUtils();
 		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodEvaluation(), params, new RequestCallBack<String>() {
@@ -121,11 +125,14 @@ public class CommentFragment  extends Fragment{
 				ObjectMapper mapper = new ObjectMapper();
 				List<Goods_evaluate_infoEntity> goods_evaluate_infoEntities = new ArrayList<Goods_evaluate_infoEntity>();// 商品评价集合实体
 				try {
-					GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
-					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
-						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
-						goods_evaluate_infoEntities =entity.getDatas().getGoods_evaluate_info();;
-						if (curPage==1) {// 刷新
+
+					JsonNode rootNode = mapper.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+						GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
+						goods_evaluate_infoEntities = entity.getDatas().getGoods_evaluate_info();
+						;
+						if (curPage == 1) {// 刷新
 							lVoList.clear();
 							lVoList = goods_evaluate_infoEntities;
 							if (goods_evaluate_infoEntities.size() < 1) {
@@ -142,10 +149,14 @@ public class CommentFragment  extends Fragment{
 							}
 						}
 					} else {
-						lVoList.clear();
-						adapter = new CommentAdapter(getActivity(), lVoList);
-						mlistview.setAdapter(adapter);
-						toastShort("暂无数据");
+						if (curPage == 1) {
+							lVoList.clear();
+							adapter = new CommentAdapter(getActivity(), lVoList);
+							mlistview.setAdapter(adapter);
+							toastShort("暂无数据");
+						} else {
+							toastShort("没有更多数据了");
+						}
 					}
 				} catch (JsonParseException e) {
 					e.printStackTrace();
@@ -157,20 +168,24 @@ public class CommentFragment  extends Fragment{
 					e.printStackTrace();
 				}
 			}
+
 			@Override
 			public void onFailure(HttpException error, String msg) {
 				onLoad();
 			}
 		});
 	}
+
 	private void onLoad() {
 		mlistview.stopRefresh();
 		mlistview.stopLoadMore();
 		mlistview.setRefreshTime("刚刚");
 	}
-   private void initData(){
-	   
-   }
+
+	private void initData() {
+
+	}
+
 	protected void toastShort(String text) {
 		Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 	}
