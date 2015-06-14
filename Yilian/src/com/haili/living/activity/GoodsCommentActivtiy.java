@@ -1,10 +1,7 @@
 package com.haili.living.activity;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;

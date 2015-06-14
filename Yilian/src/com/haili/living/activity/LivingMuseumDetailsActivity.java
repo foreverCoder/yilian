@@ -181,8 +181,8 @@ public class LivingMuseumDetailsActivity extends BaseActivity implements OnScrol
 		// 餐饮
 		case R.id.img_cy:
 			// TODO 跳转
-			intent.putExtra("searchValue", ConstantValue.S_CYWM_A);
-			intent.putExtra("searchType", "餐饮");
+			intent.putExtra("storeId", storeId);
+			intent.setClass(context, TakeOutActivity.class);
 			startActivity(intent);
 			Toast.makeText(LivingMuseumDetailsActivity.this, "餐饮", Toast.LENGTH_SHORT).show();
 			break;

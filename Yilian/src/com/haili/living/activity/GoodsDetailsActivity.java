@@ -119,14 +119,20 @@ public class GoodsDetailsActivity extends BaseActivity implements OnItemClickLis
 		callImageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent phoneIntent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + sPhoneNum));
-				startActivity(phoneIntent);
+				try {
+					Intent phoneIntent = new Intent("android.intent.action.CALL", Uri.parse("tel:" + sPhoneNum));
+					startActivity(phoneIntent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		ImageView btn_help = (ImageView) vPopWindow.findViewById(R.id.btn_help);
 		btn_help.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Intent intent = new Intent(GoodsDetailsActivity.this, DeliveryScopeActivity.class);
+				startActivity(intent);
 			}
 		});
 		ImageView btn_ps = (ImageView) vPopWindow.findViewById(R.id.btn_ps);

@@ -66,6 +66,9 @@ public class DeliveryScopeActivity extends BaseActivity{
 		String storeIdString=getIntent().getStringExtra("store_id");
 		if (storeIdString!=null) {
 			getShopDistribution(storeIdString);//传入生活馆ID
+		}else{
+			top_title.setText("帮助中心");
+			getQuestionAndAnswer();
 		}
 		
 	}
@@ -156,5 +159,62 @@ public class DeliveryScopeActivity extends BaseActivity{
 			}
 		});
 
+	}
+	/**
+	 * 常见疑问
+	 */
+	public void getQuestionAndAnswer(){
+		RequestParams params = new RequestParams();
+
+		HttpUtils http = new HttpUtils();
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getQuestionAndAnswer(), params, new RequestCallBack<String>() {
+
+			@Override
+			public void onStart() {
+				toastLong("请求服务器");
+			}
+
+			@Override
+			public void onLoading(long total, long current, boolean isUploading) {
+
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				if (progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+				String result = InterfaceUtils.getResponseResult(responseInfo.result);
+				LogUtils.d("**" + result);
+				ObjectMapper m = new ObjectMapper();
+
+				try {
+					JsonNode rootNode = m.readValue(result, JsonNode.class);
+					String jsonResult = rootNode.path("result").getTextValue();
+					LogUtils.d("getGoodBody jsonResult = " + jsonResult);
+					if (InterfaceUtils.RESULT_SUCCESS.equals(jsonResult)) {
+						String questionAndAnswerUrl = rootNode.path("datas").path("url").toString();
+						mWebView.loadUrl(questionAndAnswerUrl);
+						LogUtils.d("questionAndAnswerUrl+"+questionAndAnswerUrl.replace("", "\""));
+					} else {
+						LogUtils.d("--------数据异常");
+					}
+				} catch (JsonParseException e) {
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(HttpException error, String msg) {
+				if (progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+				toastLong("请求失败");
+			}
+		});
 	}
 }

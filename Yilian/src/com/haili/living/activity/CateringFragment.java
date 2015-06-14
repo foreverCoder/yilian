@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.haili.living.R;
-import com.haili.living.adapter.CommentAdapter;
-import com.haili.living.entity.Goods_evaluate_infoEntity;
-import com.haili.living.entity.interfaces.GoodCommentsInterfaceEntity;
+import com.haili.living.adapter.GoodsItemAdapter;
+import com.haili.living.entity.GoodEntity;
+import com.haili.living.entity.interfaces.ShopSearchGoodsInterfaceEntity;
 import com.haili.living.utils.InterfaceUtils;
 import com.haili.living.view.XListView;
 import com.haili.living.view.XListView.IXListViewListener;
@@ -32,22 +32,28 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.util.LogUtils;
 
+/**
+ * @author melody
+ * @version 创建时间：2015年6月14日 上午8:09:15 类说明 餐饮
+ */
 @SuppressLint("ValidFragment")
-public class CommentFragment  extends Fragment{
+public class CateringFragment extends Fragment {
 	private View rootView;// 缓存Fragment view
-	private XListView  mlistview;
-	private String goodsId;
-	private int curPage=1;
+	private XListView mlistview;
+	private String life_type;// 为餐饮外卖-早餐(life_type=3），4为餐饮外卖-午餐(life_type=4），为餐饮外卖-晚餐(life_type=5）
+	private String storeId;
+	private List<GoodEntity> lVoList = new ArrayList<GoodEntity>();// 一般商品
+	private int pageNum = 1;
 	private boolean firstLoad = true;
-	private CommentAdapter  adapter;
-	private List<Goods_evaluate_infoEntity> lVoList=new ArrayList<Goods_evaluate_infoEntity>();
-	
-	public CommentFragment() {
+	private GoodsItemAdapter gAdapter;
+
+	public CateringFragment() {
 		super();
 	}
-	
-	public CommentFragment(String goodsId) {
-		this.goodsId = goodsId;
+
+	public CateringFragment(String life_type, String storeId) {
+		this.life_type = life_type;
+		this.storeId = storeId;
 	}
 
 	@Override
@@ -62,47 +68,41 @@ public class CommentFragment  extends Fragment{
 		initViews(rootView);
 		setListeners();
 		if (firstLoad) {
-			getGoodEvaluation(goodsId,curPage);
+			getGoodListByClass(life_type, pageNum + "", true);
 			firstLoad = false;
 		}
 		return rootView;
 	}
+
 	private void setListeners() {
 		mlistview.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
-				curPage = 1;
-				getGoodEvaluation(goodsId,curPage);
+				pageNum = 1;
+				getGoodListByClass(life_type, pageNum + "", true);
 			}
 
 			@Override
 			public void onLoadMore() {
-				curPage += 1;
-				getGoodEvaluation(goodsId,curPage);
+				pageNum += 1;
+				getGoodListByClass(life_type, pageNum + "", false);
 			}
 		});
 	}
+
 	private void initViews(View rootView2) {
-		mlistview=(XListView)rootView2.findViewById(R.id.mlistview);
+		mlistview = (XListView) rootView2.findViewById(R.id.mlistview);
 		mlistview.setPullLoadEnable(true);
 	}
-	/**
-	* @Title: getGoodEvaluation
-	* @Description: 获取评价
-	* @param @param goodsId
-	* @param @param curPage    设定文件
-	* @return void    返回类型
-	* @throws
-	 */
-	public void getGoodEvaluation(String goodsId,final int  curPage) {
+
+	public void getGoodListByClass(String gcId, String curPage, final Boolean flag) {
 		RequestParams params = new RequestParams();
-		System.out.println(goodsId);
-		params.addBodyParameter("goods_id", goodsId);
-		params.addBodyParameter("curpage", curPage+"");
+		params.addBodyParameter("life_type", gcId);
+		params.addBodyParameter("store_id", storeId);
+		params.addBodyParameter("curpage", curPage);
 
 		HttpUtils http = new HttpUtils();
-		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodEvaluation(), params, new RequestCallBack<String>() {
-
+		http.send(HttpRequest.HttpMethod.POST, InterfaceUtils.getGoodsByTodayType(), params, new RequestCallBack<String>() {
 			@Override
 			public void onStart() {
 			}
@@ -117,35 +117,38 @@ public class CommentFragment  extends Fragment{
 				onLoad();
 				String result = InterfaceUtils.getResponseResult(responseInfo.result);
 				LogUtils.d("**" + result);
-
 				ObjectMapper mapper = new ObjectMapper();
-				List<Goods_evaluate_infoEntity> goods_evaluate_infoEntities = new ArrayList<Goods_evaluate_infoEntity>();// 商品评价集合实体
+				List<GoodEntity> goodEntities = new ArrayList<GoodEntity>();
 				try {
-					GoodCommentsInterfaceEntity entity = mapper.readValue(result, GoodCommentsInterfaceEntity.class);// 接口实体类
+					ShopSearchGoodsInterfaceEntity entity = mapper.readValue(result, ShopSearchGoodsInterfaceEntity.class);// 接口实体类
 					if (InterfaceUtils.RESULT_SUCCESS.equals(entity.getResult())) {// 如果result返回1
 						LogUtils.d("entity " + entity.getCode() + " " + entity.getResult() + " ");
-						goods_evaluate_infoEntities =entity.getDatas().getGoods_evaluate_info();;
-						if (curPage==1) {// 刷新
+						goodEntities = entity.getDatas();
+						if (flag) {// 刷新
 							lVoList.clear();
-							lVoList = goods_evaluate_infoEntities;
-							if (goods_evaluate_infoEntities.size() < 1) {
+							lVoList = goodEntities;
+							if (lVoList.size() < 1) {
 								toastShort("暂无数据");
 							}
-							adapter = new CommentAdapter(getActivity(), lVoList);
-							mlistview.setAdapter(adapter);
+							gAdapter = new GoodsItemAdapter(getActivity(), lVoList);
+							mlistview.setAdapter(gAdapter);
 						} else { // 加载更多
-							if (goods_evaluate_infoEntities.size() > 0) {
-								lVoList.addAll(goods_evaluate_infoEntities);
-								adapter.notifyDataSetChanged();
+							if (goodEntities.size() > 0) {
+								lVoList.addAll(entity.getDatas());
+								gAdapter.notifyDataSetChanged();
 							} else {
 								toastShort("没有更多数据了");
 							}
 						}
 					} else {
-						lVoList.clear();
-						adapter = new CommentAdapter(getActivity(), lVoList);
-						mlistview.setAdapter(adapter);
-						toastShort("暂无数据");
+						if (flag) {
+							lVoList.clear();
+							gAdapter = new GoodsItemAdapter(getActivity(), lVoList);
+							mlistview.setAdapter(gAdapter);
+							toastShort("暂无数据");
+						} else {
+							toastShort("没有更多数据了");
+						}
 					}
 				} catch (JsonParseException e) {
 					e.printStackTrace();
@@ -157,20 +160,25 @@ public class CommentFragment  extends Fragment{
 					e.printStackTrace();
 				}
 			}
+
 			@Override
 			public void onFailure(HttpException error, String msg) {
+				toastShort("请求失败");
 				onLoad();
 			}
 		});
 	}
+
 	private void onLoad() {
 		mlistview.stopRefresh();
 		mlistview.stopLoadMore();
 		mlistview.setRefreshTime("刚刚");
 	}
-   private void initData(){
-	   
-   }
+
+	private void initData() {
+
+	}
+
 	protected void toastShort(String text) {
 		Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
 	}

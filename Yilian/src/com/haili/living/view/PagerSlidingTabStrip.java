@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.haili.living.R;
 import com.haili.living.activity.GoodsCommentActivtiy.MyPagerAdapter;
+import com.haili.living.activity.TakeOutActivity;
 
 /**
 * @ClassName: PagerSlidingTabStrip
@@ -192,8 +193,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 			if (pager.getAdapter() instanceof IconTabProvider) {
 				addIconTab(i, ((IconTabProvider) pager.getAdapter()).getPageIconResId(i));
 			} else {
-				MyPagerAdapter adapter=	(MyPagerAdapter) pager.getAdapter();
-				addTextTab(i, pager.getAdapter().getPageTitle(i).toString(), adapter.getSubPageTitle(i).toString());
+				try {
+					MyPagerAdapter adapter=	(MyPagerAdapter) pager.getAdapter();
+					addTextTab(i, pager.getAdapter().getPageTitle(i).toString(), adapter.getSubPageTitle(i).toString());
+				} catch (Exception e) {
+					TakeOutActivity.MyPagerAdapter adapter=	(TakeOutActivity.MyPagerAdapter) pager.getAdapter();
+					addTextTab(i, pager.getAdapter().getPageTitle(i).toString());
+				}
 			}
 
 		}
@@ -220,11 +226,21 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	}
 
+	private void addTextTab(final int position, String title) {
+		
+		TextView tab = new TextView(getContext());
+		tab.setText(title);
+		tab.setGravity(Gravity.CENTER);
+		tab.setSingleLine();
+		tab.setTextColor(Color.BLACK);
+		
+		addTab(position,tab);
+	}
 	private void addTextTab(final int position, String title,String subTitle) {
         //TODO
 		LinearLayout tabLayout=new LinearLayout(getContext());
 		System.err.println(tabWidth);
-		android.widget.LinearLayout.LayoutParams layoutParams=new android.widget.LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		android.widget.LinearLayout.LayoutParams layoutParams=new android.widget.LinearLayout.LayoutParams( LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT);
 		tabLayout.setLayoutParams(layoutParams);
 		tabLayout.setOrientation(LinearLayout.VERTICAL);
 		tabLayout.setGravity(Gravity.CENTER);
@@ -264,7 +280,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		});
 
 		tab.setPadding(tabPadding, 0, tabPadding, 0);
-		tabsContainer.addView(tab, position,new android.widget.LinearLayout.LayoutParams( tabWidth,LayoutParams.WRAP_CONTENT));
+		tabsContainer.addView(tab, position,new android.widget.LinearLayout.LayoutParams( tabWidth,LayoutParams.MATCH_PARENT));
 //		tabsContainer.addView(tab, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
 	}
 
